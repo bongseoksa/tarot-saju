@@ -65,6 +65,19 @@ Strong success criteria let you loop independently. Weak criteria ("make it work
 
 **These guidelines are working if:** fewer unnecessary changes in diffs, fewer rewrites due to overcomplication, and clarifying questions come before implementation rather than after mistakes.
 
+## 작업 규칙
+
+반드시 `RULES.md`를 읽고 따를 것. 핵심 요약:
+
+1. **문서 먼저, 코드는 나중에** — `docs/frontend/` 세부 계획서 확인/작성 후 구현
+2. **작업 후 문서 최신화** — 코드 변경 시 관련 `docs/` 문서 반드시 갱신
+3. **TDD** — 테스트 케이스 먼저 작성 → 실패 확인 → 구현 → 통과 확인
+4. **MCP 도구 활용** — 화면 작업 시 Stitch MCP로 `docs/design/reference.md` 참조, 코드 검증 시 context7 + chrome-devtools MCP 사용
+5. **스펙 문서 준수** — `docs/specs/02-taro-mvp.md` 기반 구현, 임의 기능 추가 금지
+6. **pnpm 사용** — npm/yarn 사용 금지, `apps/web/`에서 lint/test/build 실행
+
+---
+
 ## 프로젝트 개요
 
 타로 + 사주 웹 애플리케이션. 타로는 무료 진입 훅(유저 획득), 사주는 유료 수익화 레이어(Phase 2). 현재 사전 개발 단계로 스펙 문서만 존재하며 애플리케이션 코드는 아직 없음.

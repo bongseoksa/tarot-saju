@@ -1,0 +1,29 @@
+## 개요
+stitch, context7 mcp를 통해 프론트엔드 화면을 구성합니다.
+화면의 레이아웃을 기반으로 반응형 페이지를 개발합니다.
+화면상의 카드이미지는 '/Users/bongseok.sa/Desktop/workspace/personal/tarot-saju/docs/design/stitch/cards' 에 정의된 카드로 적용합니다.
+
+## 사용하는 디자인
+web application/stitch/projects/1178828992586013718/screens/3267f033cfec441598b92420fa3a7be8
+web application/stitch/projects/1178828992586013718/screens/ec43978820e440c9bf3146b0049cbb4f
+web application/stitch/projects/1178828992586013718/screens/7d4bf59e4e794903b327eefa35be085c
+web application/stitch/projects/1178828992586013718/screens/f8b15de69fcb434f90797eae36e83a9e
+web application/stitch/projects/1178828992586013718/screens/fb170c9491ed4b198cb245ab691d1f7c
+web application/stitch/projects/1178828992586013718/screens/f031f05be0424996a95846bfd237f1da
+web application/stitch/projects/1178828992586013718/screens/276f099d228e4b42aa455a8872c291cd
+web application/stitch/projects/1178828992586013718/screens/e1eb4a705fe24707a3f3d5a8dc6fde83
+web application/stitch/projects/1178828992586013718/screens/4a9b9f585eeb4298bca813d75f3cfacf
+web application/stitch/projects/1178828992586013718/screens/231c8dde11c74d2ea0589c21cca71f9f
+web application/stitch/projects/1178828992586013718/screens/b2a88b8ce61d426caf3d8715fbf8eccd
+web application/stitch/projects/1178828992586013718/screens/1e44185ce2bd43d0a28675de43b679a9
+web application/stitch/projects/1178828992586013718/screens/42414e3b186a47cdb991b3578e668714
+web application/stitch/projects/1178828992586013718/screens/7d311ca51b3b4d6082cfec65303be910
+web application/stitch/projects/1178828992586013718/screens/5dd456b0242c4c4eaeabc748ef035488
+web application/stitch/projects/1178828992586013718/screens/ec7b81138adb4d86a76f032e51f4e451
+web application/stitch/projects/1178828992586013718/screens/2f8023122674429a96e23f69d81bd684
+web application/stitch/projects/1178828992586013718/screens/435aaa71e32440aa8454dfcd1889480f
+web application/stitch/projects/1178828992586013718/screens/7c7e21ee64cf46c1b9fc525dd62e1b66
+web application/stitch/projects/1178828992586013718/screens/09cb2ad72a214407a433ecfabdaabb35
+web application/stitch/projects/1178828992586013718/screens/289967b8ba044f0294ec0bacd8cbc332
+web application/stitch/projects/1178828992586013718/screens/2f13809b6bab46f2b8db9d4a5d48f468
+web application/stitch/projects/1178828992586013718/screens/d851c6f8ae46475ba23dc75bf9fb80b6
