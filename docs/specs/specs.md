@@ -58,7 +58,7 @@
 - 웹앱 어플리케이션으로 개발
 - 어플리케이션은 껍데기(WebView) 역할을 하며 내부적으로 모두 웹앱 구조
 - 모바일 래퍼: Capacitor (Ionic) — React + Vite 웹앱을 네이티브 앱으로 패키징
-- 디자인: Figma/Sketch 시안 먼저 → 확정 후 Tailwind 코드 구현
+- 디자인: [Google Stitch](https://stitch.withgoogle.com/projects/14929918690973877786) 시안 먼저 → 확정 후 Tailwind 코드 구현
 - 문서 먼저, 코드는 나중에 (설계 -> 검증 -> 개발)
 
 ## 기술스택
