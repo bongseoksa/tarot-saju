@@ -13,7 +13,8 @@
      ├── 01-taro-mvp.md        (타로 MVP 기능 설계)
      ├── backlog.md            (백로그)
      ├── 02-ai-design.md       (예정: AI 해석 품질 설계)
-     └── 03-experiment-plan.md (예정: 결제 검증 실험)
+     ├── 03-experiment-plan.md (예정: 결제 검증 실험)
+     └── 04-harness-engineering.md (하네스 엔지니어링 적용 방안)
 
 /apps
   ├── web (React + Vite)

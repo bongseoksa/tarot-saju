@@ -6,6 +6,7 @@
 - backlog.md — 백로그 (동작 우선, 최적화는 나중에)
 - 02-ai-design.md — (예정) AI 해석 품질 설계
 - 03-experiment-plan.md — (예정) 결제 검증 실험
+- 04-harness-engineering.md — 하네스 엔지니어링 적용 방안
 
 ## 서비스
 타로 카드를 통한 타로점 제공(MVP).

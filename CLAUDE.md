@@ -33,6 +33,7 @@
 - `docs/specs/00-brainstorming.md` — 프로젝트 구조 및 개발 원칙
 - `docs/specs/01-taro-mvp.md` — 타로 MVP 기능 설계 (사용자 흐름, 데이터 타입, API 엔드포인트)
 - `docs/specs/backlog.md` — 백로그 (지연 항목)
+- `docs/specs/04-harness-engineering.md` — 하네스 엔지니어링 적용 방안
 
 ## 언어 규칙
 
