@@ -11,14 +11,48 @@
 ### Next.js를 선택하지 않은 이유
 | Next.js 장점 | 이 프로젝트에서의 필요성 |
 |---|---|
-| SSR/SSG | Capacitor WebView 안에서 실행 -> SSR 무의미 |
-| SEO | 타로 앱은 검색 유입보다 공유/설치 중심 |
+| SSR/SSG | Capacitor WebView 안에서 실행 → SSR 무의미. SEO 필요 페이지는 프리렌더로 대응 |
+| SEO | SPA + 프리렌더 + Edge 동적 OG로 충분. 아래 SEO 전략 참조 |
 | API Routes | Supabase Edge Functions로 대체 |
 | 서버 컴포넌트 | 카드 뽑기, AI 응답 등 클라이언트 인터랙션 중심 |
+
+> 웹 서비스 병행이 결정되었으나, SEO가 필요한 페이지가 제한적이므로 Next.js 전환 비용 대비 효과가 낮다고 판단. 검색 유입이 유의미해지는 시점에 재검토.
 
 ### 검토했지만 제외한 대안
 - **Flutter Web**: 웹 성능 이슈, 번들 사이즈 큼, 웹 생태계 활용 어려움
 - **React Native (Expo)**: 웹 지원이 부차적, 네이티브 UI 컴포넌트 불필요
+
+### SEO 대응 전략 (SPA + 프리렌더)
+
+웹 서비스를 병행하므로 SEO가 필요하나, SSR 프레임워크(Next.js) 없이 대응 가능.
+
+#### SEO가 필요한 페이지 vs 불필요한 페이지
+
+| 페이지 | SEO 필요 | 이유 |
+|---|---|---|
+| 홈 (테마 목록) | O | "타로 운세", "오늘의 타로" 검색 유입 |
+| 테마별 랜딩 | O | "연애 타로", "이직 타로" 롱테일 키워드 |
+| 공유 결과 페이지 | O | 카카오/인스타 공유 시 OG 메타태그 필수 |
+| 카드 뽑기 | X | 인터랙션 중심, 크롤러 불필요 |
+| AI 해석 결과 | X | 동적 생성, 개인화 콘텐츠 |
+
+#### MVP 대응 방식
+
+1. **정적 프리렌더** — vite-ssg로 홈/테마 랜딩 페이지를 빌드 타임에 HTML 생성
+2. **동적 OG 메타태그** — 공유 결과 페이지는 Vercel Edge Middleware 또는 Supabase Edge Function에서 OG 태그만 동적 주입 (HTML 전체 SSR 불필요)
+3. **기본 SEO** — sitemap.xml, robots.txt, 구조화 데이터(JSON-LD) 설정
+
+#### Next.js 전환을 하지 않는 이유
+
+- Capacitor 호환을 위해 `output: 'export'` 필수 → SSR/미들웨어/API Routes 사용 불가, 사실상 SPA와 동일
+- Supabase Edge Functions와 Next.js API Routes 역할 중복
+- 서버/클라이언트 컴포넌트 경계 관리로 개발 복잡도 증가
+- MVP 속도 목표에 역행
+
+#### 전환 기준 (Phase 2 재검토)
+
+- 검색 유입이 전체 트래픽의 30% 이상을 차지할 경우
+- 프리렌더로 대응 불가능한 동적 SEO 페이지가 다수 필요해질 경우
 
 ---
 
@@ -146,6 +180,50 @@ AI는 **해석 문장 생성**만 담당한다. 나머지는 정적 데이터로
 - **글로벌 CDN**: 빠른 로딩 속도
 - **GitHub 연동**: push시 자동 배포
 - **무료 티어**: MVP 검증에 충분
+
+---
+
+## 트래킹: Google Tag Manager + Google Analytics 4
+
+### 선정 이유
+- **GTM (Google Tag Manager)**: 코드 배포 없이 태그(GA, 광고 픽셀 등)를 관리. 이벤트 추가/수정 시 개발자 개입 불필요
+- **GA4 (Google Analytics 4)**: 이벤트 기반 분석으로 사용자 행동 퍼널 추적에 적합. 무료
+
+### 추적 대상
+
+| 구분 | 이벤트 | 목적 |
+|---|---|---|
+| 페이지 뷰 | page_view (자동) | 트래픽/유입 경로 분석 |
+| 테마 선택 | select_theme (themeId, category) | 인기 테마/카테고리 파악 |
+| 카드 뽑기 완료 | cards_selected (themeId, cardIds) | 뽑기 완료율 측정 |
+| 광고 시청 | ad_impression, ad_completed, ad_failed | 광고 수익 + 이탈 분석 |
+| 결과 도달 | view_result (themeId) | 전체 퍼널 전환율 |
+| AI 스트리밍 | ai_stream_start, ai_stream_complete, ai_stream_error | AI 안정성 모니터링 |
+| 공유 | share_result (method) | 바이럴 효과 측정 |
+| 재방문 | return_user (sessionCount) | 리텐션 추적 |
+
+### 핵심 퍼널
+
+```
+홈 진입 → 테마 선택 → 카드 뽑기 완료 → 광고 시청 → 결과 도달 → 공유
+```
+
+각 단계별 전환율을 GA4 Funnel Exploration으로 분석. 이탈 지점 파악이 MVP 개선의 핵심 데이터.
+
+### 구현 방식
+- GTM 컨테이너 스니펫을 `index.html`에 삽입
+- 앱 내 이벤트는 `dataLayer.push()`로 GTM에 전달
+- GTM에서 GA4 태그로 라우팅
+- SPA 라우팅 변경 시 History Change 트리거로 page_view 자동 추적
+
+### 검토했지만 제외한 대안
+- **Mixpanel/Amplitude**: 무료 티어 제한, MVP 단계에서 GA4로 충분
+- **Plausible/Umami**: 프라이버시 중심이나 이벤트 퍼널 분석 기능 부족
+- **Firebase Analytics**: Capacitor 앱 전환 시 도입 검토 (앱 + 웹 통합 분석)
+
+### 확장 계획
+- Capacitor 앱 출시 시 Firebase Analytics 병행 검토 (앱 내 이벤트 + 크래시 리포트)
+- 광고 최적화를 위한 Google Ads 전환 추적 태그 GTM에 추가
 
 ---
 
