@@ -352,8 +352,10 @@ CREATE POLICY "anyone can insert" ON shared_readings FOR INSERT WITH CHECK (true
 ```
 [앱 (클라이언트)]
   ├── 테마 목록 / 카드 뽑기 (랜덤) ────→ 자체 처리 (정적 데이터)
-  ├── 프롬프트 요청 ───────────────────→ Edge Function (interpret)
-  ├── AI 해석 요청 ─────────────────────→ Ollama (Cloudflare Tunnel, 직접 호출)
+  ├── AI 해석 요청 ─────────────────────→ Edge Function (interpret)
+  │                                         ├── 프롬프트 조합
+  │                                         ├── Ollama 호출 (Cloudflare Tunnel)
+  │                                         └── SSE 스트리밍 중계 → 클라이언트
   ├── 결과 저장/조회 ──────────────────→ Supabase DB (SDK + RLS)
   └── 광고 표시 ────────────────────────→ Google AdMob/AdSense (클라이언트)
 ```
@@ -364,17 +366,20 @@ CREATE POLICY "anyone can insert" ON shared_readings FOR INSERT WITH CHECK (true
 
 ### Edge Functions (서버 검증 필수 — MVP 1개)
 
-#### 1. 해석 요청
+#### 1. 해석 요청 + AI 스트리밍 (interpret)
 ```
 POST /functions/v1/interpret
 ```
 - 요청: `{ themeId: string, cards: DrawnCard[] }`
-- 처리: 카드 정적 데이터 + 테마 정보 + 스프레드 위치로 프롬프트 조합
-- 응답 (200): `{ prompt: string }`
+- 처리:
+  1. 카드 정적 데이터 + 테마 정보 + 스프레드 위치로 프롬프트 조합
+  2. Ollama API 호출 (`OLLAMA_URL` — Supabase Secret, 백엔드 전용)
+  3. SSE 스트리밍 응답을 클라이언트로 중계
+- 응답 (200): SSE 스트리밍 (해석 문장)
 - 에러 (400/500): `{ error: string }`
 - 인증: Supabase anon key (기본)
-- ollamaUrl은 클라이언트 환경 변수(`VITE_OLLAMA_URL`)로 관리 — 응답에 미포함
-- 클라이언트는 반환된 prompt로 Ollama에 직접 요청
+- Ollama URL은 프론트엔드에 노출되지 않음 — 보안 근본 해결
+- Supabase Edge Function 스트리밍 타임아웃: 150초 (AI 생성 5~30초 충분 커버)
 
 > 기회 차감 로직 제거 — 광고는 클라이언트에서 직접 처리 (AdMob SDK)
 > MVP 사용자 추적: GA4/GTM으로만. DB에 사용자 관련 데이터 없음
@@ -389,14 +394,6 @@ POST /functions/v1/interpret
 - 전면 광고(Interstitial) 매회 1회. 웹: AdSense / 앱: AdMob (Capacitor)
 - 결과 화면 하단 배너 광고 1개 (홈 배너 없음)
 - 클라이언트에서 SDK로 직접 처리. 서버 검증 불필요 (기회 관리 없음)
-
-#### 4. AI 해석 호출
-```
-POST {ollamaUrl}/api/generate
-```
-- 요청: interpret에서 받은 prompt 전달
-- 응답: SSE 스트리밍 (해석 문장)
-- Edge Function 타임아웃 우회를 위해 클라이언트에서 직접 호출
 
 #### 5. 결과 저장
 - localStorage에 저장 (암호화+압축, storageUtil 경유)

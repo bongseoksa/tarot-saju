@@ -120,8 +120,8 @@ Strong success criteria let you loop independently. Weak criteria ("make it work
 
 ## 환경 변수
 
-- 프론트엔드: `VITE_` 접두사 (Vite 규칙). `VITE_SUPABASE_URL`, `VITE_SUPABASE_ANON_KEY`, `VITE_GTM_ID`, `VITE_OLLAMA_URL`, `VITE_ADSENSE_CLIENT_ID`
-- Edge Function: Supabase Secrets로 관리
+- 프론트엔드: `VITE_` 접두사 (Vite 규칙). `VITE_SUPABASE_URL`, `VITE_SUPABASE_ANON_KEY`, `VITE_GTM_ID`, `VITE_ADSENSE_CLIENT_ID`
+- Edge Function: Supabase Secrets로 관리 (`OLLAMA_URL` — Ollama 엔드포인트, 백엔드 전용)
 - 로컬: `.env.local` (git 제외), 템플릿: `.env.example` (git 포함)
 - 프로덕션: Vercel 환경 변수 (프론트), Supabase Secrets (Edge Function)
 

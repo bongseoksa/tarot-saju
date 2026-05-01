@@ -85,7 +85,8 @@
 
 ### AI 모델
 - 온디맨드 경량 모델 (Gemma 등) — 로컬 PC에서 Ollama로 서빙
-- Cloudflare Tunnel로 외부 노출, 클라이언트에서 직접 호출 (Edge Function 경유하지 않음)
+- Cloudflare Tunnel로 외부 노출, Edge Function에서 호출 + 클라이언트로 스트리밍 중계
+- Ollama URL은 백엔드(Supabase Secret)에서만 관리 — 프론트엔드 노출 없음
 - AI 역할은 **해석 문장 생성 한 가지**로 한정
   - 카드 뽑기: 클라이언트에서 랜덤 선택 (AI 불필요)
   - 카드 의미/스프레드 규칙: 정적 데이터로 DB/JSON 관리 (AI 불필요)
