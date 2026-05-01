@@ -10,7 +10,7 @@
      ├── specs.md              (서비스 스펙 정의)
      ├── tech-decisions.md     (기술스택 선정 근거)
      ├── 00-brainstorming.md   (브레인스토밍 / 초기 아이디어)
-     ├── 01-benchmark-jeomsin.md (점신 타로 벤치마킹 분석)
+     ├── 01-benchmark.md         (경쟁 서비스 벤치마킹 분석)
      ├── 02-taro-mvp.md        (타로 MVP 기능 설계)
      ├── 03-ai-design.md       (AI 해석 품질 설계 — 심리 설계 + 프롬프트)
      ├── 04-harness-engineering.md (하네스 엔지니어링 적용 방안)
@@ -109,7 +109,7 @@
 
 # ✅ 다음 작업 (강제 우선순위)
 
-1. ~~01-benchmark-jeomsin.md~~ ✅ 점신 벤치마킹 완료
+1. ~~01-benchmark.md~~ ✅ 경쟁 서비스 벤치마킹 완료 (점신/헬로우봇/보라/coto)
 2. ~~02-taro-mvp.md~~ ✅ MVP 기능 설계 완료 (벤치마킹 반영)
 3. ~~03-ai-design.md~~ ✅ AI 해석 품질 설계 완료
 4. **코드 개발 시작** ← 현재 단계

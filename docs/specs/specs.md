@@ -2,7 +2,7 @@
 - specs.md — 서비스 스펙 정의 (현재 문서)
 - tech-decisions.md — 기술스택 선정 근거
 - 00-brainstorming.md — 브레인스토밍 / 초기 아이디어 정리
-- 01-benchmark-jeomsin.md — 점신 타로 벤치마킹 분석 (UX/수익모델 참고)
+- 01-benchmark.md — 경쟁 서비스 벤치마킹 분석 (점신/헬로우봇/보라/coto)
 - 02-taro-mvp.md — 타로 MVP 기능 설계
 - 03-ai-design.md — AI 해석 품질 설계 (심리 설계 + 프롬프트 설계)
 - 04-harness-engineering.md — 하네스 엔지니어링 적용 방안 (개발 시점 + 런타임 AI 제어)
@@ -23,7 +23,7 @@
 - 전문 상담 (Phase 2) — 유료 상담 연결
 
 > 벤치마킹: 점신 수익 구조 (매회 광고 + 행운패스 + 전문가 상담 + 굿즈)
-> 상세 분석: [01-benchmark-jeomsin.md](./01-benchmark-jeomsin.md)
+> 상세 분석: [01-benchmark.md](./01-benchmark.md)
 
 ## 배포 타겟
 1. 웹 브라우저 (우선)
