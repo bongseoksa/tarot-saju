@@ -20,7 +20,7 @@
   ├── web (React + Vite)
 
 /supabase
-  ├── functions (Edge Functions)
+  ├── functions (Edge Functions — 서버 검증 필수 로직만, MVP 2개)
   ├── migrations (DB 마이그레이션)
 
 /packages
@@ -74,7 +74,8 @@
 
 - AI 역할은 해석 문장 생성으로 한정 (카드 의미/스프레드 규칙은 정적 데이터)
 - 프롬프트 설계 품질 = 서비스 품질. 프롬프트 실패 시 서비스 가치 0
-- 로컬 PC에서 Gemma 온디맨드 서빙 (비용 0원, PC 꺼지면 중단)
+- 로컬 PC에서 Ollama + Gemma 서빙 (비용 0원, PC 꺼지면 중단)
+- 클라이언트에서 Ollama 직접 호출 (Edge Function 타임아웃 회피)
 - 응답 속도는 백로그, 동작 우선
 
 ## 3. 유료 전환 불확실

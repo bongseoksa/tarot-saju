@@ -22,18 +22,34 @@
 
 ---
 
-## 백엔드: Supabase Edge Functions
+## 백엔드: Supabase Edge Functions + SDK (RLS)
+
+### 설계 원칙
+무료 티어 Edge Function 개수 제한(10~15개)이 있으므로, **서버 검증이 필수인 로직만** Edge Function으로 처리. CRUD 작업은 Supabase SDK + RLS로 클라이언트에서 직접 DB 접근.
+
+### Edge Function 사용 기준
+| 처리 방식 | 기준 | 예시 |
+|---|---|---|
+| Edge Function | 서버에서 검증해야 하는 로직 | 기회 차감, 광고 콜백 검증, 결제 검증 |
+| Supabase SDK + RLS | 단순 CRUD, 사용자 본인 데이터 | 결과 저장/조회, 기회 조회 |
+| 클라이언트 자체 처리 | 서버 불필요 | 카드 랜덤 뽑기 |
+
+### MVP Edge Functions (2개)
+1. **interpret** — 기회 차감 + 프롬프트 조합
+2. **chances-ad** — 광고 시청 검증 + 기회 추가
 
 ### 선정 이유
 - **서버 관리 불필요**: MVP 단계에서 별도 서버 운영/배포 부담 제거
 - **Supabase 통합**: DB, Auth, Storage와 동일 플랫폼에서 함수 실행
 - **TypeScript 지원**: 프론트엔드와 언어 통일 (Deno 런타임)
 - **무료 티어**: MVP 검증에 충분한 사용량 제공
+- **RLS 활용**: Edge Function 개수 최소화하면서도 보안 유지
 
 ### Python 백엔드를 선택하지 않은 이유
 - 별도 서버 인프라 필요 (배포, 모니터링, 스케일링)
 - MVP 단계에서 과도한 인프라 복잡도
 - 프론트엔드(TypeScript)와 언어 분리로 인한 개발 속도 저하
+- AI 서빙은 Ollama가 담당하므로 Python 서버 불필요
 
 ### 확장 계획
 - 트래픽 증가 또는 복잡한 비즈니스 로직 필요시 Node.js (NestJS) 도입 검토
@@ -90,6 +106,11 @@ AI는 **해석 문장 생성**만 담당한다. 나머지는 정적 데이터로
 | 4~6GB | Gemma 2B | 5~15초 |
 | 8GB+ | Gemma 7B | 5~10초 |
 | 16GB+ | Gemma 7B (고품질) | 3~5초 |
+
+### 클라이언트 직접 호출 구조
+- Edge Function에서 AI를 호출하지 않음 (타임아웃 위험 회피)
+- Edge Function은 기회 차감 + 프롬프트 조합만 수행, 프롬프트를 클라이언트에 반환
+- 클라이언트가 Ollama API를 직접 호출하여 스트리밍 응답 수신
 
 ### 리스크
 - PC 꺼지면 AI 서비스 중단 (MVP 100명 테스트에는 감당 가능)

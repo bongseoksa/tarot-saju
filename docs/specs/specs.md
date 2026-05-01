@@ -42,8 +42,10 @@
 - 상태관리: Zustand (필요시)
 
 ### 백엔드
-- Supabase Edge Functions (Deno/TypeScript)
-- 별도 백엔드 서버 없이 Supabase 기능으로 MVP 구성
+- Supabase Edge Functions (Deno/TypeScript) — 서버 검증이 필수인 로직만 사용
+- CRUD 작업은 Supabase SDK + RLS로 클라이언트에서 직접 DB 접근
+- 무료 티어 Edge Function 개수 제한 (10~15개) → 최소화 필수
+- MVP Edge Functions: interpret (기회 차감 + 프롬프트 조합), chances-ad (광고 검증)
 - 확장 필요시 Node.js (NestJS) 도입 검토
 
 ### 데이터베이스
@@ -52,10 +54,10 @@
 - 벡터DB: Supabase pgvector (확장시)
 
 ### AI 모델
-- 온디맨드 경량 모델 (Gemma 등) — 로컬 PC에서 직접 서빙
-- MVP에서는 본인 PC에서 모델 실행, Cloudflare Tunnel로 외부 노출
+- 온디맨드 경량 모델 (Gemma 등) — 로컬 PC에서 Ollama로 서빙
+- Cloudflare Tunnel로 외부 노출, 클라이언트에서 직접 호출 (Edge Function 경유하지 않음)
 - AI 역할은 **해석 문장 생성 한 가지**로 한정
-  - 카드 뽑기: 랜덤 선택 (AI 불필요)
+  - 카드 뽑기: 클라이언트에서 랜덤 선택 (AI 불필요)
   - 카드 의미/스프레드 규칙: 정적 데이터로 DB/JSON 관리 (AI 불필요)
   - 해석 문장 생성: 정적 데이터 + 사용자 질문을 프롬프트로 전달 → 문장 생성 (AI 역할)
 - 모델 크기보다 **프롬프트 설계가 핵심** (프롬프트 품질 = 서비스 품질)

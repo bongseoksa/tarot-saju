@@ -130,57 +130,71 @@ interface UserChance {
 
 ---
 
+## 아키텍처
+
+Supabase Edge Function 무료 티어 개수 제한(10~15개)을 고려하여, 서버 검증이 필수인 로직만 Edge Function으로 처리. 나머지는 클라이언트 + Supabase SDK(RLS)로 직접 처리.
+
+```
+[앱 (클라이언트)]
+  ├── 카드 뽑기 (랜덤) ─────────────────→ 자체 처리
+  ├── 결과 저장/조회, 기회 조회 ─────────→ Supabase DB (SDK + RLS)
+  ├── 기회 차감 + 프롬프트 요청 ─────────→ Edge Function (interpret)
+  ├── AI 해석 요청 ─────────────────────→ Ollama (Cloudflare Tunnel, 직접 호출)
+  └── 광고 보상 ────────────────────────→ Edge Function (chances-ad)
+```
+
+---
+
 ## API 설계
 
-### 1. 카드 뽑기
-```
-POST /api/draw
-```
-- 요청: { spreadId, question?, category? }
-- 처리: 78장에서 스프레드 카드 수만큼 랜덤 선택 + 정/역방향 결정
-- 응답: { cards: DrawnCard[], spread: Spread }
-- 기회 1회 차감
+### Edge Functions (서버 검증 필수 — MVP 2개)
 
-### 2. 해석 요청
+#### 1. 해석 요청
 ```
-POST /api/interpret
+POST /functions/v1/interpret
 ```
 - 요청: { spreadId, question?, category?, cards: DrawnCard[] }
-- 처리: Supabase Edge Function → 로컬 AI 서버(Cloudflare Tunnel) 호출
-  - 카드 정적 데이터 + 스프레드 위치 + 질문을 프롬프트로 조합 → AI 문장 생성
-- 응답: SSE 스트리밍 { interpretation (청크), summary }
-- 참고: 응답 속도는 PC 사양에 따라 다름 (속도 최적화는 백로그)
+- 처리: 기회 잔여 확인 → 기회 1회 차감 → 카드 정적 데이터 + 스프레드 위치 + 질문으로 프롬프트 조합
+- 응답: { prompt: string, ollamaUrl: string }
+- 클라이언트는 반환된 prompt로 Ollama에 직접 요청
 
-### 3. 결과 저장
+#### 2. 기회 충전 (광고)
 ```
-POST /api/readings
-```
-- 요청: ReadingResult
-- 처리: Supabase DB에 저장
-- 인증 필요 (비로그인시 로컬 저장)
-
-### 4. 결과 조회
-```
-GET /api/readings
-```
-- 응답: ReadingResult[] (최신순)
-- 인증 필요
-
-### 5. 기회 조회
-```
-GET /api/chances
-```
-- 응답: UserChance
-
-### 6. 기회 충전 (광고)
-```
-POST /api/chances/ad
+POST /functions/v1/chances-ad
 ```
 - 처리: 광고 시청 완료 콜백 검증 → 기회 +1
+- 응답: { remainingChances: number }
 
-### 7. 기회 충전 (결제)
+### 클라이언트 직접 처리
+
+#### 3. 카드 뽑기
+- 클라이언트에서 78장 중 랜덤 선택 + 정/역방향 결정
+- 서버 호출 없음
+
+#### 4. AI 해석 호출
 ```
-POST /api/chances/purchase
+POST {ollamaUrl}/api/generate
+```
+- 요청: interpret에서 받은 prompt 전달
+- 응답: SSE 스트리밍 (해석 문장)
+- Edge Function 타임아웃 우회를 위해 클라이언트에서 직접 호출
+- 참고: 응답 속도는 PC 사양에 따라 다름 (속도 최적화는 백로그)
+
+#### 5. 결과 저장 (Supabase SDK + RLS)
+- Supabase client SDK로 readings 테이블에 직접 insert
+- 비로그인시 로컬 스토리지 저장
+
+#### 6. 결과 조회 (Supabase SDK + RLS)
+- Supabase client SDK로 readings 테이블 직접 조회
+- 최신순 정렬
+
+#### 7. 기회 조회 (Supabase SDK + RLS)
+- Supabase client SDK로 user_chances 테이블 직접 조회
+
+### Phase 2 추가 예정
+#### 기회 충전 (결제)
+```
+POST /functions/v1/chances-purchase
 ```
 - 요청: { productId }
 - 처리: 결제 검증 → 기회 추가
