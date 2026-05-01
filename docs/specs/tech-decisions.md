@@ -145,14 +145,21 @@ AI는 **해석 문장 생성**만 담당한다. 나머지는 정적 데이터로
 | 8GB+ | Gemma 7B | 5~10초 |
 | 16GB+ | Gemma 7B (고품질) | 3~5초 |
 
-### 클라이언트 직접 호출 구조
-- Edge Function에서 AI를 호출하지 않음 (타임아웃 위험 회피)
-- Edge Function은 프롬프트 조합만 수행, 프롬프트를 클라이언트에 반환
-- 클라이언트가 Ollama API를 직접 호출하여 스트리밍 응답 수신
+### Edge Function 스트리밍 중계 구조
+- Edge Function이 프롬프트 조합 + Ollama 호출 + SSE 스트리밍 중계를 모두 담당
+- `OLLAMA_URL`은 Supabase Secret (백엔드 전용) — 프론트엔드 노출 원천 차단
+- Cloudflare Tunnel: Edge Function에서만 접근, 클라이언트 직접 접근 불가
+- Edge Function 스트리밍 타임아웃: 150초 (AI 생성 5~30초 충분 커버)
+
+### AI 서빙 안정성 (G-2)
+- 자동 실행: macOS `launchd` plist — 로그인 시 Ollama + Cloudflare Tunnel 자동 시작
+- Health check: cron 스크립트 5분 간격 (`curl` Ollama `/api/tags`), 실패 시 자동 재시작 시도
+- 다운 알림: 텔레그램 봇 (무료, 즉시 수신), 3회 연속 실패 시 발송
+- PC 절전 방지: macOS 에너지 설정에서 잠자기 비활성화 (수동 설정)
 
 ### 리스크
 - PC 꺼지면 AI 서비스 중단 (MVP 100명 테스트에는 감당 가능)
-- 동시 요청 1~2명이 한계
+- 동시 요청 1~2명이 한계 (대기열 관리는 P1 백로그)
 - 한국어 타로 해석 품질은 프롬프트 튜닝으로 검증 필요
 
 ### 확장 계획
