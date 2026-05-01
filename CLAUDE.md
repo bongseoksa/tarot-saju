@@ -99,7 +99,31 @@ Strong success criteria let you loop independently. Weak criteria ("make it work
 - `docs/specs/03-ai-design.md` — AI 해석 품질 설계 (심리 설계 + 프롬프트 설계)
 - `docs/specs/04-harness-engineering.md` — 하네스 엔지니어링 적용 방안
 - `docs/specs/05-experiment-plan.md` — (예정) 결제/구독 검증 실험 (Phase 2)
+- `docs/specs/06-worldview.md` — "점" 세계관 (캐릭터 가문, 점하나 캐릭터, 확장 시나리오)
 - `docs/specs/backlog.md` — 백로그 (지연 항목)
+
+## Git 컨벤션
+
+- 브랜치: `main` + `feature/*` (develop 없음, 1인 개발)
+- main: 항상 배포 가능 상태. feature 완성 후 merge
+- 커밋: Conventional Commits (`feat:`, `fix:`, `docs:`, `refactor:`, `chore:`)
+- 릴리스: Semver 태그 (`v0.1.0`)
+
+## 테스트 전략
+
+- TDD: 테스트 먼저 → 실패 확인 → 구현 → 통과 확인
+- 프레임워크: Vitest + React Testing Library
+- 필수 테스트 대상: 비즈니스 로직 (카드 랜덤, localStorage 암호화/복호화, 미완료 세션, 만료 판정 등)
+- UI 테스트: 핵심 인터랙션만
+- E2E: MVP 제외 (P1 백로그)
+- 커밋 전 `vitest run` 통과 필수
+
+## 환경 변수
+
+- 프론트엔드: `VITE_` 접두사 (Vite 규칙). `VITE_SUPABASE_URL`, `VITE_SUPABASE_ANON_KEY`, `VITE_GTM_ID`, `VITE_OLLAMA_URL`, `VITE_ADSENSE_CLIENT_ID`
+- Edge Function: Supabase Secrets로 관리
+- 로컬: `.env.local` (git 제외), 템플릿: `.env.example` (git 포함)
+- 프로덕션: Vercel 환경 변수 (프론트), Supabase Secrets (Edge Function)
 
 ## 언어 규칙
 
