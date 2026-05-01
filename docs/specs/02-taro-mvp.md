@@ -315,6 +315,34 @@ interface TarotTheme {
 
 > 기회 관리(UserChance) 제거 — 매번 광고 시청 방식으로 전환. 상세: [01-benchmark.md](./01-benchmark.md)
 
+### DB 스키마 (MVP)
+
+MVP에서 DB는 공유 기능 전용. 결과 히스토리는 localStorage.
+
+```sql
+-- 공유 결과 저장 (공유하기 클릭 시에만 INSERT)
+CREATE TABLE shared_readings (
+  id          uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  theme_id    text NOT NULL,
+  theme_title text NOT NULL,
+  cards       jsonb NOT NULL,        -- [{cardId, positionIndex, isReversed}]
+  interpretation text NOT NULL,      -- AI 해석 전문
+  summary     text NOT NULL,         -- 공유용 한줄 요약
+  created_at  timestamptz DEFAULT now(),
+  expires_at  timestamptz DEFAULT now() + interval '30 days'
+);
+
+CREATE INDEX idx_shared_readings_expires ON shared_readings (expires_at);
+
+-- RLS
+ALTER TABLE shared_readings ENABLE ROW LEVEL SECURITY;
+CREATE POLICY "anyone can read" ON shared_readings FOR SELECT USING (true);
+CREATE POLICY "anyone can insert" ON shared_readings FOR INSERT WITH CHECK (true);
+```
+
+- 만료 삭제: pg_cron 또는 Supabase scheduled function (`DELETE FROM shared_readings WHERE expires_at < now()`)
+- readings 테이블 (유저별 결과 서버 저장): P0 백로그 — 회원가입 구현 후 추가
+
 ---
 
 ## 아키텍처
@@ -340,12 +368,16 @@ interface TarotTheme {
 ```
 POST /functions/v1/interpret
 ```
-- 요청: { themeId, cards: DrawnCard[] }
+- 요청: `{ themeId: string, cards: DrawnCard[] }`
 - 처리: 카드 정적 데이터 + 테마 정보 + 스프레드 위치로 프롬프트 조합
-- 응답: { prompt: string, ollamaUrl: string }
+- 응답 (200): `{ prompt: string }`
+- 에러 (400/500): `{ error: string }`
+- 인증: Supabase anon key (기본)
+- ollamaUrl은 클라이언트 환경 변수(`VITE_OLLAMA_URL`)로 관리 — 응답에 미포함
 - 클라이언트는 반환된 prompt로 Ollama에 직접 요청
 
 > 기회 차감 로직 제거 — 광고는 클라이언트에서 직접 처리 (AdMob SDK)
+> MVP 사용자 추적: GA4/GTM으로만. DB에 사용자 관련 데이터 없음
 
 ### 클라이언트 직접 처리
 
@@ -366,12 +398,16 @@ POST {ollamaUrl}/api/generate
 - 응답: SSE 스트리밍 (해석 문장)
 - Edge Function 타임아웃 우회를 위해 클라이언트에서 직접 호출
 
-#### 5. 결과 저장 (Supabase SDK + RLS)
-- Supabase client SDK로 readings 테이블에 직접 insert
-- 비로그인시 로컬 스토리지 저장
+#### 5. 결과 저장
+- localStorage에 저장 (암호화+압축, storageUtil 경유)
+- 서버 DB 저장 없음 (MVP 비로그인)
 
-#### 6. 결과 조회 (Supabase SDK + RLS)
-- Supabase client SDK로 readings 테이블 직접 조회
+#### 6. 공유 결과 저장 (Supabase SDK + RLS)
+- "공유하기" 클릭 시에만 shared_readings 테이블에 insert
+- 30일 후 자동 삭제
+
+#### 7. 공유 결과 조회 (Supabase SDK + RLS)
+- `/shared/:shareId` 접근 시 shared_readings 테이블 조회
 - 최신순 정렬
 
 ### Phase 2 추가 예정
