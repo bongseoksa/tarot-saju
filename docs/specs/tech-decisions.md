@@ -38,9 +38,12 @@
 
 #### MVP 대응 방식
 
-1. **정적 프리렌더** — vite-ssg로 홈/테마 랜딩 페이지를 빌드 타임에 HTML 생성
-2. **동적 OG 메타태그** — 공유 결과 페이지는 Vercel Edge Middleware 또는 Supabase Edge Function에서 OG 태그만 동적 주입 (HTML 전체 SSR 불필요)
-3. **기본 SEO** — sitemap.xml, robots.txt, 구조화 데이터(JSON-LD) 설정
+1. **정적 프리렌더** — vite-ssg로 홈(`/`) 1페이지만 빌드 타임에 HTML 생성
+   - title: "점하나 - 오늘, 점 하나 찍어볼까?"
+   - description: "AI가 읽어주는 타로 카드. 무료, 무제한. 지금 바로 점 하나 찍어보세요."
+   - OG 이미지: 점하나 대표 이미지 (정적)
+2. **동적 OG 메타태그** — `/shared/:shareId` 공유 결과 페이지는 Supabase Edge Function에서 OG 태그 동적 주입
+3. **기본 SEO** — sitemap.xml (vite-ssg 자동 생성), robots.txt (크롤링 허용)
 
 #### Next.js 전환을 하지 않는 이유
 
