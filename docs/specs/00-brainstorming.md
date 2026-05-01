@@ -15,6 +15,7 @@
      ├── 03-ai-design.md       (AI 해석 품질 설계 — 심리 설계 + 프롬프트)
      ├── 04-harness-engineering.md (하네스 엔지니어링 적용 방안)
      ├── 05-experiment-plan.md (예정: 결제/구독 검증 — Phase 2)
+     ├── 06-worldview.md       ("점" 세계관 — 캐릭터 가문, 서비스 내 등장)
      └── backlog.md            (백로그)
 
 /apps
@@ -76,7 +77,7 @@
 - AI 역할은 해석 문장 생성으로 한정 (카드 의미/스프레드 규칙은 정적 데이터)
 - 프롬프트 설계 품질 = 서비스 품질. 심리 기법(바넘 효과, 양면 진술 등)을 프롬프트에 적용. 프롬프트 실패 시 서비스 가치 0
 - 로컬 PC에서 Ollama + Gemma 서빙 (비용 0원, PC 꺼지면 중단)
-- 클라이언트에서 Ollama 직접 호출 (Edge Function 타임아웃 회피)
+- Edge Function이 Ollama 호출 + SSE 스트리밍 중계 (Ollama URL은 Supabase Secret, 프론트 노출 없음)
 - 응답 속도는 백로그, 동작 우선
 
 ## 3. 유료 전환 불확실
