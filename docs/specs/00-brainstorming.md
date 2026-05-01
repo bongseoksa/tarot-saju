@@ -12,15 +12,16 @@
      ├── 00-brainstorming.md   (브레인스토밍 / 초기 아이디어)
      ├── 01-taro-mvp.md        (타로 MVP 기능 설계)
      ├── backlog.md            (백로그)
-     ├── 02-ai-design.md       (예정: AI 해석 품질 설계)
+     ├── 02-ai-design.md       (AI 해석 품질 설계 — 심리 설계 + 프롬프트)
      ├── 03-experiment-plan.md (예정: 결제 검증 실험)
-     └── 04-harness-engineering.md (하네스 엔지니어링 적용 방안)
+     ├── 04-harness-engineering.md (하네스 엔지니어링 적용 방안)
+     └── 05-benchmark-jeomsin.md (점신 타로 벤치마킹 분석)
 
 /apps
   ├── web (React + Vite)
 
 /supabase
-  ├── functions (Edge Functions — 서버 검증 필수 로직만, MVP 2개)
+  ├── functions (Edge Functions — 서버 검증 필수 로직만, MVP 1개)
   ├── migrations (DB 마이그레이션)
 
 /packages
@@ -73,7 +74,7 @@
 ## 2. AI 품질 의존
 
 - AI 역할은 해석 문장 생성으로 한정 (카드 의미/스프레드 규칙은 정적 데이터)
-- 프롬프트 설계 품질 = 서비스 품질. 프롬프트 실패 시 서비스 가치 0
+- 프롬프트 설계 품질 = 서비스 품질. 심리 기법(바넘 효과, 양면 진술 등)을 프롬프트에 적용. 프롬프트 실패 시 서비스 가치 0
 - 로컬 PC에서 Ollama + Gemma 서빙 (비용 0원, PC 꺼지면 중단)
 - 클라이언트에서 Ollama 직접 호출 (Edge Function 타임아웃 회피)
 - 응답 속도는 백로그, 동작 우선
