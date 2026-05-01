@@ -31,11 +31,12 @@
 - `docs/specs/specs.md` — 마스터 서비스 스펙 (기술스택, 수익모델, 배포 타겟)
 - `docs/specs/tech-decisions.md` — 기술스택 선정 근거
 - `docs/specs/00-brainstorming.md` — 프로젝트 구조 및 개발 원칙
-- `docs/specs/01-taro-mvp.md` — 타로 MVP 기능 설계 (사용자 흐름, 데이터 타입, API 엔드포인트)
-- `docs/specs/02-ai-design.md` — AI 해석 품질 설계 (심리 설계 + 프롬프트 설계)
-- `docs/specs/backlog.md` — 백로그 (지연 항목)
+- `docs/specs/01-benchmark-jeomsin.md` — 점신 타로 벤치마킹 분석
+- `docs/specs/02-taro-mvp.md` — 타로 MVP 기능 설계 (사용자 흐름, 데이터 타입, API 엔드포인트)
+- `docs/specs/03-ai-design.md` — AI 해석 품질 설계 (심리 설계 + 프롬프트 설계)
 - `docs/specs/04-harness-engineering.md` — 하네스 엔지니어링 적용 방안
-- `docs/specs/05-benchmark-jeomsin.md` — 점신 타로 벤치마킹 분석
+- `docs/specs/05-experiment-plan.md` — (예정) 결제/구독 검증 실험 (Phase 2)
+- `docs/specs/backlog.md` — 백로그 (지연 항목)
 
 ## 언어 규칙
 

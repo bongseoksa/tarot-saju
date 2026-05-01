@@ -2,13 +2,13 @@
 
 ## 핵심 목표
 - 빠른 체험 → 감정 자극 → 공유 유도
-- 1회 무료 제공 후 광고/결제로 기회 추가
+- 무제한 무료 이용 + 결과 보기 전 매회 광고 시청
 
 ---
 
 ## 사용자 흐름
 
-> 벤치마킹(점신) 반영하여 단순화. 상세 분석: [05-benchmark-jeomsin.md](./05-benchmark-jeomsin.md)
+> 벤치마킹(점신) 반영하여 단순화. 상세 분석: [01-benchmark-jeomsin.md](./01-benchmark-jeomsin.md)
 
 ```
 [1. 홈 (테마 목록)] → [2. 카드 뽑기 (3장)] → [3. 광고 시청] → [4. AI 해석 결과] → [5. 공유/저장]
@@ -141,7 +141,7 @@ interface TarotTheme {
 }
 ```
 
-> 기회 관리(UserChance) 제거 — 매번 광고 시청 방식으로 전환. 상세: [05-benchmark-jeomsin.md](./05-benchmark-jeomsin.md)
+> 기회 관리(UserChance) 제거 — 매번 광고 시청 방식으로 전환. 상세: [01-benchmark-jeomsin.md](./01-benchmark-jeomsin.md)
 
 ---
 

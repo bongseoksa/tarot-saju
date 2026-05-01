@@ -12,8 +12,8 @@
 
 ```
 [Edge Function: interpret]
-  → 기회 차감
   → 카드 정적 데이터 조회
+  → 테마 정보 조회
   → 프롬프트 조합
   → { prompt, ollamaUrl } 반환
 
@@ -256,34 +256,36 @@ function buildPrompt(request: ReadingRequest, cards: TarotCard[], spread: Spread
 - 설명: ${card.description}`;
   }).join("\n\n");
 
-  // 질문 블록 (사전 정의된 질문에서 조회)
-  const presetQuestion = presetQuestions.find(q => q.id === request.questionId);
-  const categoryMap = { love: "연애", career: "직장", wealth: "재물", study: "학업", health: "건강", daily: "오늘의 운세", general: "일반" };
-  const question = presetQuestion.text;
-  const category = categoryMap[presetQuestion.category];
+  // 테마 정보 조회
+  const theme = themes.find(t => t.id === request.themeId);
+  const categoryMap = { love: "연애", career: "직장", wealth: "재물", study: "학업", daily: "일상", general: "일반" };
+  const question = theme.description;
+  const category = categoryMap[theme.category];
 
-  // 출력 형식 (스프레드에 따라 다름)
-  const outputFormat = spread.id === "one-card" ? ONE_CARD_FORMAT : THREE_CARD_FORMAT;
+  // 출력 형식 (MVP: 쓰리카드 고정)
+  const outputFormat = THREE_CARD_FORMAT;
 
   return `${systemInstruction}\n\n## 뽑힌 카드\n\n${cardBlocks}\n\n## 질문\n- 카테고리: ${category}\n- 질문: ${question}\n\n${outputFormat}`;
 }
 ```
 
-### 사전 정의 질문 목록
+### 테마 콘텐츠 목록
+
+> 데이터 구조 상세: [02-taro-mvp.md](./02-taro-mvp.md)의 TarotTheme 참조
 
 ```typescript
-const PRESET_QUESTIONS: PresetQuestion[] = [
-  { id: "daily-today",      category: "daily",   text: "오늘 하루는 어떨까요?" },
-  { id: "love-luck",        category: "love",    text: "나의 연애운은 어떤가요?" },
-  { id: "love-feeling",     category: "love",    text: "그 사람의 마음은 어떤가요?" },
-  { id: "love-new",         category: "love",    text: "새로운 인연이 올까요?" },
-  { id: "career-outlook",   category: "career",  text: "지금 직장에서의 전망은?" },
-  { id: "career-change",    category: "career",  text: "이직을 해도 괜찮을까요?" },
-  { id: "wealth-luck",      category: "wealth",  text: "나의 재물운은 어떤가요?" },
-  { id: "study-result",     category: "study",   text: "시험/학업 결과가 어떨까요?" },
-  { id: "health-caution",   category: "health",  text: "건강에서 주의할 점은?" },
-  { id: "general-message",  category: "general", text: "지금 가장 필요한 메시지는?" },
-  { id: "general-choice",   category: "general", text: "이 선택이 맞을까요?" },
+const TAROT_THEMES: TarotTheme[] = [
+  { id: "daily-today",      category: "daily",   title: "오늘의 타로",       description: "오늘 하루는 어떨까?",          tags: ["#오늘", "#하루운세"],    spreadType: "three-card", positions: ["과거", "현재", "미래"] },
+  { id: "daily-week",       category: "daily",   title: "이번 주 타로",      description: "이번 주는 어떤 흐름일까?",     tags: ["#이번주", "#주간운세"],  spreadType: "three-card", positions: ["과거", "현재", "미래"] },
+  { id: "love-luck",        category: "love",    title: "나의 연애운",       description: "나의 연애운은 어떤가요?",      tags: ["#연애", "#애정운"],      spreadType: "three-card", positions: ["과거", "현재", "미래"] },
+  { id: "love-feeling",     category: "love",    title: "그 사람의 마음",    description: "그 사람의 마음은 어떤가요?",   tags: ["#짝사랑", "#속마음"],    spreadType: "three-card", positions: ["과거", "현재", "미래"] },
+  { id: "love-new",         category: "love",    title: "새로운 인연",       description: "새로운 인연이 올까요?",        tags: ["#인연", "#만남"],        spreadType: "three-card", positions: ["과거", "현재", "미래"] },
+  { id: "career-outlook",   category: "career",  title: "직장에서의 전망",   description: "지금 직장에서의 전망은?",      tags: ["#직장", "#커리어"],      spreadType: "three-card", positions: ["과거", "현재", "미래"] },
+  { id: "career-change",    category: "career",  title: "이직 타이밍",       description: "이직을 해도 괜찮을까요?",      tags: ["#이직", "#전환"],        spreadType: "three-card", positions: ["과거", "현재", "미래"] },
+  { id: "wealth-luck",      category: "wealth",  title: "나의 재물운",       description: "나의 재물운은 어떤가요?",      tags: ["#재물", "#금전운"],      spreadType: "three-card", positions: ["과거", "현재", "미래"] },
+  { id: "study-result",     category: "study",   title: "시험/학업 결과",    description: "시험/학업 결과가 어떨까요?",   tags: ["#시험", "#합격"],        spreadType: "three-card", positions: ["과거", "현재", "미래"] },
+  { id: "general-message",  category: "general", title: "지금 필요한 메시지", description: "지금 가장 필요한 메시지는?",  tags: ["#조언", "#메시지"],      spreadType: "three-card", positions: ["과거", "현재", "미래"] },
+  { id: "general-choice",   category: "general", title: "이 선택이 맞을까",  description: "이 선택이 맞을까요?",         tags: ["#선택", "#결정"],        spreadType: "three-card", positions: ["과거", "현재", "미래"] },
 ];
 ```
 
