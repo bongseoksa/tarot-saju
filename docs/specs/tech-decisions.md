@@ -237,6 +237,32 @@ AI는 **해석 문장 생성**만 담당한다. 나머지는 정적 데이터로
 
 ---
 
+## 테스트 전략
+
+### 프레임워크
+- **Vitest**: Vite 네이티브 테스트 러너. 빠른 실행 속도, ESM 호환
+- **React Testing Library**: 사용자 관점의 컴포넌트 테스트
+- **`@packages/msw-handler`**: 내부 MSW 기반 API 모킹 패키지
+
+### API 테스트 — MSW 기반 네트워크 모킹
+
+외부 API(Supabase 등)를 호출하는 코드는 `vi.mock`으로 클라이언트를 직접 모킹하지 않고, `@packages/msw-handler`를 사용하여 네트워크 레벨에서 요청을 가로챈다.
+
+| 구분 | 설명 |
+|---|---|
+| 패키지 | `packages/msw-handler` (`@packages/msw-handler`) |
+| 핸들러 정의 | `createMock({ route, method, resolver })` |
+| 테스트 서버 | `packages/msw-handler/src/server.ts` — `setupServer(gatewayHandler)` (MSW Node) |
+| 브라우저 지원 | `MSWProvider` + `useMSWContext` (MSW Service Worker) |
+| 동적 설정 | `setConfig(mockName, config)` — 테스트별 응답 변경 |
+
+### 선정 이유
+- **실제 네트워크 동작 검증**: fetch/XHR을 네트워크 레벨에서 가로채므로 클라이언트 코드 변경 없이 테스트 가능
+- **일관된 모킹 패턴**: `createMock` 패턴으로 모든 API 모킹을 통일
+- **브라우저/Node 양쪽 지원**: 테스트(Node)와 개발 환경(브라우저) 동일 핸들러 재사용
+
+---
+
 ## 스타일링: Tailwind CSS
 
 ### 선정 이유

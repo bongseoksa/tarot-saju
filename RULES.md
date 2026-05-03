@@ -22,6 +22,10 @@
 - 실제 코드 작성 이전에 테스트 케이스를 먼저 작성한다.
 - 테스트 실패 확인 → 구현 → 테스트 통과 확인 순서를 따른다.
 - 프레임워크: Vitest + React Testing Library
+- **API 모킹**: 외부 API(Supabase 등)를 호출하는 코드의 테스트는 `@packages/msw-handler`를 사용한다.
+  - `createMock`으로 핸들러를 정의하고, `server.ts`의 MSW Node 서버로 테스트 환경을 구성한다.
+  - `vi.mock`으로 Supabase 클라이언트를 직접 모킹하지 않는다. MSW로 네트워크 레벨에서 가로챈다.
+  - 사용법은 `packages/msw-handler/README.md` 참조.
 - 커밋 전 `pnpm run test` 통과 필수
 
 ## 4. MCP 도구 활용 규칙
