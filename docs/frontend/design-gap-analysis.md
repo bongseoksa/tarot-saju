@@ -16,6 +16,7 @@
 - TASK 3 완료 후: Result 93%↑ (AdviceCard font-bold)
 - TASK 4 완료 후: Result 94%↑ (버튼 hover/duration 추가)
 - TASK 5 완료 후: Result 95%↑ (mascot indicator mb-lg)
+- TASK 6 완료 후: Result 97%↑ (스크롤바 숨김)
 
 | 디자인 | 구현 파일 |
 |---|---|
@@ -147,9 +148,10 @@ share 버튼에도 `duration-200` 추가:
 
 ## TASK 6 — ResultPage 메인 영역 스크롤바 숨김
 
+**상태**: ✅ 완료
 **파일**: `pages/ResultPage.tsx`
 **디자인**: `_6/code.html` — `overflow-y-auto no-scrollbar`
-**현재**: 스크롤바 표시됨
+**현재**: ~~스크롤바 표시됨~~ → 스크롤바 숨김 적용
 
 메인 스크롤 컨테이너에 스크롤바 숨김 클래스 추가:
 

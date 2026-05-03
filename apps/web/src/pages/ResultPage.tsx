@@ -53,7 +53,7 @@ export default function ResultPage() {
         title="오늘의 운세 결과"
         rightAction={shareButton}
       />
-      <main className="max-w-[448px] mx-auto px-[--spacing-container-padding] pt-[--spacing-lg] pb-40 space-y-[--spacing-lg]">
+      <main className="max-w-[448px] mx-auto px-[--spacing-container-padding] pt-[--spacing-lg] pb-40 space-y-[--spacing-lg] overflow-y-auto [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
         <CardSummary cards={MOCK_CARDS} />
 
         {/* Mascot Indicator */}
