@@ -12,7 +12,7 @@ export default function ThemeCard({ theme, onClick }: ThemeCardProps) {
 
   return (
     <div
-      className="bg-white p-[--spacing-lg] rounded-[24px] shadow-sm border border-zinc-100 flex flex-col gap-[--spacing-sm] group cursor-pointer hover:border-primary-fixed transition-colors"
+      className="bg-white p-[--spacing-lg] rounded-[24px] shadow-[0_1px_3px_rgba(0,0,0,0.08),0_4px_16px_rgba(139,92,246,0.04)] border border-zinc-200 flex flex-col gap-[--spacing-sm] group cursor-pointer hover:border-primary-fixed transition-colors"
       onClick={onClick}
     >
       <div className="flex justify-between items-start">

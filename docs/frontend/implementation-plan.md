@@ -24,7 +24,7 @@
 | 2 | 페이지 구현 | [phase-2-pages.md](./phase-2-pages.md) | 완료 |
 | 3 | 비즈니스 로직 + 상태 관리 | [phase-3-logic.md](./phase-3-logic.md) | 진행 중 |
 | 4 | 애니메이션 + 폴리싱 | [phase-4-polish.md](./phase-4-polish.md) | 완료 |
-| 5 | 트래킹 + 배포 | [phase-5-deploy.md](./phase-5-deploy.md) | 대기 |
+| 5 | 트래킹 + 배포 | [phase-5-deploy.md](./phase-5-deploy.md) | 계획 완료 |
 
 ---
 
