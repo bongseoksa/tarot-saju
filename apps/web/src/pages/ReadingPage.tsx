@@ -82,7 +82,7 @@ export default function ReadingPage() {
           ) : (
             <button
               disabled
-              className="w-full py-[--spacing-md] rounded-2xl bg-zinc-200 text-zinc-400 font-bold text-[length:--font-size-body-main] cursor-not-allowed flex items-center justify-center"
+              className="w-full py-[--spacing-md] rounded-2xl bg-zinc-200 text-zinc-400 font-bold text-[length:--font-size-body-main] cursor-not-allowed shadow-lg shadow-black/5 flex items-center justify-center"
             >
               점 보기 ({selectedCards.length}/3)
             </button>

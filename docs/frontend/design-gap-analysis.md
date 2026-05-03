@@ -22,6 +22,8 @@
 - TASK 9: 이미 구현됨 (브랜딩 텍스트 존재)
 - TASK 10 완료 후: Loading 95%↑ (커스텀 bounce + shadow-pulse + 도트 duration + footer)
 - TASK 11 완료 후: ErrorModal 98%↑ (mouth 채움형으로 변경)
+- TASK 12 완료 후: Reading 92%↑ (disabled 버튼 shadow 추가)
+- **전체 TASK 1~12 완료**
 
 | 디자인 | 구현 파일 |
 |---|---|
@@ -298,9 +300,10 @@ animation: {
 
 ## TASK 12 — ReadingPage disabled 버튼 shadow 추가
 
+**상태**: ✅ 완료
 **파일**: `pages/ReadingPage.tsx`
 **디자인**: `_1/code.html` — disabled 상태 버튼에 `shadow-lg shadow-black/5`
-**현재**: shadow 없음
+**현재**: ~~shadow 없음~~ → `shadow-lg shadow-black/5` 적용
 
 비활성 상태 버튼에 추가:
 
