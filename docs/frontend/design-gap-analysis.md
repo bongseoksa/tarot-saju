@@ -18,6 +18,7 @@
 - TASK 5 완료 후: Result 95%↑ (mascot indicator mb-lg)
 - TASK 6 완료 후: Result 97%↑ (스크롤바 숨김)
 - TASK 7 완료 후: SharedResult 96%↑ (한줄 요약 leading-tight)
+- TASK 8 완료 후: SharedResult 97%↑ (CTA 버튼 hover 추가)
 
 | 디자인 | 구현 파일 |
 |---|---|
@@ -179,9 +180,10 @@ share 버튼에도 `duration-200` 추가:
 
 ## TASK 8 — SharedResultPage CTA 버튼 hover 추가
 
+**상태**: ✅ 완료
 **파일**: `pages/SharedResultPage.tsx`
 **디자인**: `_7/code.html` — `hover:scale-[0.98] transition-transform`
-**현재**: hover 없음
+**현재**: ~~hover 없음~~ → `hover:scale-[0.98]` 적용
 
 하단 CTA 버튼에 추가:
 

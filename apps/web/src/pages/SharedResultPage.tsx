@@ -128,7 +128,7 @@ export default function SharedResultPage() {
       <footer className="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-[448px] p-[--spacing-container-padding] bg-gradient-to-t from-white via-white to-transparent z-50">
         <button
           onClick={() => navigate("/")}
-          className="w-full h-14 bg-primary text-white rounded-2xl font-bold text-[length:--font-size-display-title] leading-[1.4] shadow-lg shadow-primary/20 active:scale-95 transition-transform flex items-center justify-center gap-2"
+          className="w-full h-14 bg-primary text-white rounded-2xl font-bold text-[length:--font-size-display-title] leading-[1.4] shadow-lg shadow-primary/20 hover:scale-[0.98] active:scale-95 transition-transform flex items-center justify-center gap-2"
         >
           나도 점 하나 찍어볼까?
           <Icon name="arrow_forward" size={20} />
