@@ -1,6 +1,8 @@
 import { useParams, useNavigate } from "react-router";
+import { motion } from "framer-motion";
 import AppHeader from "../components/AppHeader";
 import CardSummary from "../components/result/CardSummary";
+import StreamingText from "../components/result/StreamingText";
 import AdviceCard from "../components/result/AdviceCard";
 import Icon from "../components/ui/Icon";
 import { useReadingStore } from "../stores/useReadingStore";
@@ -85,10 +87,23 @@ export default function ResultPage() {
         rightAction={shareButton}
       />
       <main className="max-w-[448px] mx-auto px-[--spacing-container-padding] pt-[--spacing-lg] pb-40 space-y-[--spacing-lg] overflow-y-auto [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
-        {cardSummary.length > 0 && <CardSummary cards={cardSummary} />}
+        {cardSummary.length > 0 && (
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.4 }}
+          >
+            <CardSummary cards={cardSummary} />
+          </motion.div>
+        )}
 
         {/* Mascot Indicator */}
-        <div className="flex items-center gap-[--spacing-sm] mb-[--spacing-lg]">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.4, delay: 0.1 }}
+          className="flex items-center gap-[--spacing-sm] mb-[--spacing-lg]"
+        >
           <div className="w-12 h-12 bg-primary-fixed rounded-full flex items-center justify-center overflow-hidden border-2 border-white shadow-sm">
             <div className="w-6 h-6 bg-primary rounded-full flex items-center justify-center">
               <div className="w-2 h-2 bg-white rounded-full" />
@@ -99,30 +114,47 @@ export default function ResultPage() {
               점하나가 당신의 카드를 읽고 있어요...
             </p>
           </div>
-        </div>
+        </motion.div>
 
         {/* Interpretation Text */}
         {interpretation && (
-          <section className="bg-white p-[--spacing-lg] rounded-[24px] shadow-sm border border-zinc-100">
-            <p className="text-[length:--font-size-body-main] leading-[1.6] text-on-surface-variant whitespace-pre-wrap">
-              {interpretation}
-            </p>
-          </section>
+          <motion.section
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.4, delay: 0.2 }}
+            className="bg-white p-[--spacing-lg] rounded-[24px] shadow-sm border border-zinc-100"
+          >
+            <StreamingText
+              text={interpretation}
+              isStreaming={false}
+            />
+          </motion.section>
         )}
 
         {/* Summary / Advice */}
         {summary && (
-          <AdviceCard advice="" summary={summary} />
+          <motion.div
+            initial={{ opacity: 0, y: 20, scale: 0.98 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            transition={{ duration: 0.4, delay: 0.3 }}
+          >
+            <AdviceCard advice="" summary={summary} />
+          </motion.div>
         )}
 
         {/* Ad Banner */}
-        <section className="w-full py-[--spacing-md]">
+        <motion.section
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.4, delay: 0.4 }}
+          className="w-full py-[--spacing-md]"
+        >
           <div className="bg-zinc-100 rounded-xl h-24 flex items-center justify-center border border-zinc-200 border-dashed">
             <span className="text-[length:--font-size-caption] leading-[1.4] tracking-[0.01em] text-zinc-400 uppercase tracking-widest">
               Advertisement
             </span>
           </div>
-        </section>
+        </motion.section>
       </main>
 
       {/* Sticky Footer */}

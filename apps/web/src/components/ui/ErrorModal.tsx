@@ -1,3 +1,6 @@
+import { motion } from "framer-motion";
+import { SPRING_CARD, DURATION_FAST } from "../../utils/motionConfig";
+
 interface ErrorModalProps {
   onHome: () => void;
   onRetry: () => void;
@@ -5,8 +8,20 @@ interface ErrorModalProps {
 
 export default function ErrorModal({ onHome, onRetry }: ErrorModalProps) {
   return (
-    <div className="fixed inset-0 z-[100] flex items-center justify-center bg-zinc-900/40 backdrop-blur-sm p-[--spacing-container-padding]">
-      <div className="bg-white w-full max-w-xs rounded-[32px] overflow-hidden shadow-[0_20px_50px_rgba(107,56,212,0.15)] flex flex-col items-center p-[--spacing-xl] text-center">
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      transition={{ duration: DURATION_FAST }}
+      className="fixed inset-0 z-[100] flex items-center justify-center bg-zinc-900/40 backdrop-blur-sm p-[--spacing-container-padding]"
+    >
+      <motion.div
+        initial={{ scale: 0.9, opacity: 0 }}
+        animate={{ scale: 1, opacity: 1 }}
+        exit={{ scale: 0.95, opacity: 0 }}
+        transition={SPRING_CARD}
+        className="bg-white w-full max-w-xs rounded-[32px] overflow-hidden shadow-[0_20px_50px_rgba(107,56,212,0.15)] flex flex-col items-center p-[--spacing-xl] text-center"
+      >
         {/* Character */}
         <div className="mb-[--spacing-lg] relative w-32 h-32 flex items-center justify-center">
           <div className="absolute inset-0 bg-primary-container/10 rounded-full blur-2xl" />
@@ -41,10 +56,10 @@ export default function ErrorModal({ onHome, onRetry }: ErrorModalProps) {
             className="w-full py-[--spacing-sm] bg-transparent text-outline text-[length:--font-size-sub-text] leading-[1.5] hover:text-primary transition-colors"
             onClick={onRetry}
           >
-            다시 시도
+            다시 시���
           </button>
         </div>
-      </div>
-    </div>
+      </motion.div>
+    </motion.div>
   );
 }

@@ -1,4 +1,6 @@
+import { motion } from "framer-motion";
 import type { PendingSession } from "@tarot-saju/shared";
+import { SPRING_GENTLE, DURATION_FAST } from "../../utils/motionConfig";
 
 interface PendingSessionModalProps {
   sessions: PendingSession[];
@@ -14,8 +16,20 @@ export default function PendingSessionModal({
   onSuppress,
 }: PendingSessionModalProps) {
   return (
-    <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/40">
-      <div className="bg-white rounded-2xl p-6 mx-4 w-full max-w-sm shadow-xl">
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      transition={{ duration: DURATION_FAST }}
+      className="fixed inset-0 z-[100] flex items-center justify-center bg-black/40"
+    >
+      <motion.div
+        initial={{ y: 20, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        exit={{ y: 10, opacity: 0 }}
+        transition={SPRING_GENTLE}
+        className="bg-white rounded-2xl p-6 mx-4 w-full max-w-sm shadow-xl"
+      >
         <h2 className="text-lg font-bold text-zinc-900 mb-4">
           이어서 볼 수 있는 결과가 있어요
         </h2>
@@ -55,7 +69,7 @@ export default function PendingSessionModal({
             닫기
           </button>
         </div>
-      </div>
-    </div>
+      </motion.div>
+    </motion.div>
   );
 }

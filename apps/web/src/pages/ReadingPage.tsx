@@ -68,8 +68,8 @@ export default function ReadingPage() {
     });
   }
 
-  function getSlotCardId(positionIndex: number): number | undefined {
-    return selectedCards.find((c) => c.positionIndex === positionIndex)?.cardId;
+  function getSlotCard(positionIndex: number) {
+    return selectedCards.find((c) => c.positionIndex === positionIndex);
   }
 
   return (
@@ -85,7 +85,8 @@ export default function ReadingPage() {
               <CardSlot
                 key={pos.index}
                 label={pos.label}
-                cardId={getSlotCardId(pos.index)}
+                cardId={getSlotCard(pos.index)?.cardId}
+                isReversed={getSlotCard(pos.index)?.isReversed}
               />
             ))}
           </div>

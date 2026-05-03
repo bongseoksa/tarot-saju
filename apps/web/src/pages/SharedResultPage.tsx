@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router";
+import { motion } from "framer-motion";
 import TarotCardImage from "../components/ui/TarotCardImage";
 import Icon from "../components/ui/Icon";
 import TimelineInterpretation from "../components/shared/TimelineInterpretation";
@@ -124,7 +125,11 @@ export default function SharedResultPage() {
 
       <main className="flex-grow p-[--spacing-container-padding] pb-32">
         {/* Greeting Bubble */}
-        <div className="flex items-start gap-3 mb-[--spacing-xl]">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.4 }}
+          className="flex items-start gap-3 mb-[--spacing-xl]">
           <div className="w-10 h-10 rounded-full bg-surface-container flex-shrink-0 flex items-center justify-center">
             <div className="w-2.5 h-2.5 bg-primary rounded-full" />
           </div>
@@ -135,10 +140,14 @@ export default function SharedResultPage() {
               당신의 고민에 작은 점 하나가 찍혔길 바라요.
             </p>
           </div>
-        </div>
+        </motion.div>
 
         {/* Card Summary */}
-        <section className="mb-[--spacing-xl]">
+        <motion.section
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.4, delay: 0.1 }}
+          className="mb-[--spacing-xl]">
           <div className="grid grid-cols-3 gap-[--spacing-gutter]">
             {cardDisplays.map((card, i) => {
               const isCurrent = i === 1;
@@ -169,17 +178,21 @@ export default function SharedResultPage() {
               );
             })}
           </div>
-        </section>
+        </motion.section>
 
         {/* One-line Summary */}
-        <div className="bg-primary-fixed-dim/20 border border-primary-fixed-dim rounded-2xl p-[--spacing-lg] mb-[--spacing-xl] text-center">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.4, delay: 0.2 }}
+          className="bg-primary-fixed-dim/20 border border-primary-fixed-dim rounded-2xl p-[--spacing-lg] mb-[--spacing-xl] text-center">
           <span className="text-[length:--font-size-caption] leading-[1.4] tracking-[0.01em] font-bold text-primary mb-[--spacing-xs] block">
             오늘의 한 줄 요약
           </span>
           <h2 className="text-[length:--font-size-display-title] leading-tight tracking-[-0.02em] font-bold text-on-surface-variant">
             {data.summary}
           </h2>
-        </div>
+        </motion.div>
 
         {/* Timeline Interpretation */}
         {timelineItems.length > 0 ? (

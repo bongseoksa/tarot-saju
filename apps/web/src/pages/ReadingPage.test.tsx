@@ -1,4 +1,4 @@
-import { render, screen } from "@testing-library/react";
+import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import { MemoryRouter, Route, Routes } from "react-router";
@@ -94,14 +94,17 @@ describe("ReadingPage", () => {
     expect(actionButton).toBeDisabled();
   });
 
-  it("calls selectCard when a card is clicked", async () => {
+  it("calls selectCard when a card is clicked (after flip animation)", async () => {
     const user = userEvent.setup();
     renderReadingPage();
 
     const cards = screen.getAllByRole("button", { name: /카드/ });
     await user.click(cards[0]);
 
-    expect(mockSelectCard).toHaveBeenCalled();
+    // selectCard is called after 500ms flip animation delay
+    await waitFor(() => {
+      expect(mockSelectCard).toHaveBeenCalled();
+    }, { timeout: 1000 });
   });
 
   it("shows two buttons when 3 cards are selected", () => {
