@@ -13,6 +13,7 @@
 - 초기 일치율: HistoryPage 99% / ErrorModal 95% / SharedResult 94% / Result·Reading 90% / Home 88% / Loading 80%
 - TASK 1 완료 후: Home 95%↑ / HistoryPage 100%↑ (BottomNav 추가)
 - TASK 2 완료 후: Result 92%↑ (InterpretationCard font-bold)
+- TASK 3 완료 후: Result 93%↑ (AdviceCard font-bold)
 
 | 디자인 | 구현 파일 |
 |---|---|
@@ -89,9 +90,10 @@
 
 ## TASK 3 — AdviceCard title weight 수정
 
+**상태**: ✅ 완료
 **파일**: `components/result/AdviceCard.tsx`
 **디자인**: `_6/code.html` — `font-bold` (700)
-**현재**: `font-semibold` (600)
+**현재**: ~~`font-semibold` (600)~~ → `font-bold` (700)
 
 ```diff
 - font-semibold

@@ -8,7 +8,7 @@ interface AdviceCardProps {
 export default function AdviceCard({ advice, summary }: AdviceCardProps) {
   return (
     <div className="bg-primary-container p-[--spacing-lg] rounded-[24px] text-on-primary-container shadow-md">
-      <h3 className="text-[length:--font-size-section-header] leading-[1.4] tracking-[-0.01em] font-semibold mb-[--spacing-sm]">
+      <h3 className="text-[length:--font-size-section-header] leading-[1.4] tracking-[-0.01em] font-bold mb-[--spacing-sm]">
         점하나의 한마디
       </h3>
       <p className="text-[length:--font-size-body-main] leading-[1.6] opacity-90 mb-[--spacing-md]">
