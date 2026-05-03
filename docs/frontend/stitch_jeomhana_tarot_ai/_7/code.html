@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+
+<html class="light" lang="ko"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link as="style" crossorigin="" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "primary-fixed-dim": "#d0bcff",
+                        "on-secondary": "#ffffff",
+                        "error-container": "#ffdad6",
+                        "on-tertiary-fixed-variant": "#673d00",
+                        "on-background": "#1d1a23",
+                        "on-secondary-fixed": "#40000d",
+                        "surface-container-lowest": "#ffffff",
+                        "secondary-container": "#dc2c4f",
+                        "error": "#ba1a1a",
+                        "on-primary-container": "#fffbff",
+                        "surface": "#fef7ff",
+                        "inverse-surface": "#322f39",
+                        "tertiary-fixed-dim": "#ffb869",
+                        "primary-fixed": "#e9ddff",
+                        "outline-variant": "#cbc3d7",
+                        "tertiary-container": "#a76500",
+                        "on-primary": "#ffffff",
+                        "background": "#fef7ff",
+                        "surface-tint": "#6d3bd7",
+                        "surface-dim": "#ded7e4",
+                        "inverse-primary": "#d0bcff",
+                        "on-surface": "#1d1a23",
+                        "primary-container": "#8455ef",
+                        "inverse-on-surface": "#f5eefb",
+                        "on-tertiary": "#ffffff",
+                        "tertiary": "#855000",
+                        "on-secondary-fixed-variant": "#92002a",
+                        "primary": "#6b38d4",
+                        "tertiary-fixed": "#ffdcbb",
+                        "on-tertiary-fixed": "#2c1700",
+                        "on-surface-variant": "#494454",
+                        "on-tertiary-container": "#fffbff",
+                        "surface-container-highest": "#e7e0ed",
+                        "surface-variant": "#e7e0ed",
+                        "on-secondary-container": "#fffbff",
+                        "secondary-fixed-dim": "#ffb2b7",
+                        "on-error-container": "#93000a",
+                        "surface-container-high": "#ede5f3",
+                        "surface-container": "#f3ebf8",
+                        "surface-container-low": "#f8f1fe",
+                        "outline": "#7b7486",
+                        "secondary": "#b90538",
+                        "on-error": "#ffffff",
+                        "surface-bright": "#fef7ff",
+                        "secondary-fixed": "#ffdadb",
+                        "on-primary-fixed": "#23005c",
+                        "on-primary-fixed-variant": "#5516be"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "sm": "12px",
+                        "container-padding": "20px",
+                        "lg": "24px",
+                        "xs": "8px",
+                        "base": "4px",
+                        "xl": "32px",
+                        "gutter": "12px",
+                        "md": "16px"
+                    },
+                    "fontFamily": {
+                        "display-title": ["Pretendard"],
+                        "sub-text": ["Pretendard"],
+                        "section-header": ["Pretendard"],
+                        "body-main": ["Pretendard"],
+                        "caption": ["Pretendard"]
+                    },
+                    "fontSize": {
+                        "display-title": ["20px", {"lineHeight": "1.4", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                        "sub-text": ["14px", {"lineHeight": "1.5", "letterSpacing": "0", "fontWeight": "400"}],
+                        "section-header": ["18px", {"lineHeight": "1.4", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                        "body-main": ["16px", {"lineHeight": "1.6", "letterSpacing": "0", "fontWeight": "400"}],
+                        "caption": ["12px", {"lineHeight": "1.4", "letterSpacing": "0.01em", "fontWeight": "400"}]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        body { font-family: 'Pretendard', sans-serif; background-color: #FAFAF9; }
+    </style>
+</head>
+<body class="bg-[#FAFAF9] text-on-surface flex justify-center min-h-screen">
+<div class="w-full max-w-md bg-white min-h-screen shadow-xl relative overflow-x-hidden flex flex-col">
+<!-- Header: TopAppBar (Shared Component Logic) -->
+<header class="bg-white/80 backdrop-blur-md border-b border-zinc-100 sticky top-0 z-50 flex justify-center items-center px-4 h-16 w-full">
+<div class="flex items-center gap-2">
+<div class="w-8 h-8 bg-primary rounded-full flex items-center justify-center">
+<div class="w-2 h-2 bg-white rounded-full"></div>
+</div>
+<span class="text-xl font-black text-zinc-900 font-['Plus_Jakarta_Sans']">점하나</span>
+</div>
+</header>
+<main class="flex-grow p-container-padding pb-32">
+<!-- Greeting Bubble -->
+<div class="flex items-start gap-3 mb-xl">
+<div class="w-10 h-10 rounded-full bg-surface-container flex-shrink-0 flex items-center justify-center">
+<div class="w-2.5 h-2.5 bg-primary rounded-full"></div>
+</div>
+<div class="bg-white border border-zinc-100 p-md rounded-2xl rounded-tl-none shadow-sm max-w-[85%]">
+<p class="font-body-main text-body-main text-on-surface">점하나가 전해준 타로 결과예요.<br/>당신의 고민에 작은 점 하나가 찍혔길 바라요.</p>
+</div>
+</div>
+<!-- Card Summary Section -->
+<section class="mb-xl">
+<div class="grid grid-cols-3 gap-gutter">
+<!-- Past Card -->
+<div class="flex flex-col items-center gap-xs">
+<span class="text-caption font-caption text-zinc-500">과거</span>
+<div class="relative w-full aspect-[2/3] rounded-xl overflow-hidden shadow-sm border border-zinc-100 bg-white">
+<img class="w-full h-full object-cover" data-alt="A clean, minimalist tarot card illustration representing 'The Fool' with a simple dot character standing at a cliff's edge. The art style is modern and flat, using a pastel lavender and soft yellow palette. The composition is centered and airy, evoking a sense of new beginnings and optimism." src="https://lh3.googleusercontent.com/aida-public/AB6AXuC8OKIohrcAM-L9kGxkR1GtyUfsIP6teslgiCV2K2cp0pbpyQLVX8xTw5KyN8caxXoU8Z99IRqSnXRwig99J8xQCCL-FkDSSyZMEW5yLDeKpQl5gamU2nQdQom9KDXz9LLa-9PGpnCxrJyIE3up3vH7-Ktn2GXt2A0R_hOsUkcXhvTk0CErC01uP7J_qE6Wp-HkiDxAcghmXG-TgG3R9IXbP6uU3snEvVzLOWvJcA93Q22SQyo17Wo4T7iLUgamFd6Fi6JuO8QGaSw"/>
+</div>
+<span class="text-caption font-semibold text-center text-zinc-700">The Fool</span>
+</div>
+<!-- Present Card -->
+<div class="flex flex-col items-center gap-xs">
+<span class="text-caption font-caption text-zinc-500">현재</span>
+<div class="relative w-full aspect-[2/3] rounded-xl overflow-hidden shadow-sm border border-zinc-100 bg-white scale-110 z-10">
+<img class="w-full h-full object-cover" data-alt="A modern tarot card featuring 'The Lovers' illustrated with two minimalist dot characters sharing a warm pink glow. The background is a soft peach gradient. The visual language is soft minimalism, focusing on connection and balance with no intricate occult symbols." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBkwd2wo4F4Mnrudifqv7ydSeRKU6O3twGHRMXbauMB8PGd4gqwX9KEJbffobYAaqVpAKOwfRMILPBob_nA1YFhbAQSfr7jVCxyZBf6GR5BmUqZd6SdOxXJhp7mWVvJ7MzSSMqS8b_Om3d6NA7cXUtExdRVBjqOHic_ETCONjkmzd0EDMChZkJe2bR9jNXYVFvLySLqhvur-U_sYivpWzj0JYqU-V-LlyE4cIW4H9gEpbe03SPxNP31RDkJ3hwE4e719CvMHtzLMvs"/>
+</div>
+<span class="text-caption font-semibold text-center text-zinc-900">The Lovers</span>
+</div>
+<!-- Future Card -->
+<div class="flex flex-col items-center gap-xs">
+<span class="text-caption font-caption text-zinc-500">미래</span>
+<div class="relative w-full aspect-[2/3] rounded-xl overflow-hidden shadow-sm border border-zinc-100 bg-white">
+<img class="w-full h-full object-cover" data-alt="A minimalist tarot card of 'The Star' showcasing a bright white star over a calm, violet lake. A single dot character reflects in the water. The lighting is high-key and serene, creating an atmosphere of hope and clarity in a contemporary flat art style." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBffH61gL5zru9NehDZDNCxCidSJYQRIBWNHEFF-tC0YEd2P7006Eov43QIWs6nhDwybG2wXntdeRzWL-uj7oTV0A9Ir8cnn1CF3_PtaI52mgnN0sttEniidqbgzbLonXX_1OJ4iZ1PW_LQPR5dR-kXDMcY0k9_Lo37Jg1jVtqajVAQnojDdhvsvO-5Hb1Vx4UTqE5RvXynj8SMxDFqEsNccbqwtnlAv5JIil6xp4VpjLgfpq4z-vP30u-uvBrHmmPLXUawipAHKhY"/>
+</div>
+<span class="text-caption font-semibold text-center text-zinc-700">The Star</span>
+</div>
+</div>
+</section>
+<!-- One-line Summary Card -->
+<div class="bg-primary-fixed-dim/20 border border-primary-fixed-dim rounded-2xl p-lg mb-xl text-center">
+<span class="text-caption font-bold text-primary mb-xs block">오늘의 한 줄 요약</span>
+<h2 class="text-display-title font-display-title text-on-surface-variant leading-tight">"망설임은 끝내고,<br/>진심이 닿는 방향으로 움직이세요."</h2>
+</div>
+<!-- Interpretation Content -->
+<div class="space-y-lg">
+<!-- Past -->
+<div class="relative pl-lg border-l-2 border-zinc-100">
+<div class="absolute -left-[9px] top-0 w-4 h-4 rounded-full bg-zinc-200 border-4 border-white"></div>
+<h3 class="text-section-header font-section-header text-zinc-900 mb-xs">과거: 새로운 시작</h3>
+<p class="text-body-main font-body-main text-on-surface-variant">무언가를 새롭게 시작하려던 순수한 에너지가 가득했습니다. 결과보다는 과정 자체에서 즐거움을 찾던 시기였네요.</p>
+</div>
+<!-- Present -->
+<div class="relative pl-lg border-l-2 border-primary-fixed-dim">
+<div class="absolute -left-[9px] top-0 w-4 h-4 rounded-full bg-primary border-4 border-white"></div>
+<h3 class="text-section-header font-section-header text-primary mb-xs">현재: 선택의 순간</h3>
+<p class="text-body-main font-body-main text-on-surface-variant">중요한 선택의 기로에 서 있습니다. 머리보다는 마음이 이끄는 대로, 조화로운 관계를 우선시하는 것이 좋습니다.</p>
+</div>
+<!-- Future -->
+<div class="relative pl-lg border-l-2 border-zinc-100">
+<div class="absolute -left-[9px] top-0 w-4 h-4 rounded-full bg-zinc-200 border-4 border-white"></div>
+<h3 class="text-section-header font-section-header text-zinc-900 mb-xs">미래: 희망의 발견</h3>
+<p class="text-body-main font-body-main text-on-surface-variant">길었던 고민이 해결되고 명확한 비전이 보이기 시작합니다. 당신의 노력은 곧 밝은 빛으로 보상받을 거예요.</p>
+</div>
+<!-- General Advice Card -->
+<div class="bg-surface-container rounded-2xl p-lg mt-xl">
+<div class="flex items-center gap-2 mb-sm">
+<span class="material-symbols-outlined text-primary" style="font-variation-settings: 'FILL' 1;">lightbulb</span>
+<h3 class="text-section-header font-section-header text-on-surface">점하나의 조언</h3>
+</div>
+<p class="text-body-main font-body-main text-on-surface-variant">지금 가장 필요한 것은 스스로에 대한 믿음입니다. 타인의 시선보다는 당신이 느끼는 행복의 가치에 집중하세요. 작은 휴식이 생각의 정리를 도와줄 것입니다.</p>
+</div>
+</div>
+</main>
+<!-- Bottom Sticky Footer CTA -->
+<footer class="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-md p-container-padding bg-gradient-to-t from-white via-white to-transparent z-50">
+<button class="w-full h-14 bg-primary text-white rounded-2xl font-display-title text-display-title shadow-lg shadow-primary/20 hover:scale-[0.98] transition-transform active:scale-95 flex items-center justify-center gap-2">
+                나도 점 하나 찍어볼까?
+                <span class="material-symbols-outlined">arrow_forward</span>
+</button>
+<p class="text-center text-caption font-caption text-zinc-400 mt-sm">AI 타로 서비스 점하나(JeomHana)</p>
+</footer>
+</div>
+</body></html>

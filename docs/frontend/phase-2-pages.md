@@ -2,7 +2,7 @@
 
 > 목표: Phase 1에서 만든 공용 컴포넌트와 정적 데이터를 조합하여 모든 페이지의 UI를 구현한다.
 > 완료 기준: 각 페이지가 Stitch HTML 디자인과 일치하는 레이아웃을 렌더링하고, 모의(mock) 데이터로 정상 동작한다. tsc/lint/test/build 통과.
-> **상태: 대기**
+> **상태: 완료**
 
 ---
 
@@ -61,8 +61,8 @@ AppHeader variant="home"
 | 푸터 | `mt-xl px-container-padding pb-lg text-center border-t border-zinc-100 pt-lg` |
 
 **작업:**
-- [ ] `HomePage.tsx` — Hero 섹션 + 카테고리 필터 + 테마 목록 + 푸터
-- [ ] `HomePage.test.tsx` — 테마 11개 렌더링, 카테고리 필터링, 네비게이션 동작 테스트
+- [x] `HomePage.tsx` — Hero 섹션 + 카테고리 필터 + 테마 목록 + 푸터
+- [x] `HomePage.test.tsx` — 테마 11개 렌더링, 카테고리 필터링, 네비게이션 동작 테스트
 
 **검증:** tsc/build 통과, chrome-devtools 모바일(390x844) 스크린샷으로 Stitch 디자인과 비교
 
@@ -123,10 +123,10 @@ AppHeader variant="sub" title={theme.title}
 | 스크롤 마스크 | `mask-image: linear-gradient(to bottom, transparent, black 5%, black 90%, transparent)` |
 
 **작업:**
-- [ ] `CardSlot.tsx` — 슬롯 컴포넌트 (empty/filled 상태)
-- [ ] `CardGrid.tsx` — 22장 카드 그리드 (4열 + 마지막 2장 중앙)
-- [ ] `ReadingPage.tsx` — 슬롯 + 그리드 + 하단 버튼 조합
-- [ ] `ReadingPage.test.tsx` — 카드 선택/해제, 슬롯 업데이트, 버튼 활성화 테스트
+- [x] `CardSlot.tsx` — 슬롯 컴포넌트 (empty/filled 상태)
+- [x] `CardGrid.tsx` — 22장 카드 그리드 (4열 + 마지막 2장 중앙)
+- [x] `ReadingPage.tsx` — 슬롯 + 그리드 + 하단 버튼 조합
+- [x] `ReadingPage.test.tsx` — 카드 선택/해제, 슬롯 업데이트, 버튼 활성화 테스트
 
 **검증:** tsc/build 통과, chrome-devtools 모바일 스크린샷
 
@@ -190,11 +190,11 @@ AppHeader variant="sub" title={theme.title} rightAction={공유 아이콘}
 | 푸터 컨테이너 | `rounded-t-[32px] shadow-[0_-8px_30px_rgba(0,0,0,0.05)]` |
 
 **작업:**
-- [ ] `CardSummary.tsx` — 카드 3장 요약 (현재 강조)
-- [ ] `InterpretationCard.tsx` — 개별 해석 카드
-- [ ] `AdviceCard.tsx` — 종합 조언 + 한줄 요약
-- [ ] `ResultPage.tsx` — 전체 레이아웃 조합 (모의 데이터)
-- [ ] `ResultPage.test.tsx` — 카드 요약 렌더링, 해석 텍스트 표시, 버튼 동작 테스트
+- [x] `CardSummary.tsx` — 카드 3장 요약 (현재 강조)
+- [x] `InterpretationCard.tsx` — 개별 해석 카드
+- [x] `AdviceCard.tsx` — 종합 조언 + 한줄 요약
+- [x] `ResultPage.tsx` — 전체 레이아웃 조합 (모의 데이터)
+- [x] `ResultPage.test.tsx` — 카드 요약 렌더링, 해석 텍스트 표시, 버튼 동작 테스트
 
 **검증:** tsc/build 통과, chrome-devtools 모바일 스크린샷
 
@@ -248,9 +248,9 @@ AppHeader variant="sub" title={theme.title} rightAction={공유 아이콘}
 | CTA 버튼 | `w-full h-14 bg-primary text-white rounded-2xl shadow-lg shadow-primary/20` |
 
 **작업:**
-- [ ] `TimelineInterpretation.tsx` — 타임라인 스타일 해석
-- [ ] `SharedResultPage.tsx` — 공유 전용 레이아웃 (모의 데이터)
-- [ ] `SharedResultPage.test.tsx` — 렌더링 및 CTA 동작 테스트
+- [x] `TimelineInterpretation.tsx` — 타임라인 스타일 해석
+- [x] `SharedResultPage.tsx` — 공유 전용 레이아웃 (모의 데이터)
+- [x] `SharedResultPage.test.tsx` — 렌더링 및 CTA 동작 테스트
 
 **검증:** tsc/build 통과, chrome-devtools 모바일 스크린샷
 
@@ -304,10 +304,10 @@ AppHeader variant="sub" title="히스토리"
 | 통계 카드 | `bg-white p-md rounded-xl shadow-[0_4px_20px_rgba(139,92,246,0.04)] border border-zinc-50` |
 
 **작업:**
-- [ ] `HistoryCard.tsx` — 히스토리 항목 카드
-- [ ] `EmptyState.tsx` — 빈 상태 컴포넌트 (일러스트 + 문구 + CTA)
-- [ ] `HistoryPage.tsx` — 목록 + 빈 상태 전환 (모의 데이터)
-- [ ] `HistoryPage.test.tsx` — 목록 렌더링, 빈 상태 전환, 네비게이션 테스트
+- [x] `HistoryCard.tsx` — 히스토리 항목 카드
+- [x] `EmptyState.tsx` — 빈 상태 컴포넌트 (일러스트 + 문구 + CTA)
+- [x] `HistoryPage.tsx` — 목록 + 빈 상태 전환 (모의 데이터)
+- [x] `HistoryPage.test.tsx` — 목록 렌더링, 빈 상태 전환, 네비게이션 테스트
 
 **검증:** tsc/build 통과, chrome-devtools 모바일 스크린샷
 
@@ -329,7 +329,7 @@ Phase 2에서의 작업:
 - 별도 페이지 파일 생성 불필요 (오버레이/모달 형태이므로)
 
 **작업:**
-- [ ] 로딩/에러 컴포넌트가 페이지에서 조건부 렌더링 가능한지 통합 확인
+- [x] 로딩/에러 컴포넌트가 페이지에서 조건부 렌더링 가능한지 통합 확인
 
 ---
 
@@ -376,17 +376,17 @@ Phase 2에서의 작업:
 
 ## 완료 체크리스트
 
-- [ ] HomePage: Hero + 카테고리 필터 + 테마 목록 + 푸터
-- [ ] ReadingPage: 슬롯 3개 + 카드 그리드 22장 + 하단 버튼
-- [ ] ResultPage: 카드 요약 + 해석 카드 + 조언 + 하단 버튼
-- [ ] SharedResultPage: 로고 헤더 + 타임라인 해석 + CTA
-- [ ] HistoryPage: 히스토리 목록 + 빈 상태
-- [ ] 새 컴포넌트 8개 생성
-- [ ] 테스트 5개 작성 및 통과
-- [ ] `pnpm run lint` 통과
-- [ ] `pnpm run test` 통과
-- [ ] `pnpm run build` 통과
-- [ ] chrome-devtools 모바일(390x844) 시각적 검증
+- [x] HomePage: Hero + 카테고리 필터 + 테마 목록 + 푸터
+- [x] ReadingPage: 슬롯 3개 + 카드 그리드 22장 + 하단 버튼
+- [x] ResultPage: 카드 요약 + 해석 카드 + 조언 + 하단 버튼
+- [x] SharedResultPage: 로고 헤더 + 타임라인 해석 + CTA
+- [x] HistoryPage: 히스토리 목록 + 빈 상태
+- [x] 새 컴포넌트 8개 생성
+- [x] 테스트 5개 작성 및 통과 (총 33개 테스트)
+- [x] `pnpm run lint` 통과
+- [x] `pnpm run test` 통과
+- [x] `pnpm run build` 통과
+- [x] chrome-devtools 모바일(390x844) 시각적 검증
 
 ---
 

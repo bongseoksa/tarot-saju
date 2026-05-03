@@ -21,7 +21,7 @@ export default function AppHeader(props: AppHeaderProps) {
   if (props.variant === "home") {
     return (
       <header className="sticky top-0 z-50 bg-white/80 backdrop-blur-md border-b border-zinc-100">
-        <div className="flex justify-between items-center px-4 h-16 w-full max-w-md mx-auto">
+        <div className="flex justify-between items-center px-4 h-16 w-full max-w-[448px] mx-auto">
           <div className="text-xl font-black text-zinc-900 flex items-center gap-2 font-['Plus_Jakarta_Sans']">
             <div className="w-8 h-8 bg-primary rounded-full flex items-center justify-center">
               <div className="w-2 h-2 bg-white rounded-full" />
@@ -43,7 +43,7 @@ export default function AppHeader(props: AppHeaderProps) {
 
   return (
     <header className="sticky top-0 z-50 bg-white/80 backdrop-blur-md border-b border-zinc-100">
-      <div className="flex justify-between items-center px-4 h-16 w-full max-w-md mx-auto">
+      <div className="flex justify-between items-center px-4 h-16 w-full max-w-[448px] mx-auto">
         <button
           className="w-10 h-10 flex items-center justify-center hover:bg-zinc-50 rounded-full transition-colors"
           onClick={onBack ?? (() => navigate(-1))}

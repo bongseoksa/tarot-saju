@@ -3,6 +3,7 @@ import cardBack from "../../assets/cards/card-back.png";
 interface TarotCardImageProps {
   cardId?: number;
   showBack?: boolean;
+  isReversed?: boolean;
   className?: string;
 }
 
@@ -20,14 +21,14 @@ function getCardImagePath(cardId: number): string {
   return new URL(`../../assets/cards/${paddedId}-${name}.png`, import.meta.url).href;
 }
 
-export default function TarotCardImage({ cardId, showBack, className = "" }: TarotCardImageProps) {
+export default function TarotCardImage({ cardId, showBack, isReversed, className = "" }: TarotCardImageProps) {
   const src = showBack || cardId === undefined ? cardBack : getCardImagePath(cardId);
 
   return (
     <img
       src={src}
       alt={showBack ? "카드 뒷면" : `타로 카드 ${cardId}`}
-      className={`w-full h-full object-cover ${className}`}
+      className={`w-full h-full object-cover ${isReversed ? "rotate-180" : ""} ${className}`}
       draggable={false}
     />
   );

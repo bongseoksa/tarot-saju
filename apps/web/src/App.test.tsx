@@ -5,6 +5,6 @@ import App from "./App";
 describe("App", () => {
   it("renders home page at root route", () => {
     render(<App />);
-    expect(screen.getByText("HomePage")).toBeInTheDocument();
+    expect(screen.getByText(/오늘의 타로 한 장/)).toBeInTheDocument();
   });
 });
