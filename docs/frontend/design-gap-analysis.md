@@ -17,6 +17,7 @@
 - TASK 4 완료 후: Result 94%↑ (버튼 hover/duration 추가)
 - TASK 5 완료 후: Result 95%↑ (mascot indicator mb-lg)
 - TASK 6 완료 후: Result 97%↑ (스크롤바 숨김)
+- TASK 7 완료 후: SharedResult 96%↑ (한줄 요약 leading-tight)
 
 | 디자인 | 구현 파일 |
 |---|---|
@@ -164,9 +165,10 @@ share 버튼에도 `duration-200` 추가:
 
 ## TASK 7 — SharedResultPage 한줄 요약 line-height 수정
 
+**상태**: ✅ 완료
 **파일**: `pages/SharedResultPage.tsx`
 **디자인**: `_7/code.html` — 한줄 요약 제목에 `leading-tight` (1.25)
-**현재**: `leading-[1.4]`
+**현재**: ~~`leading-[1.4]`~~ → `leading-tight`
 
 ```diff
 - leading-[1.4]

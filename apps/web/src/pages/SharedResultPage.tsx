@@ -99,7 +99,7 @@ export default function SharedResultPage() {
           <span className="text-[length:--font-size-caption] leading-[1.4] tracking-[0.01em] font-bold text-primary mb-[--spacing-xs] block">
             오늘의 한 줄 요약
           </span>
-          <h2 className="text-[length:--font-size-display-title] leading-[1.4] tracking-[-0.02em] font-bold text-on-surface-variant">
+          <h2 className="text-[length:--font-size-display-title] leading-tight tracking-[-0.02em] font-bold text-on-surface-variant">
             "망설임은 끝내고,
             <br />
             진심이 닿는 방향으로 움직이세요."
