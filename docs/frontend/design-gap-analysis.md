@@ -14,6 +14,7 @@
 - TASK 1 완료 후: Home 95%↑ / HistoryPage 100%↑ (BottomNav 추가)
 - TASK 2 완료 후: Result 92%↑ (InterpretationCard font-bold)
 - TASK 3 완료 후: Result 93%↑ (AdviceCard font-bold)
+- TASK 4 완료 후: Result 94%↑ (버튼 hover/duration 추가)
 
 | 디자인 | 구현 파일 |
 |---|---|
@@ -106,9 +107,10 @@
 
 ## TASK 4 — ResultPage primary 버튼 hover 추가
 
+**상태**: ✅ 완료
 **파일**: `pages/ResultPage.tsx`
 **디자인**: `_6/code.html` — 하단 primary 버튼에 `hover:bg-primary/90 duration-200`
-**현재**: `hover` 없음, `duration` 없음
+**현재**: ~~`hover` 없음, `duration` 없음~~ → 적용 완료
 
 하단 footer의 primary 버튼(flex-[2])에 추가:
 

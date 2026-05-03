@@ -97,13 +97,13 @@ export default function ResultPage() {
       {/* Sticky Footer */}
       <footer className="fixed bottom-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-md px-6 pb-8 pt-4 max-w-[448px] mx-auto space-y-3 rounded-t-[32px] shadow-[0_-8px_30px_rgba(0,0,0,0.05)] border-t border-zinc-50">
         <div className="flex gap-3">
-          <button className="flex-1 h-14 bg-white border border-violet-200 text-primary font-bold rounded-2xl flex items-center justify-center gap-2 hover:bg-violet-50 transition-colors active:scale-95">
+          <button className="flex-1 h-14 bg-white border border-violet-200 text-primary font-bold rounded-2xl flex items-center justify-center gap-2 hover:bg-violet-50 transition-colors active:scale-95 duration-200">
             <Icon name="share" />
             공유하기
           </button>
           <button
             onClick={() => navigate("/")}
-            className="flex-[2] h-14 bg-primary text-white font-bold rounded-2xl flex items-center justify-center gap-2 shadow-[0_8px_16px_rgba(107,56,212,0.2)] active:scale-95 transition-colors"
+            className="flex-[2] h-14 bg-primary text-white font-bold rounded-2xl flex items-center justify-center gap-2 shadow-[0_8px_16px_rgba(107,56,212,0.2)] hover:bg-primary/90 active:scale-95 transition-colors duration-200"
           >
             점 하나 더 찍어볼까?
             <Icon name="arrow_forward" />
