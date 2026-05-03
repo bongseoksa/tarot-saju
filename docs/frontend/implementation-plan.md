@@ -1,7 +1,16 @@
-# 프론트엔드 구현 계획
+# MVP 구현 계획
 
-> Stitch 디자인 시안 기반 React + Vite SPA 구현 계획
+> 전체 서비스 구현 계획. 프론트엔드 배포는 모든 기능 구현 완료 후 최종 단계에서 진행한다.
 > 각 Phase별 세부 계획서를 작성하며 순차 진행한다.
+
+---
+
+## 현재 상태 요약
+
+- 기획/정의: 32개 항목 전체 완료 (`docs/기획-정의목록.md`)
+- 프론트엔드: Phase 0~4 완료 (UI + 비즈니스 로직 + 애니메이션, 126 tests PASS)
+- 백엔드/AI/인프라: 미착수
+- 배포: 미착수
 
 ---
 
@@ -17,27 +26,61 @@
 
 ## Phase 목록
 
+### 프론트엔드 (완료)
+
 | Phase | 제목 | 세부 계획서 | 상태 |
 |---|---|---|---|
 | 0 | 프로젝트 초기 세팅 | [phase-0-setup.md](./phase-0-setup.md) | 완료 |
 | 1 | 정적 데이터 + 공용 컴포넌트 | [phase-1-data-components.md](./phase-1-data-components.md) | 완료 |
 | 2 | 페이지 구현 | [phase-2-pages.md](./phase-2-pages.md) | 완료 |
-| 3 | 비즈니스 로직 + 상태 관리 | [phase-3-logic.md](./phase-3-logic.md) | 진행 중 |
+| 3 | 비즈니스 로직 + 상태 관리 | [phase-3-logic.md](./phase-3-logic.md) | 완료 |
 | 4 | 애니메이션 + 폴리싱 | [phase-4-polish.md](./phase-4-polish.md) | 완료 |
-| 5 | 트래킹 + 배포 | [phase-5-deploy.md](./phase-5-deploy.md) | 계획 완료 |
+
+### 남은 작업 (우선순위순)
+
+| 순위 | 영역 | 제목 | 세부 계획서 | 상태 |
+|---|---|---|---|---|
+| 1 | 백엔드 | Supabase 세팅 + Edge Function (interpret) | 미작성 | 대기 |
+| 2 | AI | Ollama + Cloudflare Tunnel + 프롬프트 검증 | 미작성 | 대기 |
+| 3 | 프론트-백 | 프론트엔드-백엔드 통합 (실제 AI 스트리밍 + 공유 API 연결) | 미작성 | 대기 |
+| 4 | 프론트 | 광고 연동 (AdSense Interstitial + 배너) | 미작성 | 대기 |
+| 5 | 프론트 | GTM + GA4 트래킹 | [phase-5-deploy.md](./phase-5-deploy.md) 5-1 | 대기 |
+| 6 | 프론트 | SEO + 동적 OG 메타태그 | [phase-5-deploy.md](./phase-5-deploy.md) 5-2, 5-3 | 대기 |
+| 7 | 인프라 | AI 서빙 안정성 (launchd, health check, 텔레그램 알림) | 미작성 | 대기 |
+| 8 | 배포 | Vercel + Supabase 배포 + 최종 검증 | [phase-5-deploy.md](./phase-5-deploy.md) 5-4, 5-5 | 대기 |
 
 ---
 
 ## 실행 순서
 
 ```
-Phase 0 (세팅)           → 모노레포, 패키지 설치, Tailwind 디자인 토큰 이전
-Phase 1 (데이터+컴포넌트) → 정적 데이터 JSON, Stitch HTML → React 컴포넌트, 레이아웃
-Phase 2 (페이지)          → 홈 → 카드 뽑기 → 로딩 → 결과 → 공유 → 히스토리 → 오류
-Phase 3 (로직)            → Zustand 스토어, storageUtil, 카드 로직, 광고, AI 스트리밍, 공유
-Phase 4 (폴리싱)          → 카드 4단계 애니메이션, 페이지 전환, 타이핑 효과, 반응형
-Phase 5 (배포)            → GTM/GA4, SEO 프리렌더, Vercel/Supabase 배포
+[완료] Phase 0~4 (프론트엔드)
+  → 모노레포, 컴포넌트, 페이지, 비즈니스 로직, 애니메이션 (126 tests)
+
+[다음] 1. 백엔드 — Supabase 프로젝트 + DB 스키마 + interpret Edge Function
+       2. AI — Ollama + Gemma 모델 + Cloudflare Tunnel + 프롬프트 품질 검증
+       3. 통합 — 프론트엔드 ↔ 백엔드 실제 연결 (AI 스트리밍, 공유 API)
+       4. 광고 — AdSense 계정 + Interstitial/배너 코드 삽입
+       5. 트래킹 — GTM 스니펫 + GA4 이벤트 12종
+       6. SEO — 메타태그 + sitemap + robots.txt + 동적 OG Edge Function
+       7. 인프라 — AI 서빙 자동화 (launchd, health check, 텔레그램 알림)
+       8. 배포 — Vercel 설정 + Supabase 배포 + Lighthouse 검증 + 프리뷰 QA
 ```
+
+### 의존 관계
+
+```
+1 (백엔드) ← 3 (통합): Edge Function 필요
+2 (AI)     ← 3 (통합): Ollama 엔드포인트 필요
+3 (통합)   ← 8 (배포): 전체 흐름 동작 확인 후 배포
+4 (광고)   ← 독립 (AdSense 승인에 시간 소요, 일찍 시작 가능)
+5 (트래킹) ← 독립 (백엔드 없이 프론트만으로 구현 가능)
+6 (SEO)    ← 독립 (정적 메타태그는 즉시, 동적 OG는 1 이후)
+7 (인프라)  ← 2 (AI): Ollama 설정 완료 후
+8 (배포)   ← 1~7 전체 완료 후 최종 단계
+```
+
+> **원칙: 프론트엔드 배포(Vercel)는 전체 기능 구현이 완료된 이후 최종 단계에서 진행한다.**
 
 ---
 

@@ -101,7 +101,7 @@
 
 ## 완료된 TASK 이력 (TASK 1~12)
 
-> 이전 디자인 HTML(`stitch_jeomhana_tarot_ai/_*/code.html`) 기반으로 수행한 미세 보정 작업.
+> 이전 디자인 HTML 기반으로 수행한 미세 보정 작업.
 > 모든 항목 완료됨.
 
 | TASK | 내용 | 파일 | 변경 |

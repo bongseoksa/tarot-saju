@@ -1,7 +1,6 @@
 ## 문서 목록 (docs/specs)
 - specs.md — 서비스 스펙 정의 (현재 문서)
 - tech-decisions.md — 기술스택 선정 근거
-- 00-brainstorming.md — 브레인스토밍 / 초기 아이디어 정리
 - 01-benchmark.md — 경쟁 서비스 벤치마킹 분석 (점신/헬로우봇/보라/coto)
 - 02-taro-mvp.md — 타로 MVP 기능 설계
 - 03-ai-design.md — AI 해석 품질 설계 (심리 설계 + 프롬프트 설계)
