@@ -21,7 +21,7 @@ export default function InterpretationCard({
           : "border border-zinc-100"
       }`}
     >
-      <h3 className="text-[length:--font-size-section-header] leading-[1.4] tracking-[-0.01em] font-semibold text-primary mb-[--spacing-sm] flex items-center gap-2">
+      <h3 className="text-[length:--font-size-section-header] leading-[1.4] tracking-[-0.01em] font-bold text-primary mb-[--spacing-sm] flex items-center gap-2">
         <Icon name={icon} size={20} />
         {title}
       </h3>

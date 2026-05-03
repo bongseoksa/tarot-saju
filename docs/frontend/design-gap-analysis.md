@@ -10,7 +10,9 @@
 
 - 디자인 시스템: `docs/frontend/stitch_jeomhana_tarot_ai/mystic_dot_minimalism/DESIGN.md`
 - 디자인 스크린 HTML+PNG: `_1/`~`_7/` (아래 매핑 참조)
-- 현재 일치율: HistoryPage 99% / ErrorModal 95% / SharedResult 94% / Result·Reading 90% / Home 88% / Loading 80%
+- 초기 일치율: HistoryPage 99% / ErrorModal 95% / SharedResult 94% / Result·Reading 90% / Home 88% / Loading 80%
+- TASK 1 완료 후: Home 95%↑ / HistoryPage 100%↑ (BottomNav 추가)
+- TASK 2 완료 후: Result 92%↑ (InterpretationCard font-bold)
 
 | 디자인 | 구현 파일 |
 |---|---|
@@ -28,7 +30,7 @@
 
 ## TASK 1 — 바텀 네비게이션 바 (신규 컴포넌트)
 
-**상태**: 미구현
+**상태**: ✅ 완료
 **디자인 출처**: `_3/code.html`, `_5/code.html` 하단 `<nav>`
 **영향**: HomePage, HistoryPage에 표시 / ReadingPage, ResultPage, SharedResultPage에서 숨김
 
@@ -71,9 +73,10 @@
 
 ## TASK 2 — InterpretationCard title weight 수정
 
+**상태**: ✅ 완료
 **파일**: `components/result/InterpretationCard.tsx`
 **디자인**: `_6/code.html` — `font-bold` (700)
-**현재**: `font-semibold` (600)
+**현재**: ~~`font-semibold` (600)~~ → `font-bold` (700)
 
 ```diff
 - font-semibold
