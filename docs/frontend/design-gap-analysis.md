@@ -15,6 +15,7 @@
 - TASK 2 완료 후: Result 92%↑ (InterpretationCard font-bold)
 - TASK 3 완료 후: Result 93%↑ (AdviceCard font-bold)
 - TASK 4 완료 후: Result 94%↑ (버튼 hover/duration 추가)
+- TASK 5 완료 후: Result 95%↑ (mascot indicator mb-lg)
 
 | 디자인 | 구현 파일 |
 |---|---|
@@ -130,9 +131,10 @@ share 버튼에도 `duration-200` 추가:
 
 ## TASK 5 — ResultPage mascot indicator 하단 마진 추가
 
+**상태**: ✅ 완료
 **파일**: `pages/ResultPage.tsx`
 **디자인**: `_6/code.html` — mascot indicator 컨테이너에 `mb-lg`
-**현재**: `mb` 없음
+**현재**: ~~`mb` 없음~~ → `mb-[--spacing-lg]` 적용
 
 마스코트 인디케이터(아바타 + 말풍선) 래핑 div에 추가:
 

@@ -57,7 +57,7 @@ export default function ResultPage() {
         <CardSummary cards={MOCK_CARDS} />
 
         {/* Mascot Indicator */}
-        <div className="flex items-center gap-[--spacing-sm]">
+        <div className="flex items-center gap-[--spacing-sm] mb-[--spacing-lg]">
           <div className="w-12 h-12 bg-primary-fixed rounded-full flex items-center justify-center overflow-hidden border-2 border-white shadow-sm">
             <div className="w-6 h-6 bg-primary rounded-full flex items-center justify-center">
               <div className="w-2 h-2 bg-white rounded-full" />
