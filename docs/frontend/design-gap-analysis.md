@@ -1,349 +1,257 @@
-# 디자인-구현 갭 보완 HANDOFF
+# 디자인-구현 갭 분석
 
-> 디자인 시안 HTML(`docs/frontend/stitch_jeomhana_tarot_ai/_*/code.html`)과 구현 코드를 CSS 속성 단위로 직접 대조한 결과.
-> 일치하는 항목은 생략하고, **수정이 필요한 갭만 기재**한다.
-> 작성일: 2026-05-03 | 기준 브랜치: feature/frontend
-
----
-
-## 사전 지식
-
-- 디자인 시스템: `docs/frontend/stitch_jeomhana_tarot_ai/mystic_dot_minimalism/DESIGN.md`
-- 디자인 스크린 HTML+PNG: `_1/`~`_7/` (아래 매핑 참조)
-- 초기 일치율: HistoryPage 99% / ErrorModal 95% / SharedResult 94% / Result·Reading 90% / Home 88% / Loading 80%
-- TASK 1 완료 후: Home 95%↑ / HistoryPage 100%↑ (BottomNav 추가)
-- TASK 2 완료 후: Result 92%↑ (InterpretationCard font-bold)
-- TASK 3 완료 후: Result 93%↑ (AdviceCard font-bold)
-- TASK 4 완료 후: Result 94%↑ (버튼 hover/duration 추가)
-- TASK 5 완료 후: Result 95%↑ (mascot indicator mb-lg)
-- TASK 6 완료 후: Result 97%↑ (스크롤바 숨김)
-- TASK 7 완료 후: SharedResult 96%↑ (한줄 요약 leading-tight)
-- TASK 8 완료 후: SharedResult 97%↑ (CTA 버튼 hover 추가)
-- TASK 9: 이미 구현됨 (브랜딩 텍스트 존재)
-- TASK 10 완료 후: Loading 95%↑ (커스텀 bounce + shadow-pulse + 도트 duration + footer)
-- TASK 11 완료 후: ErrorModal 98%↑ (mouth 채움형으로 변경)
-- TASK 12 완료 후: Reading 92%↑ (disabled 버튼 shadow 추가)
-- **전체 TASK 1~12 완료**
-
-| 디자인 | 구현 파일 |
-|---|---|
-| `_1/` 카드 선택 | `pages/ReadingPage.tsx`, `reading/CardSlot.tsx`, `reading/CardGrid.tsx` |
-| `_2/` 로딩 | `ui/LoadingScreen.tsx` |
-| `_3/` 히스토리 | `pages/HistoryPage.tsx`, `history/HistoryCard.tsx` |
-| `_4/` 에러 모달 | `ui/ErrorModal.tsx` |
-| `_5/` 홈 | `pages/HomePage.tsx`, `ui/CategoryChip.tsx`, `ui/ThemeCard.tsx` |
-| `_6/` 결과 | `pages/ResultPage.tsx`, `result/CardSummary.tsx`, `result/InterpretationCard.tsx`, `result/AdviceCard.tsx` |
-| `_7/` 공유 결과 | `pages/SharedResultPage.tsx`, `shared/TimelineInterpretation.tsx` |
-
-> 모든 파일 경로는 `apps/web/src/components/` 또는 `apps/web/src/pages/` 기준.
+> Stitch MCP 스크린(HTML + 스크린샷)과 React 구현 코드를 CSS 속성 단위로 직접 대조한 결과.
+> 일치하는 항목은 생략하고, **차이점만 기재**한다.
+> 최종 갱신: 2026-05-03 | 기준 브랜치: feature/frontend
 
 ---
 
-## TASK 1 — 바텀 네비게이션 바 (신규 컴포넌트)
+## 기준 소스
 
-**상태**: ✅ 완료
-**디자인 출처**: `_3/code.html`, `_5/code.html` 하단 `<nav>`
-**영향**: HomePage, HistoryPage에 표시 / ReadingPage, ResultPage, SharedResultPage에서 숨김
+### Stitch MCP (디자인 기준점)
 
-### 1-1. `components/ui/BottomNav.tsx` 신규 생성
+- 프로젝트: JeomHana Tarot AI (`1178828992586013718`)
+- 디자인 시스템: Mystic Dot Minimalism (프로젝트 designTheme.designMd)
+- 스크린 HTML: `docs/design/stitch/screens/*.html`
+- 스크린샷: `docs/design/stitch/screenshots/*.png`
 
-```tsx
-// 디자인 스펙 (code.html에서 추출)
-<nav className="fixed bottom-0 left-0 right-0 z-50">
-  <div className="max-w-md mx-auto bg-white rounded-t-3xl border-t border-zinc-100
-                  shadow-[0_-4px_20px_rgba(139,92,246,0.06)]
-                  flex justify-around items-center px-6 pb-6 pt-3">
-    {/* 각 탭 */}
-    <button className={active
-      ? "flex flex-col items-center gap-1 px-3 py-1.5 rounded-2xl bg-violet-50 text-violet-500 transition-colors"
-      : "flex flex-col items-center gap-1 px-3 py-1.5 rounded-2xl text-zinc-400 hover:text-violet-400 transition-colors"
-    }>
-      <Icon name="..." size={24} />
-      <span className="text-[10px] font-medium">탭이름</span>
-    </button>
-  </div>
-</nav>
-```
+### 스크린 매핑
 
-- 4탭: 홈(`home`) / 탐색(`explore`) / 히스토리(`history`) / 설정(`settings`)
-- `useLocation()`으로 현재 경로 매칭 → 활성 탭 결정
-- 탭 클릭 → `useNavigate()`로 이동
+| # | Stitch 스크린 | HTML 파일 | 구현 파일 |
+|---|-------------|-----------|---------|
+| 1 | 홈 - 점하나 (`32f51da6`) | `01-home.html` | `pages/HomePage.tsx`, `ui/CategoryChip.tsx`, `ui/ThemeCard.tsx` |
+| 2 | 카드 뽑기 - 점하나 (`16488b24`) | `02-card-draw.html` | `pages/ReadingPage.tsx`, `reading/CardSlot.tsx`, `reading/CardGrid.tsx` |
+| 3 | 히스토리 - 점하나 (`25ff684b`) | `03-history.html` | `pages/HistoryPage.tsx`, `history/HistoryCard.tsx` |
+| 4 | 결과 - 점하나 (`a3a7a4dd`) | `04-result.html` | `pages/ResultPage.tsx`, `result/CardSummary.tsx`, `result/InterpretationCard.tsx`, `result/AdviceCard.tsx` |
+| 5 | 공유 결과 - 점하나 (`b1eae62a`) | `05-share-result.html` | `pages/SharedResultPage.tsx`, `shared/TimelineInterpretation.tsx` |
+| 6 | 오류 안내 - 점하나 (`2f2fbc5e`) | `06-error.html` | `ui/ErrorModal.tsx` |
+| 7 | 로딩 - 점하나 (`1d89cc83`) | `07-loading.html` | `ui/LoadingScreen.tsx` |
 
-### 1-2. `components/AppLayout.tsx` 수정
-
-- BottomNav를 조건부 렌더링
-- 표시 조건: pathname이 `/` 또는 `/history`일 때만
-- 숨김 조건: `/reading/*`, `/result/*`, `/share/*`
-
-### 1-3. 페이지 하단 패딩 조정
-
-- `HomePage.tsx`: 메인 콘텐츠에 `pb-24` 추가 (BottomNav 높이 + 여백)
-- `HistoryPage.tsx`: 동일하게 `pb-24` 추가
+> 모든 구현 파일 경로는 `apps/web/src/components/` 또는 `apps/web/src/pages/` 기준.
 
 ---
 
-## TASK 2 — InterpretationCard title weight 수정
+## 전체 일치율 요약
 
-**상태**: ✅ 완료
-**파일**: `components/result/InterpretationCard.tsx`
-**디자인**: `_6/code.html` — `font-bold` (700)
-**현재**: ~~`font-semibold` (600)~~ → `font-bold` (700)
-
-```diff
-- font-semibold
-+ font-bold
-```
-
-타이틀 `<h3>` 또는 제목 요소의 `font-semibold`를 `font-bold`로 변경.
+| 스크린 | 일치율 | 비고 |
+|--------|--------|------|
+| 홈 | 95% | BottomNav 추가, 캐릭터는 CSS 도형 |
+| 카드 뽑기 | 92% | 3장 선택 시 2버튼 (스펙 우선), 카드 뒷면 에셋 차이 |
+| 히스토리 | 99% | 검색 아이콘 제거 (스펙 우선) |
+| 결과 | 97% | 헤더 우측 share 아이콘 (스펙 우선), 마스코트 CSS 도형 |
+| 공유 결과 | 97% | CTA hover 추가 |
+| 오류 안내 | 98% | 캐릭터 CSS 도형 |
+| 로딩 | 95% | 커스텀 bounce + shadow-pulse |
 
 ---
 
-## TASK 3 — AdviceCard title weight 수정
+## 의도적 차이 (스펙 우선 결정)
 
-**상태**: ✅ 완료
-**파일**: `components/result/AdviceCard.tsx`
-**디자인**: `_6/code.html` — `font-bold` (700)
-**현재**: ~~`font-semibold` (600)~~ → `font-bold` (700)
+> 스펙(`docs/specs/02-taro-mvp.md`)과 Stitch MCP가 불일치할 때, **스펙을 우선**한 항목.
+> 이 항목들은 수정 대상이 아님.
 
-```diff
-- font-semibold
-+ font-bold
-```
-
-타이틀 요소의 `font-semibold`를 `font-bold`로 변경.
+| # | 항목 | Stitch MCP | React 구현 | 근거 |
+|---|------|-----------|-----------|------|
+| S1 | 결과 헤더 우측 아이콘 | `history` 아이콘 | `share` 아이콘 | 스펙 IA line 38: "공유 아이콘" |
+| S2 | 히스토리 검색 아이콘 | `search` 아이콘 존재 | 없음 | 스펙 미정의 → 미구현 |
+| S3 | 카드 뽑기 3장 선택 시 버튼 | 단일 disabled 버튼만 표시 | "다시 선택" + "결과 보기" 2버튼 | 스펙 line 104 |
+| S4 | 미완료 세션 토스트 | `01-home.html`에 토스트 존재 | 미구현 | Phase 3 이관 (localStorage 의존) |
 
 ---
 
-## TASK 4 — ResultPage primary 버튼 hover 추가
+## 에셋 차이 (구조적 제약)
 
-**상태**: ✅ 완료
-**파일**: `pages/ResultPage.tsx`
-**디자인**: `_6/code.html` — 하단 primary 버튼에 `hover:bg-primary/90 duration-200`
-**현재**: ~~`hover` 없음, `duration` 없음~~ → 적용 완료
+> Stitch MCP는 AI 생성 이미지를 사용하나, 실제 구현은 CSS 도형 또는 로컬 에셋 사용.
+> 추후 실제 캐릭터 일러스트 확보 시 교체 대상.
 
-하단 footer의 primary 버튼(flex-[2])에 추가:
-
-```diff
-- active:scale-95 transition-colors
-+ hover:bg-primary/90 active:scale-95 transition-colors duration-200
-```
-
-share 버튼에도 `duration-200` 추가:
-
-```diff
-- active:scale-95
-+ active:scale-95 duration-200
-```
+| # | 항목 | Stitch MCP | React 구현 | 비고 |
+|---|------|-----------|-----------|------|
+| A1 | 점하나 캐릭터 (홈 Hero) | AI 생성 이미지 (Google URL) | CSS 원형 도형 (`bg-primary rounded-full`) | 캐릭터 에셋 확보 시 교체 |
+| A2 | 마스코트 아바타 (결과) | AI 생성 마스코트 이미지 | CSS 원형 + 눈/입 도형 | 동일 |
+| A3 | 에러 캐릭터 (오류 모달) | AI 생성 슬픈 마스코트 | CSS 원형 + 눈/입 도형 | 동일 |
+| A4 | 타로 카드 이미지 (결과/공유) | AI 생성 타로카드 일러스트 | 로컬 PNG 에셋 22장 | 자체 에셋 사용 |
+| A5 | 카드 뒷면 (카드 뽑기) | 보라색 면 + 흰색 원 아이콘 | `card-back.png` 이미지 | 자체 에셋 사용 |
 
 ---
 
-## TASK 5 — ResultPage mascot indicator 하단 마진 추가
+## 구조적 이슈
 
-**상태**: ✅ 완료
-**파일**: `pages/ResultPage.tsx`
-**디자인**: `_6/code.html` — mascot indicator 컨테이너에 `mb-lg`
-**현재**: ~~`mb` 없음~~ → `mb-[--spacing-lg]` 적용
+### I1. BottomNav 존재 — 스펙 불일치 (결정 필요)
 
-마스코트 인디케이터(아바타 + 말풍선) 래핑 div에 추가:
+**상태**: 결정 필요
 
-```diff
-- flex items-center gap-[--spacing-sm]
-+ flex items-center gap-[--spacing-sm] mb-[--spacing-lg]
-```
+- **스펙**: `02-taro-mvp.md` — "탭바 없음 — 선형 플로우에 탭바 불필요"
+- **Stitch MCP**: 4탭 BottomNav 존재 (홈/타로/히스토리/내정보)
+- **현재 구현**: BottomNav 존재 (홈/히스토리에서만 표시)
+- **Phase 2 계획서**: "구현하지 않음"으로 명시
 
----
+**선택지:**
+1. BottomNav 제거 → 스펙 준수, 선형 플로우 원칙 유지
+2. BottomNav 유지 → Stitch 디자인 채택, UX 편의 (홈↔히스토리 직접 이동)
 
-## TASK 6 — ResultPage 메인 영역 스크롤바 숨김
+### I2. AppLayout max-width 위치
 
-**상태**: ✅ 완료
-**파일**: `pages/ResultPage.tsx`
-**디자인**: `_6/code.html` — `overflow-y-auto no-scrollbar`
-**현재**: ~~스크롤바 표시됨~~ → 스크롤바 숨김 적용
+**상태**: 기능 동일, 문서만 차이
 
-메인 스크롤 컨테이너에 스크롤바 숨김 클래스 추가:
-
-```diff
-- overflow-y-auto
-+ overflow-y-auto [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]
-```
+- **Phase 1 계획서**: `AppLayout`에서 `max-w-md mx-auto` 제공
+- **현재 구현**: 각 페이지에서 개별적으로 `max-w-[448px] mx-auto` 적용
+- **영향**: 없음 (기능적으로 동일)
 
 ---
 
-## TASK 7 — SharedResultPage 한줄 요약 line-height 수정
+## 완료된 TASK 이력 (TASK 1~12)
 
-**상태**: ✅ 완료
-**파일**: `pages/SharedResultPage.tsx`
-**디자인**: `_7/code.html` — 한줄 요약 제목에 `leading-tight` (1.25)
-**현재**: ~~`leading-[1.4]`~~ → `leading-tight`
+> 이전 디자인 HTML(`stitch_jeomhana_tarot_ai/_*/code.html`) 기반으로 수행한 미세 보정 작업.
+> 모든 항목 완료됨.
 
-```diff
-- leading-[1.4]
-+ leading-tight
-```
-
----
-
-## TASK 8 — SharedResultPage CTA 버튼 hover 추가
-
-**상태**: ✅ 완료
-**파일**: `pages/SharedResultPage.tsx`
-**디자인**: `_7/code.html` — `hover:scale-[0.98] transition-transform`
-**현재**: ~~hover 없음~~ → `hover:scale-[0.98]` 적용
-
-하단 CTA 버튼에 추가:
-
-```diff
-- active:scale-95 transition-transform
-+ hover:scale-[0.98] active:scale-95 transition-transform
-```
+| TASK | 내용 | 파일 | 변경 |
+|------|------|------|------|
+| 1 | BottomNav 신규 생성 | `ui/BottomNav.tsx`, `AppLayout.tsx` | 홈/히스토리에 BottomNav 추가 |
+| 2 | InterpretationCard title weight | `result/InterpretationCard.tsx` | `font-semibold` → `font-bold` |
+| 3 | AdviceCard title weight | `result/AdviceCard.tsx` | `font-semibold` → `font-bold` |
+| 4 | ResultPage 버튼 hover | `pages/ResultPage.tsx` | `hover:bg-primary/90 duration-200` 추가 |
+| 5 | ResultPage mascot mb-lg | `pages/ResultPage.tsx` | 마스코트 인디케이터 `mb-[--spacing-lg]` 추가 |
+| 6 | ResultPage 스크롤바 숨김 | `pages/ResultPage.tsx` | `[&::-webkit-scrollbar]:hidden` 추가 |
+| 7 | SharedResultPage leading-tight | `pages/SharedResultPage.tsx` | 한줄 요약 `leading-tight` 적용 |
+| 8 | SharedResultPage CTA hover | `pages/SharedResultPage.tsx` | `hover:scale-[0.98]` 추가 |
+| 9 | SharedResultPage 브랜딩 | `pages/SharedResultPage.tsx` | 이미 구현됨 (작업 불필요) |
+| 10 | LoadingScreen 애니메이션 | `ui/LoadingScreen.tsx`, `index.css` | 커스텀 bounce + shadow-pulse + 도트 duration + footer |
+| 11 | ErrorModal mouth 스타일 | `ui/ErrorModal.tsx` | 테두리형 → 채움형 (`bg-white/20`) |
+| 12 | ReadingPage disabled shadow | `pages/ReadingPage.tsx` | `shadow-lg shadow-black/5` 추가 |
 
 ---
 
-## TASK 9 — SharedResultPage 하단 브랜딩 추가
+## 화면별 상세 대조 결과
 
-**상태**: ✅ 완료 (이미 구현됨)
-**파일**: `pages/SharedResultPage.tsx`
-**디자인**: `_7/code.html` — CTA 버튼 아래에 브랜딩 텍스트
-**현재**: 이미 `AI 타로 서비스 점하나(JeomHana)` 텍스트가 동일하게 구현되어 있음
+### 홈 (`01-home.html` vs `HomePage.tsx`)
 
-CTA 버튼 아래에 추가:
+| 요소 | Stitch MCP 클래스 | React 구현 | 판정 |
+|------|------------------|-----------|------|
+| Hero 그래디언트 | `from-[#FFFDEB] to-[#FDF4FF]` | 동일 | ✅ |
+| Hero 라운딩 | `rounded-[32px]` | 동일 | ✅ |
+| CTA 버튼 | `bg-primary text-on-primary px-lg py-md rounded-full shadow-lg shadow-primary/20` | 동일 | ✅ |
+| 카테고리 칩 active | `bg-primary text-on-primary rounded-full` | 동일 | ✅ |
+| 카테고리 칩 inactive | `bg-surface-container-low text-on-surface-variant rounded-full hover:bg-surface-container-high` | 동일 | ✅ |
+| 테마 카드 | `bg-white p-lg rounded-[24px] shadow-sm border border-zinc-100` | 동일 | ✅ |
+| 테마 카드 hover | `hover:border-primary-fixed transition-colors` | 동일 | ✅ |
+| 카테고리 태그 색상 | `#FCE7F3/#9D174D` (연애), `#E0F2FE/#075985` (직장) 등 | 동일 (getCategoryMeta) | ✅ |
+| 푸터 | `border-t border-zinc-100 pt-lg` | 동일 | ✅ |
+| 캐릭터 | AI 이미지 | CSS 도형 | ⚠️ A1 |
 
-```tsx
-<p className="text-center text-[length:--font-size-caption] leading-[1.4]
-              tracking-[0.01em] text-zinc-400 mt-[--spacing-sm]">
-  JeomHana AI Tarot
-</p>
-```
+### 카드 뽑기 (`02-card-draw.html` vs `ReadingPage.tsx`)
 
----
+| 요소 | Stitch MCP 클래스 | React 구현 | 판정 |
+|------|------------------|-----------|------|
+| 배경 | `bg-amber-50/30` | 동일 | ✅ |
+| 빈 슬롯 | `border-2 border-dashed border-violet-200 bg-white/50` | 동일 | ✅ |
+| 선택 슬롯 | `bg-primary shadow-lg rounded-lg border-4 border-white` | 동일 | ✅ |
+| 카드 그리드 | `grid grid-cols-4 gap-sm` | 동일 | ✅ |
+| 마지막 2장 | `col-span-4 flex justify-center gap-sm` | 동일 | ✅ |
+| 카드 hover | `hover:shadow-md hover:-translate-y-1 transition-all active:scale-95` | 동일 | ✅ |
+| 선택 dimmed | `opacity-40 grayscale-[0.2]` | 동일 | ✅ |
+| disabled 버튼 | `bg-zinc-200 text-zinc-400 cursor-not-allowed shadow-lg shadow-black/5` | 동일 | ✅ |
+| 스크롤 마스크 | `mask-image: linear-gradient(...)` | 동일 | ✅ |
+| 배경 데코 | `bg-violet-100/40 blur-3xl` + `bg-amber-100/40 blur-3xl` | 동일 | ✅ |
+| 3장 선택 시 | 단일 버튼 | 2버튼 (스펙 우선) | ⚠️ S3 |
+| 카드 뒷면 | 보라색+원 아이콘 | card-back.png | ⚠️ A5 |
 
-## TASK 10 — LoadingScreen 바운스 커스텀 애니메이션
+### 결과 (`04-result.html` vs `ResultPage.tsx`)
 
-**상태**: ✅ 완료
-**파일**: `components/ui/LoadingScreen.tsx` + `index.css`
-**디자인**: `_2/code.html` — 커스텀 bounce (0.8s, translateY -24px)
-**현재**: ~~기본 `animate-bounce` (1s, translateY -25%)~~ → 커스텀 bounce-custom 적용
+| 요소 | Stitch MCP 클래스 | React 구현 | 판정 |
+|------|------------------|-----------|------|
+| 카드 요약 컨테이너 | `bg-white rounded-[32px] p-md shadow-[0_4px_20px_rgba(139,92,246,0.04)] border border-violet-50` | 동일 | ✅ |
+| 현재 카드 강조 | `shadow-md border-2 border-primary-fixed ring-4 ring-primary-fixed/20` | 동일 | ✅ |
+| 마스코트 말풍선 | `rounded-tr-2xl rounded-br-2xl rounded-bl-2xl shadow-sm border border-zinc-100` | 동일 | ✅ |
+| 해석 카드 | `bg-white p-lg rounded-[24px] border border-zinc-100 shadow-sm` | 동일 | ✅ |
+| 현재 해석 강조 | `border border-primary-fixed/50 ring-1 ring-primary-fixed/20` | 동일 | ✅ |
+| 조언 카드 | `bg-primary-container p-lg rounded-[24px] text-on-primary-container shadow-md` | 동일 | ✅ |
+| 광고 배너 | `bg-zinc-100 rounded-xl h-24 border border-zinc-200 border-dashed` | 동일 | ✅ |
+| 공유 버튼 | `flex-1 h-14 bg-white border border-violet-200 text-primary rounded-2xl` | 동일 | ✅ |
+| CTA 버튼 | `flex-[2] h-14 bg-primary text-white rounded-2xl shadow-[0_8px_16px_rgba(107,56,212,0.2)]` | 동일 | ✅ |
+| 헤더 우측 | `history` 아이콘 | `share` 아이콘 (스펙 우선) | ⚠️ S1 |
 
-### 10-1. tailwind.config.ts에 커스텀 keyframe 추가
+### 공유 결과 (`05-share-result.html` vs `SharedResultPage.tsx`)
 
-```js
-keyframes: {
-  'bounce-custom': {
-    '0%, 100%': { transform: 'translateY(0)' },
-    '50%': { transform: 'translateY(-24px)' },
-  },
-  'shadow-pulse': {
-    '0%, 100%': { transform: 'scaleX(1)', opacity: '0.3' },
-    '50%': { transform: 'scaleX(0.7)', opacity: '0.15' },
-  },
-},
-animation: {
-  'bounce-custom': 'bounce-custom 0.8s ease-in-out infinite',
-  'shadow-pulse': 'shadow-pulse 0.8s ease-in-out infinite',
-},
-```
+| 요소 | Stitch MCP 클래스 | React 구현 | 판정 |
+|------|------------------|-----------|------|
+| 로고 헤더 | 중앙 정렬, `flex justify-center items-center h-16` | 동일 | ✅ |
+| 인사 말풍선 | `rounded-2xl rounded-tl-none shadow-sm max-w-[85%]` | 동일 | ✅ |
+| 카드 그리드 | `grid grid-cols-3 gap-gutter` | 동일 | ✅ |
+| 현재 카드 확대 | `scale-110 z-10` | 동일 | ✅ |
+| 한줄 요약 | `bg-primary-fixed-dim/20 border border-primary-fixed-dim rounded-2xl p-lg text-center` | 동일 | ✅ |
+| 타임라인 과거/미래 | `border-l-2 border-zinc-100` + `bg-zinc-200 border-4 border-white` | 동일 | ✅ |
+| 타임라인 현재 | `border-l-2 border-primary-fixed-dim` + `bg-primary border-4 border-white` | 동일 | ✅ |
+| 조언 카드 | `bg-surface-container rounded-2xl p-lg` + `lightbulb` 아이콘 | 동일 | ✅ |
+| CTA 버튼 | `w-full h-14 bg-primary text-white rounded-2xl shadow-lg shadow-primary/20` | 동일 | ✅ |
+| CTA hover | `hover:scale-[0.98] active:scale-95 transition-transform` | 동일 | ✅ |
+| 서비스 캡션 | "AI 타로 서비스 점하나(JeomHana)" | 동일 | ✅ |
 
-### 10-2. LoadingScreen.tsx 수정
+### 히스토리 (`03-history.html` vs `HistoryPage.tsx`)
 
-캐릭터 바운스:
+| 요소 | Stitch MCP 클래스 | React 구현 | 판정 |
+|------|------------------|-----------|------|
+| 요약 통계 카드 | `bg-white p-md rounded-xl shadow-[0_4px_20px_rgba(139,92,246,0.04)] border border-zinc-50` | 동일 | ✅ |
+| 히스토리 카드 | `bg-white p-md rounded-2xl shadow-[0_8px_30px_rgba(0,0,0,0.04)] border border-white` | 동일 | ✅ |
+| 카테고리 태그 | `bg-pink-50 text-secondary px-2 py-0.5 rounded-full text-[10px] font-bold` | 동일 | ✅ |
+| 카드 썸네일 | `w-14 h-20 rounded-lg border border-zinc-50` | 동일 | ✅ |
+| 빈 상태 | HTML 주석 처리 | EmptyState 컴포넌트 구현 | ✅ 개선 |
+| 검색 아이콘 | `search` 아이콘 존재 | 없음 (스펙 우선) | ⚠️ S2 |
 
-```diff
-- animate-bounce
-+ animate-bounce-custom
-```
+### 오류 안내 (`06-error.html` vs `ErrorModal.tsx`)
 
-### 10-3. shadow pulse 요소 추가
+| 요소 | Stitch MCP 클래스 | React 구현 | 판정 |
+|------|------------------|-----------|------|
+| 오버레이 | `bg-zinc-900/40 backdrop-blur-sm` | 동일 | ✅ |
+| 모달 | `max-w-xs rounded-[32px] shadow-[0_20px_50px_rgba(107,56,212,0.15)]` | 동일 | ✅ |
+| 제목 | "죄송해요!" | 동일 | ✅ |
+| 메시지 | "일시적으로 해석을 불러오지 못했어요..." | 동일 | ✅ |
+| 주 버튼 | `bg-primary text-on-primary rounded-xl` "홈으로 돌아가기" | 동일 | ✅ |
+| 보조 버튼 | `bg-transparent text-outline` "다시 시도" | 동일 | ✅ |
+| 캐릭터 | AI 생성 이미지 | CSS 도형 (눈+입) | ⚠️ A3 |
 
-캐릭터 아래에 그림자 요소 추가:
+### 로딩 (`07-loading.html` vs `LoadingScreen.tsx`)
 
-```tsx
-<div className="w-16 h-3 bg-black/10 blur-sm rounded-[100%] mt-4 animate-shadow-pulse" />
-```
-
-### 10-4. 로딩 도트 duration 수정
-
-```diff
-- animate-pulse
-+ animate-[pulse_1.5s_ease-in-out_infinite]
-```
-
-3개 도트 모두 동일 적용 (delay는 기존 유지: 0ms, 200ms, 400ms).
-
-### 10-5. footer 텍스트 추가
-
-컴포넌트 하단에 추가:
-
-```tsx
-<div className="fixed bottom-12 left-0 right-0 flex justify-center opacity-40">
-  <span className="text-[length:--font-size-caption] leading-[1.4]
-                    tracking-[0.01em] text-on-surface-variant">
-    JeomHana AI Tarot System
-  </span>
-</div>
-```
-
----
-
-## TASK 11 — ErrorModal mouth 스타일 수정
-
-**상태**: ✅ 완료
-**파일**: `components/ui/ErrorModal.tsx`
-**디자인**: `_4/code.html` — `w-8 h-3 bg-white/20 rounded-full` (채움형)
-**현재**: ~~`w-6 h-2 border-b-2 border-white/60 rounded-full` (테두리형)~~ → `w-8 h-3 bg-white/20 rounded-full` (채움형)
-
-```diff
-- w-6 h-2 border-b-2 border-white/60 rounded-full
-+ w-8 h-3 bg-white/20 rounded-full
-```
-
----
-
-## TASK 12 — ReadingPage disabled 버튼 shadow 추가
-
-**상태**: ✅ 완료
-**파일**: `pages/ReadingPage.tsx`
-**디자인**: `_1/code.html` — disabled 상태 버튼에 `shadow-lg shadow-black/5`
-**현재**: ~~shadow 없음~~ → `shadow-lg shadow-black/5` 적용
-
-비활성 상태 버튼에 추가:
-
-```diff
-- bg-zinc-200 text-zinc-400 cursor-not-allowed
-+ bg-zinc-200 text-zinc-400 cursor-not-allowed shadow-lg shadow-black/5
-```
+| 요소 | Stitch MCP 클래스 | React 구현 | 판정 |
+|------|------------------|-----------|------|
+| 배경 | `bg-[#FAFAF9]` | 동일 | ✅ |
+| 바운스 | `bounce-custom 0.8s ease-in-out infinite` | 동일 | ✅ |
+| 그림자 펄스 | `shadow-pulse 0.8s ease-in-out infinite` | 동일 | ✅ |
+| 캐릭터 | `w-24 h-24 bg-primary rounded-full` + 눈/입 | 동일 | ✅ |
+| 텍스트 | "점하나" + "당신을 위한 점, 하나 준비 중" | 동일 | ✅ |
+| 도트 | 3개, `pulse 1.5s infinite` + 200ms/400ms delay | 동일 | ✅ |
+| 하단 | "JeomHana AI Tarot System" | 동일 | ✅ |
+| 터치 차단 | `touch-none pointer-events-none select-none` | 동일 | ✅ |
 
 ---
 
-## 판단 필요 (의도적 개선 가능성)
+## 의도적 구현 개선 (디자인에 없으나 유지)
 
-아래 3건은 디자인에 없지만 구현에서 추가된 스타일. 시각적으로 나을 수 있으므로 유지/제거를 판단할 것.
-
-| # | 파일 | 현재 (디자인에 없음) | 판단 |
-|---|---|---|---|
-| A | `CardSlot.tsx` (filled 상태) | `shadow-lg border-4 border-white` 추가됨 | 카드에 입체감 부여 — **유지 권장** |
-| B | `ErrorModal.tsx` (눈) | `-translate-y-1` 추가됨 | 눈 위치 미세 보정 — **유지 권장** |
-| C | `AdviceCard.tsx` (body) | `opacity-90` 추가됨 | 본문 대비 살짝 낮춤 — **유지 권장** |
+| # | 파일 | 추가된 스타일 | 판단 |
+|---|------|-------------|------|
+| A | `CardSlot.tsx` (filled) | `shadow-lg border-4 border-white` | 카드 입체감 — **유지** |
+| B | `ErrorModal.tsx` (눈) | `-translate-y-1` | 눈 위치 미세 보정 — **유지** |
+| C | `AdviceCard.tsx` (body) | `opacity-90` | 본문 대비 미세 조정 — **유지** |
 
 ---
 
 ## 보류 (Phase 3~4 연계)
 
 | # | 항목 | 연계 Phase | 비고 |
-|---|---|---|---|
+|---|------|-----------|------|
 | D | 미완료 세션 토스트 (HomePage) | Phase 3 | localStorage 세션 상태에 의존 |
 | E | AI 스트리밍 타이핑 효과 (ResultPage) | Phase 4 | 마스코트 말풍선 타이핑 애니메이션 |
+| F | 카드 4단계 애니메이션 (ReadingPage) | Phase 4 | 기대감→몰입→설렘→완성감 |
+| G | 광고 게이트 (Loading → 광고 → 결과) | Phase 3 | 광고 로드 로직에 의존 |
 
 ---
 
-## 참고: 무시해도 되는 차이
+## 무시해도 되는 차이 (표기법/동작 동일)
 
-아래는 표기법 차이이거나 동작에 영향 없는 항목이므로 수정 불필요.
-
-| 항목 | 디자인 | 구현 | 이유 |
-|---|---|---|---|
+| 항목 | Stitch MCP | React 구현 | 이유 |
+|------|-----------|-----------|------|
 | max-width 표기 | `max-w-md` | `max-w-[448px]` | 동일 값 (448px) |
-| spacing 표기 | `gap-sm` | `gap-[--spacing-sm]` | CSS var로 동일 값 해소 |
+| spacing 표기 | `gap-sm`, `px-container-padding` | `gap-[--spacing-sm]`, `px-[--spacing-container-padding]` | Tailwind v3 vs v4 CSS var 문법 차이 |
 | font-family 적용 | `font-display-title` | `text-[length:--font-size-*]` | body에 Pretendard 설정되어 상속 동작 |
 | ReadingPage height | flex 암시적 | `calc(100vh - 64px)` | 결과 동일 |
-| scrollbar thumb color | `rgba(139,92,246,0.1)` | `bg-violet-100` | 미세 차이, 시각적 동일 |
-| scrollbar thumb radius | `10px` | `rounded-full` | 시각적 동일 |
+| dark mode 클래스 | `dark:bg-zinc-950/80` 등 포함 | 미포함 | 스펙에 "dark mode 제외" 명시 |
+| Plus Jakarta Sans | 헤더 `font-['Plus_Jakarta_Sans']` | 동일 | ✅ |
