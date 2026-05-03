@@ -1,581 +1,325 @@
-# 디자인-구현 갭 분석 및 보완 계획
+# 디자인-구현 갭 보완 HANDOFF
 
-> Stitch 디자인 시안(`docs/frontend/stitch_jeomhana_tarot_ai/`)과 현재 구현(`apps/web/src/`) CSS/Tailwind 클래스 직접 대조 비교
+> 디자인 시안 HTML(`docs/frontend/stitch_jeomhana_tarot_ai/_*/code.html`)과 구현 코드를 CSS 속성 단위로 직접 대조한 결과.
+> 일치하는 항목은 생략하고, **수정이 필요한 갭만 기재**한다.
 > 작성일: 2026-05-03 | 기준 브랜치: feature/frontend
 
 ---
 
-## 1. 디자인 시안-구현 매핑
+## 사전 지식
 
-| 디자인 스크린 | 대응 페이지 | 일치율 |
-|---|---|---|
-| `_1/` — 카드 선택 (오늘의 타로) | `ReadingPage.tsx` | ~90% |
-| `_2/` — 로딩/스플래시 | `LoadingScreen.tsx` | ~80% |
-| `_3/` — 히스토리 | `HistoryPage.tsx` | ~99% |
-| `_4/` — 에러 모달 | `ErrorModal.tsx` | ~95% |
-| `_5/` — 홈 | `HomePage.tsx` | ~88% |
-| `_6/` — 결과 페이지 | `ResultPage.tsx` | ~90% |
-| `_7/` — 공유 결과 | `SharedResultPage.tsx` | ~94% |
+- 디자인 시스템: `docs/frontend/stitch_jeomhana_tarot_ai/mystic_dot_minimalism/DESIGN.md`
+- 디자인 스크린 HTML+PNG: `_1/`~`_7/` (아래 매핑 참조)
+- 현재 일치율: HistoryPage 99% / ErrorModal 95% / SharedResult 94% / Result·Reading 90% / Home 88% / Loading 80%
 
----
-
-## 2. 공통 크로스 페이지 갭
-
-### 2.1 바텀 네비게이션 바 — 미구현 (P1)
-
-디자인 `_3/`, `_5/`에 존재하지만 현재 구현에 전혀 없음.
-
-| 속성 | 디자인 값 |
+| 디자인 | 구현 파일 |
 |---|---|
-| Position | `fixed bottom-0 left-0 right-0 z-50` |
-| Layout | `flex justify-around items-center` |
-| Padding | `px-6 pb-6 pt-3` |
-| Max Width | `max-w-md mx-auto` |
-| Background | `bg-white` |
-| Border | `border-t border-zinc-100`, `rounded-t-3xl` |
-| Shadow | `shadow-[0_-4px_20px_rgba(139,92,246,0.06)]` |
-| Active Tab | `text-violet-500`, `bg-violet-50` |
-| Inactive Tab | `text-zinc-400`, `hover:text-violet-400` |
-| 표시 조건 | 홈/히스토리에서 표시, 결과/공유/리딩에서 숨김 |
+| `_1/` 카드 선택 | `pages/ReadingPage.tsx`, `reading/CardSlot.tsx`, `reading/CardGrid.tsx` |
+| `_2/` 로딩 | `ui/LoadingScreen.tsx` |
+| `_3/` 히스토리 | `pages/HistoryPage.tsx`, `history/HistoryCard.tsx` |
+| `_4/` 에러 모달 | `ui/ErrorModal.tsx` |
+| `_5/` 홈 | `pages/HomePage.tsx`, `ui/CategoryChip.tsx`, `ui/ThemeCard.tsx` |
+| `_6/` 결과 | `pages/ResultPage.tsx`, `result/CardSummary.tsx`, `result/InterpretationCard.tsx`, `result/AdviceCard.tsx` |
+| `_7/` 공유 결과 | `pages/SharedResultPage.tsx`, `shared/TimelineInterpretation.tsx` |
 
-### 2.2 미완료 세션 토스트 — 미구현 (P2, Phase 3 연계)
-
-디자인 `_5/` 하단에 존재.
-
-| 속성 | 디자인 값 |
-|---|---|
-| Position | `fixed bottom-28 left-0 right-0 z-50` |
-| Inner | `bg-zinc-900 text-white px-lg py-sm rounded-full shadow-2xl` |
-| Layout | `flex items-center gap-3 max-w-xs` |
-| Animation | `animate-bounce` |
-
-### 2.3 타이포그래피 font-family 적용 방식 차이 — 전체 (P3)
-
-디자인 HTML은 Tailwind 커스텀 유틸리티 `font-display-title`, `font-sub-text` 등을 사용하여 fontFamily와 fontSize를 동시에 적용. 구현은 `text-[length:--font-size-*]`로 fontSize만 추출하고, fontFamily는 body 상속에 의존.
-
-| 타이포 레벨 | 디자인 클래스 | 구현 클래스 | 차이 |
-|---|---|---|---|
-| display-title | `font-display-title text-display-title` | `text-[length:--font-size-display-title] leading-[1.4] tracking-[-0.02em] font-bold` | fontFamily 누락 (body 상속으로 동작) |
-| section-header | `font-section-header text-section-header` | `text-[length:--font-size-section-header] leading-[1.4] tracking-[-0.01em] font-semibold` | fontFamily 누락 |
-| body-main | `font-body-main text-body-main` | `text-[length:--font-size-body-main] leading-[1.6]` | fontFamily 누락 |
-| sub-text | `font-sub-text text-sub-text` | `text-[length:--font-size-sub-text] leading-[1.5]` | fontFamily 누락 |
-| caption | `font-caption text-caption` | `text-[length:--font-size-caption] leading-[1.4] tracking-[0.01em]` | fontFamily 누락 |
-
-**영향도**: Pretendard가 body에 설정되어 있으므로 현재 동작에는 문제 없음. 단, body font가 변경되면 깨질 수 있는 잠재적 리스크.
+> 모든 파일 경로는 `apps/web/src/components/` 또는 `apps/web/src/pages/` 기준.
 
 ---
 
-## 3. 화면별 상세 CSS 대조
+## TASK 1 — 바텀 네비게이션 바 (신규 컴포넌트)
 
-### 3.1 HomePage (디자인 `_5/`)
+**상태**: 미구현
+**디자인 출처**: `_3/code.html`, `_5/code.html` 하단 `<nav>`
+**영향**: HomePage, HistoryPage에 표시 / ReadingPage, ResultPage, SharedResultPage에서 숨김
 
-#### Header (AppHeader home variant)
+### 1-1. `components/ui/BottomNav.tsx` 신규 생성
 
-| 속성 | 디자인 | 구현 | 일치 |
-|---|---|---|---|
-| Background | `bg-white/80` | `bg-white/80` | O |
-| Backdrop | `backdrop-blur-md` | `backdrop-blur-md` | O |
-| Border | `border-b border-zinc-100` | `border-b border-zinc-100` | O |
-| Position | `sticky top-0 z-50` | `sticky top-0 z-50` | O |
-| Height | `h-16` | `h-16` | O |
-| Width | `max-w-md` | `max-w-[448px]` | O (동일 값) |
-| Padding | `px-4` | `px-4` | O |
-| Logo font | `font-['Plus_Jakarta_Sans'] text-xl font-black` | `font-['Plus_Jakarta_Sans'] text-xl font-black` | O |
-| Logo circle | `w-8 h-8 bg-primary rounded-full` | `w-8 h-8 bg-primary rounded-full` | O |
-| Inner dot | `w-2 h-2 bg-white rounded-full` | `w-2 h-2 bg-white rounded-full` | O |
-| History btn | `p-2 rounded-full hover:bg-zinc-50 transition-colors` | `p-2 rounded-full hover:bg-zinc-50 transition-colors` | O |
+```tsx
+// 디자인 스펙 (code.html에서 추출)
+<nav className="fixed bottom-0 left-0 right-0 z-50">
+  <div className="max-w-md mx-auto bg-white rounded-t-3xl border-t border-zinc-100
+                  shadow-[0_-4px_20px_rgba(139,92,246,0.06)]
+                  flex justify-around items-center px-6 pb-6 pt-3">
+    {/* 각 탭 */}
+    <button className={active
+      ? "flex flex-col items-center gap-1 px-3 py-1.5 rounded-2xl bg-violet-50 text-violet-500 transition-colors"
+      : "flex flex-col items-center gap-1 px-3 py-1.5 rounded-2xl text-zinc-400 hover:text-violet-400 transition-colors"
+    }>
+      <Icon name="..." size={24} />
+      <span className="text-[10px] font-medium">탭이름</span>
+    </button>
+  </div>
+</nav>
+```
 
-#### Hero Section
+- 4탭: 홈(`home`) / 탐색(`explore`) / 히스토리(`history`) / 설정(`settings`)
+- `useLocation()`으로 현재 경로 매칭 → 활성 탭 결정
+- 탭 클릭 → `useNavigate()`로 이동
 
-| 속성 | 디자인 | 구현 | 일치 |
-|---|---|---|---|
-| Outer padding | `px-container-padding pt-lg pb-xl` | `px-[--spacing-container-padding] pt-[--spacing-lg] pb-[--spacing-xl]` | O |
-| Inner padding | `p-lg` | `p-[--spacing-lg]` | O |
-| Border radius | `rounded-[32px]` | `rounded-[32px]` | O |
-| Gradient | `bg-gradient-to-br from-[#FFFDEB] to-[#FDF4FF]` | `bg-gradient-to-br from-[#FFFDEB] to-[#FDF4FF]` | O |
-| Overflow | `overflow-hidden` | `overflow-hidden` | O |
-| Subtitle color | `text-on-surface-variant` | `text-on-surface-variant` | O |
-| Heading tracking | `-0.02em` | `tracking-[-0.02em]` | O |
-| CTA bg/text | `bg-primary text-on-primary` | `bg-primary text-on-primary` | O |
-| CTA padding | `px-lg py-md` | `px-[--spacing-lg] py-[--spacing-md]` | O |
-| CTA radius | `rounded-full` | `rounded-full` | O |
-| CTA shadow | `shadow-lg shadow-primary/20` | `shadow-lg shadow-primary/20` | O |
-| CTA active | `active:scale-95 transition-transform` | `active:scale-95 transition-transform` | O |
-| Character deco | `absolute right-[-20px] bottom-[-20px] w-48 h-48 opacity-20` | 동일 | O |
-| **Character 렌더링** | `<img>` 태그 (이미지) | `<div> bg-primary rounded-full` (CSS 원형) | **X** |
+### 1-2. `components/AppLayout.tsx` 수정
 
-#### Category Chips
+- BottomNav를 조건부 렌더링
+- 표시 조건: pathname이 `/` 또는 `/history`일 때만
+- 숨김 조건: `/reading/*`, `/result/*`, `/share/*`
 
-| 속성 | 디자인 | 구현 | 일치 |
-|---|---|---|---|
-| Container | `flex overflow-x-auto no-scrollbar gap-xs` | `flex overflow-x-auto gap-[--spacing-xs]` + 스크롤바 숨김 arbitrary | O |
-| Active chip | `bg-primary text-on-primary` | `bg-primary text-on-primary` | O |
-| Inactive chip | `bg-surface-container-low text-on-surface-variant` | `bg-surface-container-low text-on-surface-variant` | O |
-| Hover | `hover:bg-surface-container-high transition-colors` | `hover:bg-surface-container-high transition-colors` | O |
-| Padding | `px-md py-sm` | `px-[--spacing-md] py-[--spacing-sm]` | O |
-| Radius | `rounded-full` | `rounded-full` | O |
-| Flex | `flex-none` | `flex-none` | O |
+### 1-3. 페이지 하단 패딩 조정
 
-#### Theme Cards (ThemeCard.tsx)
-
-| 속성 | 디자인 | 구현 | 일치 |
-|---|---|---|---|
-| Grid | `grid grid-cols-1 gap-md` | `grid grid-cols-1 gap-[--spacing-md]` | O |
-| Card bg | `bg-white` | `bg-white` | O |
-| Card padding | `p-lg` | `p-[--spacing-lg]` | O |
-| Card radius | `rounded-[24px]` | `rounded-[24px]` | O |
-| Card shadow | `shadow-sm` | `shadow-sm` | O |
-| Card border | `border border-zinc-100` | `border border-zinc-100` | O |
-| Card hover | `hover:border-primary-fixed transition-colors` | `hover:border-primary-fixed transition-colors` | O |
-| Tag colors (Love) | `bg-[#FCE7F3] text-[#9D174D]` | 데이터 기반 동적 적용 | O (값 일치 확인 필요) |
-| Icon box | `w-10 h-10 bg-surface-container rounded-xl` | `w-10 h-10 bg-surface-container rounded-xl` | O |
-| Icon hover | `group-hover:bg-primary-fixed transition-colors` | `group-hover:bg-primary-fixed transition-colors` | O |
-
-#### Footer
-
-| 속성 | 디자인 | 구현 | 일치 |
-|---|---|---|---|
-| Border | `border-t border-zinc-100` | `border-t border-zinc-100` | O |
-| Links color/hover | `text-on-surface-variant hover:text-primary` | `text-on-surface-variant hover:text-primary` | O |
-| Copyright color | `text-zinc-400` | `text-zinc-400` | O |
-
-#### 미구현 요소
-
-| 요소 | 디자인 스펙 | 우선순위 |
-|---|---|---|
-| **Bottom Nav** | 4탭 바텀 내비게이션 (위 2.1 참조) | P1 |
-| **미완료 세션 토스트** | 하단 고정, bg-zinc-900 (위 2.2 참조) | P2 |
+- `HomePage.tsx`: 메인 콘텐츠에 `pb-24` 추가 (BottomNav 높이 + 여백)
+- `HistoryPage.tsx`: 동일하게 `pb-24` 추가
 
 ---
 
-### 3.2 ReadingPage (디자인 `_1/`)
+## TASK 2 — InterpretationCard title weight 수정
 
-#### Main Container
+**파일**: `components/result/InterpretationCard.tsx`
+**디자인**: `_6/code.html` — `font-bold` (700)
+**현재**: `font-semibold` (600)
 
-| 속성 | 디자인 | 구현 | 일치 |
-|---|---|---|---|
-| Background | `bg-amber-50/30` | `bg-amber-50/30` | O |
-| Overflow | `overflow-hidden` | `overflow-hidden` | O |
-| **Height** | flex 기반 암시적 | `calc(100vh - 64px)` 명시적 | **X** (동작 동일) |
+```diff
+- font-semibold
++ font-bold
+```
 
-#### Card Slots
-
-| 속성 | 디자인 | 구현 (CardSlot.tsx) | 일치 |
-|---|---|---|---|
-| Wrapper | `flex justify-between gap-gutter` | `flex justify-between gap-[--spacing-gutter]` | O |
-| Slot flex | `flex-1` | `flex-1` | O |
-| Slot aspect | `aspect-[2/3]` | `aspect-[2/3]` | O |
-| Empty border | `border-2 border-dashed border-violet-200` | `border-2 border-dashed border-violet-200` | O |
-| Empty bg | `bg-white/50` | `bg-white/50` | O |
-| Empty icon | `add_circle text-3xl text-violet-100` | `add_circle size={30} text-violet-100` | O |
-| Label color | `text-violet-300` | `text-violet-300` | O |
-| **Filled: shadow** | 없음 | `shadow-lg` 추가됨 | **X** (구현에서 추가) |
-| **Filled: border** | 없음 | `border-4 border-white` 추가됨 | **X** (구현에서 추가) |
-
-#### Card Grid (CardGrid.tsx)
-
-| 속성 | 디자인 | 구현 | 일치 |
-|---|---|---|---|
-| Grid | `grid grid-cols-4 gap-sm` | `grid grid-cols-4 gap-[--spacing-sm]` | O |
-| Card aspect | `aspect-[2/3]` | `aspect-[2/3]` | O |
-| Card radius | `rounded-lg` | `rounded-lg` | O |
-| Card bg | `bg-white` | `bg-white` | O |
-| Card border | `border border-zinc-100` | `border border-zinc-100` | O |
-| Card shadow | `shadow-sm` | `shadow-sm` | O |
-| Hover | `hover:shadow-md hover:-translate-y-1` | `hover:shadow-md hover:-translate-y-1` | O |
-| Active | `active:scale-95` | `active:scale-95` | O |
-| Selected opacity | `opacity-40` | `opacity-40` | O |
-| Selected grayscale | `grayscale-[0.2]` | `grayscale-[0.2]` | O |
-| Last 2 cards | `flex justify-center gap-sm`, `w-[calc(25%-9px)]` | 동일 | O |
-| Mask image | `linear-gradient(transparent, black 5%, black 90%, transparent)` | 동일 | O |
-| **Scrollbar width** | `4px` (custom CSS) | `[&::-webkit-scrollbar]:w-1` (4px) | O |
-| **Scrollbar thumb color** | `rgba(139,92,246,0.1)` | `bg-violet-100` | **X** (미세 색상 차이) |
-| **Scrollbar thumb radius** | `border-radius: 10px` | `rounded-full` (9999px) | **X** (시각 차이 미미) |
-| **Card inner bg** | `bg-violet-50` (카드 뒷면 래퍼) | TarotCardImage 컴포넌트 위임 | **X** (확인 필요) |
-
-#### Bottom Button Area
-
-| 속성 | 디자인 | 구현 | 일치 |
-|---|---|---|---|
-| Position | `fixed bottom-0 left-0 right-0` | `fixed bottom-0 left-0 right-0` | O |
-| Gradient | `bg-gradient-to-t from-white via-white/90 to-transparent` | 동일 | O |
-| Padding bottom | `pb-8` | `pb-8` | O |
-| Disabled bg/text | `bg-zinc-200 text-zinc-400 cursor-not-allowed` | `bg-zinc-200 text-zinc-400 cursor-not-allowed` | O |
-| Disabled radius | `rounded-2xl` | `rounded-2xl` | O |
-| **Disabled shadow** | `shadow-lg shadow-black/5` | 없음 | **X** (누락) |
-| **Enabled 레이아웃** | 단일 버튼 (bg-primary) | 2버튼 (다시 선택 + 결과 보기) | **X** (구현 확장) |
-| **Enabled submit shadow** | `shadow-violet-200` | `shadow-primary/20` | **X** (미세 차이) |
-
-#### Background Decorations
-
-| 속성 | 디자인 | 구현 | 일치 |
-|---|---|---|---|
-| Top-right orb | `w-64 h-64 bg-violet-100/40 blur-3xl -translate-y-1/2 translate-x-1/2` | 동일 | O |
-| Bottom-left orb | `w-80 h-80 bg-amber-100/40 blur-3xl translate-y-1/3 -translate-x-1/3` | 동일 | O |
+타이틀 `<h3>` 또는 제목 요소의 `font-semibold`를 `font-bold`로 변경.
 
 ---
 
-### 3.3 ResultPage (디자인 `_6/`)
+## TASK 3 — AdviceCard title weight 수정
 
-#### Card Summary (CardSummary.tsx)
+**파일**: `components/result/AdviceCard.tsx`
+**디자인**: `_6/code.html` — `font-bold` (700)
+**현재**: `font-semibold` (600)
 
-| 속성 | 디자인 | 구현 | 일치 |
-|---|---|---|---|
-| Container bg | `bg-white` | `bg-white` | O |
-| Container radius | `rounded-[32px]` | `rounded-[32px]` | O |
-| Container padding | `p-md` | `p-[--spacing-md]` | O |
-| Container shadow | `shadow-[0_4px_20px_rgba(139,92,246,0.04)]` | 동일 | O |
-| Container border | `border border-violet-50` | `border border-violet-50` | O |
-| Inner flex | `flex justify-between items-end gap-xs` | `flex justify-between items-end gap-[--spacing-xs]` | O |
-| Non-current label | `bg-surface-container-low text-on-surface-variant` | 동일 | O |
-| Current label | `bg-primary-fixed text-primary font-bold` | 동일 | O |
-| Label padding/radius | `px-2 py-0.5 rounded-full` | `px-2 py-0.5 rounded-full` | O |
-| Non-current card | `shadow-sm border border-zinc-100 rounded-xl` | 동일 | O |
-| Current card border | `border-2 border-primary-fixed` | 동일 | O |
-| Current card ring | `ring-4 ring-primary-fixed/20` | 동일 | O |
-| Current card offset | `pb-4` | `pb-4` | O |
-| Card name weight | `font-bold` | `font-bold` | O |
-| Current name color | `text-primary` | `text-primary` | O |
+```diff
+- font-semibold
++ font-bold
+```
 
-#### Mascot Indicator
-
-| 속성 | 디자인 | 구현 | 일치 |
-|---|---|---|---|
-| Container | `flex items-center gap-sm` | `flex items-center gap-[--spacing-sm]` | O |
-| Avatar size | `w-12 h-12` | `w-12 h-12` | O |
-| Avatar bg | `bg-primary-fixed` | `bg-primary-fixed` | O |
-| Avatar border | `border-2 border-white` | `border-2 border-white` | O |
-| Avatar shadow | `shadow-sm` | `shadow-sm` | O |
-| **Avatar 내부** | `<img>` (실제 이미지) | `<div> bg-primary rounded-full` (CSS 원형) | **X** |
-| Bubble bg | `bg-white` | `bg-white` | O |
-| Bubble radius | `rounded-tr-2xl rounded-br-2xl rounded-bl-2xl` | 동일 | O |
-| Bubble border | `border border-zinc-100` | 동일 | O |
-| Bubble shadow | `shadow-sm` | `shadow-sm` | O |
-| **Container mb** | `mb-lg` | 없음 | **X** (누락) |
-
-#### Interpretation Cards (InterpretationCard.tsx)
-
-| 속성 | 디자인 | 구현 | 일치 |
-|---|---|---|---|
-| Card bg | `bg-white` | `bg-white` | O |
-| Card padding | `p-lg` | `p-[--spacing-lg]` | O |
-| Card radius | `rounded-[24px]` | `rounded-[24px]` | O |
-| Card shadow | `shadow-sm` | `shadow-sm` | O |
-| Non-highlight border | `border border-zinc-100` | 동일 | O |
-| Highlight border | `border border-primary-fixed/50` | 동일 | O |
-| Highlight ring | `ring-1 ring-primary-fixed/20` | 동일 | O |
-| Title color | `text-primary` | `text-primary` | O |
-| Title gap | `flex items-center gap-2` | 동일 | O |
-| Body color | `text-on-surface-variant` | `text-on-surface-variant` | O |
-| **Title weight** | `font-bold` (700) | `font-semibold` (600) | **X** |
-| **Section position** | `relative` | 없음 | **X** (누락) |
-
-#### Advice Card (AdviceCard.tsx)
-
-| 속성 | 디자인 | 구현 | 일치 |
-|---|---|---|---|
-| Background | `bg-primary-container` | `bg-primary-container` | O |
-| Text color | `text-on-primary-container` | `text-on-primary-container` | O |
-| Padding | `p-lg` | `p-[--spacing-lg]` | O |
-| Radius | `rounded-[24px]` | `rounded-[24px]` | O |
-| Shadow | `shadow-md` | `shadow-md` | O |
-| Divider | `bg-white/20 h-px w-full` | 동일 | O |
-| Summary icon | `verified text-[24px]` | `verified size={24}` | O |
-| Summary weight | `font-bold` | `font-bold` | O |
-| **Title weight** | `font-bold` (700) | `font-semibold` (600) | **X** |
-| **Body opacity** | 없음 | `opacity-90` 추가됨 | **X** (구현에서 추가) |
-
-#### Footer Buttons
-
-| 속성 | 디자인 | 구현 | 일치 |
-|---|---|---|---|
-| Position | `fixed bottom-0 left-0 right-0 z-50` | 동일 | O |
-| Background | `bg-white/95 backdrop-blur-md` | 동일 | O |
-| Radius | `rounded-t-[32px]` | `rounded-t-[32px]` | O |
-| Shadow | `shadow-[0_-8px_30px_rgba(0,0,0,0.05)]` | 동일 | O |
-| Border | `border-t border-zinc-50` | 동일 | O |
-| Share btn | `flex-1 h-14 bg-white border border-violet-200 text-primary rounded-2xl` | 동일 | O |
-| Share hover | `hover:bg-violet-50` | `hover:bg-violet-50` | O |
-| Primary btn | `flex-[2] h-14 bg-primary text-white rounded-2xl` | 동일 | O |
-| Primary shadow | `shadow-[0_8px_16px_rgba(107,56,212,0.2)]` | 동일 | O |
-| **Primary hover** | `hover:bg-primary/90` | 없음 | **X** (누락) |
-| **Active duration** | `active:scale-95 duration-200` | `active:scale-95` (duration 없음) | **X** (미세) |
-| **Main scrollbar** | `overflow-y-auto no-scrollbar` | `no-scrollbar` 누락 | **X** |
+타이틀 요소의 `font-semibold`를 `font-bold`로 변경.
 
 ---
 
-### 3.4 SharedResultPage (디자인 `_7/`)
+## TASK 4 — ResultPage primary 버튼 hover 추가
 
-#### Greeting Bubble
+**파일**: `pages/ResultPage.tsx`
+**디자인**: `_6/code.html` — 하단 primary 버튼에 `hover:bg-primary/90 duration-200`
+**현재**: `hover` 없음, `duration` 없음
 
-| 속성 | 디자인 | 구현 | 일치 |
-|---|---|---|---|
-| Avatar | `w-10 h-10 bg-surface-container` | 동일 | O |
-| Avatar dot | `w-2.5 h-2.5` | 동일 | O |
-| Message border | `border border-zinc-100` | 동일 | O |
-| Message padding | `p-md` | `p-[--spacing-md]` | O |
-| Message radius | `rounded-2xl rounded-tl-none` | 동일 | O |
-| Message shadow | `shadow-sm` | `shadow-sm` | O |
+하단 footer의 primary 버튼(flex-[2])에 추가:
 
-#### Card Grid
+```diff
+- active:scale-95 transition-colors
++ hover:bg-primary/90 active:scale-95 transition-colors duration-200
+```
 
-| 속성 | 디자인 | 구현 | 일치 |
-|---|---|---|---|
-| Grid | `grid-cols-3 gap-gutter` | `grid-cols-3 gap-[--spacing-gutter]` | O |
-| Label color | `text-zinc-500` | `text-zinc-500` | O |
-| Card radius/border | `rounded-xl border border-zinc-100` | 동일 | O |
-| Center card | `scale-110 z-10` | 동일 | O |
-| Name current color | `text-zinc-900` | 동일 | O |
-| Name other color | `text-zinc-700` | 동일 | O |
+share 버튼에도 `duration-200` 추가:
 
-#### Summary Card
-
-| 속성 | 디자인 | 구현 | 일치 |
-|---|---|---|---|
-| Background | `bg-primary-fixed-dim/20` | 동일 | O |
-| Border | `border border-primary-fixed-dim` | 동일 | O |
-| Padding/radius | `p-lg rounded-2xl` | `p-[--spacing-lg] rounded-2xl` | O |
-| Label | `font-bold text-primary` | 동일 | O |
-| **Title line-height** | `leading-tight` (1.25) | `leading-[1.4]` | **X** |
-
-#### Timeline (TimelineInterpretation.tsx)
-
-| 속성 | 디자인 | 구현 | 일치 |
-|---|---|---|---|
-| Non-highlight border | `border-l-2 border-zinc-100` | 동일 | O |
-| Highlight border | `border-l-2 border-primary-fixed-dim` | 동일 | O |
-| Dot position | `absolute -left-[9px] top-0` | 동일 | O |
-| Dot size | `w-4 h-4` | 동일 | O |
-| Dot border | `border-4 border-white` | 동일 | O |
-| Dot non-highlight | `bg-zinc-200` | 동일 | O |
-| Dot highlight | `bg-primary` | 동일 | O |
-| Title highlight color | `text-primary` | 동일 | O |
-| Body color | `text-on-surface-variant` | 동일 | O |
-
-#### Bottom CTA
-
-| 속성 | 디자인 | 구현 | 일치 |
-|---|---|---|---|
-| Position | `fixed bottom-0 left-1/2 -translate-x-1/2` | 동일 | O |
-| Button | `h-14 w-full bg-primary text-white rounded-2xl` | 동일 | O |
-| Shadow | `shadow-lg shadow-primary/20` | 동일 | O |
-| **Hover** | `hover:scale-[0.98]` | 없음 | **X** (누락) |
-| **Footer branding** | 하단 `text-caption text-zinc-400` + "JeomHana AI Tarot" | 없음 | **X** (누락) |
+```diff
+- active:scale-95
++ active:scale-95 duration-200
+```
 
 ---
 
-### 3.5 HistoryPage (디자인 `_3/`)
+## TASK 5 — ResultPage mascot indicator 하단 마진 추가
 
-#### Summary Stats
+**파일**: `pages/ResultPage.tsx`
+**디자인**: `_6/code.html` — mascot indicator 컨테이너에 `mb-lg`
+**현재**: `mb` 없음
 
-| 속성 | 디자인 | 구현 | 일치 |
-|---|---|---|---|
-| Grid | `grid-cols-2 gap-sm` | `grid-cols-2 gap-[--spacing-sm]` | O |
-| Card bg/padding | `bg-white p-md` | `bg-white p-[--spacing-md]` | O |
-| Card radius | `rounded-xl` | `rounded-xl` | O |
-| Card shadow | `shadow-[0_4px_20px_rgba(139,92,246,0.04)]` | 동일 | O |
-| Card border | `border border-zinc-50` | 동일 | O |
-| Stat label | `text-caption text-zinc-500` | `text-[length:--font-size-caption] text-zinc-500` | O |
-| Stat value primary | `text-primary font-bold` | 동일 | O |
-| Stat value secondary | `text-secondary` | 동일 | O |
+마스코트 인디케이터(아바타 + 말풍선) 래핑 div에 추가:
 
-#### History Card (HistoryCard.tsx)
-
-| 속성 | 디자인 | 구현 | 일치 |
-|---|---|---|---|
-| Card bg | `bg-white` | `bg-white` | O |
-| Card padding | `p-md` | `p-[--spacing-md]` | O |
-| Card radius | `rounded-2xl` | `rounded-2xl` | O |
-| Card shadow | `shadow-[0_8px_30px_rgba(0,0,0,0.04)]` | `shadow-[0_8px_30px_rgba(0,0,0,0.04)]` | O |
-| Card border | `border border-white` | `border border-white` | O |
-| Active | `active:scale-[0.98] transition-transform` | 동일 | O |
-| Badge padding | `px-2 py-0.5 rounded-full` | 동일 | O |
-| Badge font | `text-[10px] font-bold` | 동일 | O |
-| Badge colors | `bg-pink-50 text-secondary` 등 | 동일 | O |
-| Date color | `text-zinc-400` | 동일 | O |
-| Chevron | `text-zinc-300` | 동일 | O |
-| Thumbnail | `w-14 h-20 rounded-lg bg-zinc-100 border border-zinc-50` | 동일 | O |
-
-> HistoryPage는 바텀 네비 외에 CSS 차이가 거의 없음 (~99% 일치).
+```diff
+- flex items-center gap-[--spacing-sm]
++ flex items-center gap-[--spacing-sm] mb-[--spacing-lg]
+```
 
 ---
 
-### 3.6 LoadingScreen (디자인 `_2/`)
+## TASK 6 — ResultPage 메인 영역 스크롤바 숨김
 
-#### Container
+**파일**: `pages/ResultPage.tsx`
+**디자인**: `_6/code.html` — `overflow-y-auto no-scrollbar`
+**현재**: 스크롤바 표시됨
 
-| 속성 | 디자인 | 구현 | 일치 |
-|---|---|---|---|
-| Position | `fixed inset-0 z-[100]` | 동일 | O |
-| Background | `bg-[#FAFAF9]` | 동일 | O |
-| Layout | `flex flex-col items-center justify-center` | 동일 | O |
-| Touch | `touch-none pointer-events-none select-none` | 동일 | O |
+메인 스크롤 컨테이너에 스크롤바 숨김 클래스 추가:
 
-#### Character
-
-| 속성 | 디자인 | 구현 | 일치 |
-|---|---|---|---|
-| Outer container | `w-32 h-32` | 동일 | O |
-| Circle | `w-24 h-24 bg-primary rounded-full` | 동일 | O |
-| Eyes | `absolute top-1/2 left-1/4 (right-1/4) w-3 h-3 bg-white` | 동일 | O |
-| Mouth | `absolute bottom-6 w-8 h-3 bg-white/20 rounded-full` | 동일 | O |
-| Highlight | `absolute -top-4 -right-4 w-12 h-12 bg-white/10 blur-md` | 동일 | O |
-| **Bounce animation** | `animate-bounce-custom` (커스텀 0.8s, -24px) | `animate-bounce` (기본 1s) | **X** |
-
-#### Shadow Pulse
-
-| 속성 | 디자인 | 구현 | 일치 |
-|---|---|---|---|
-| **Shadow element** | `w-16 h-3 bg-black/10 blur-sm rounded-[100%] mt-4` | 없음 | **X** (미구현) |
-| **Shadow animation** | `animate-shadow-pulse` (scaleX 진동) | 없음 | **X** (미구현) |
-
-#### Text Section
-
-| 속성 | 디자인 | 구현 | 일치 |
-|---|---|---|---|
-| Gap | `gap-xs` | `gap-[--spacing-xs]` | O |
-| Title color | `text-on-surface` | 동일 | O |
-| Subtitle color | `text-on-surface-variant opacity-80` | 동일 | O |
-
-#### Loading Dots
-
-| 속성 | 디자인 | 구현 | 일치 |
-|---|---|---|---|
-| Dot size | `w-1.5 h-1.5` | 동일 | O |
-| Dot color | `bg-primary-fixed-dim` | 동일 | O |
-| Dot radius | `rounded-full` | 동일 | O |
-| **Dot animation duration** | `1.5s infinite` | `animate-pulse` (기본 2s) | **X** |
-| Dot delay (2nd) | `200ms` | `[animation-delay:200ms]` | O |
-| Dot delay (3rd) | `400ms` | `[animation-delay:400ms]` | O |
-
-#### Footer
-
-| 속성 | 디자인 | 구현 | 일치 |
-|---|---|---|---|
-| **Footer text** | `fixed bottom-12` + `opacity-40` + "JeomHana AI Tarot System" | 없음 | **X** (미구현) |
+```diff
+- overflow-y-auto
++ overflow-y-auto [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]
+```
 
 ---
 
-### 3.7 ErrorModal (디자인 `_4/`)
+## TASK 7 — SharedResultPage 한줄 요약 line-height 수정
 
-#### Overlay
+**파일**: `pages/SharedResultPage.tsx`
+**디자인**: `_7/code.html` — 한줄 요약 제목에 `leading-tight` (1.25)
+**현재**: `leading-[1.4]`
 
-| 속성 | 디자인 | 구현 | 일치 |
-|---|---|---|---|
-| Position | `fixed inset-0 z-[100]` | 동일 | O |
-| Background | `bg-zinc-900/40` | 동일 | O |
-| Backdrop | `backdrop-blur-sm` | 동일 | O |
-| Layout | `flex items-center justify-center` | 동일 | O |
-
-#### Modal
-
-| 속성 | 디자인 | 구현 | 일치 |
-|---|---|---|---|
-| Width | `w-full max-w-xs` | 동일 | O |
-| Radius | `rounded-[32px]` | 동일 | O |
-| Shadow | `shadow-[0_20px_50px_rgba(107,56,212,0.15)]` | 동일 | O |
-| Padding | `p-xl` | `p-[--spacing-xl]` | O |
-| Overflow | `overflow-hidden` | 동일 | O |
-
-#### Character
-
-| 속성 | 디자인 | 구현 | 일치 |
-|---|---|---|---|
-| Container | `w-32 h-32 mb-lg` | `w-32 h-32 mb-[--spacing-lg]` | O |
-| Glow bg | `bg-primary-container/10 rounded-full blur-2xl` | 동일 | O |
-| Circle | `w-24 h-24 bg-primary rounded-full relative z-10` | 동일 | O |
-| Eyes position | `absolute top-1/2 left-1/4 (right-1/4)` | 동일 | O |
-| Eyes size | `w-3 h-3 bg-white rounded-full` | 동일 | O |
-| **Eyes transform** | 없음 | `-translate-y-1` 추가됨 | **X** (구현 추가) |
-| **Mouth** | `w-8 h-3 bg-white/20 rounded-full` (채움) | `w-6 h-2 border-b-2 border-white/60` (테두리) | **X** |
-
-#### Buttons
-
-| 속성 | 디자인 | 구현 | 일치 |
-|---|---|---|---|
-| Primary bg/text | `bg-primary text-on-primary` | 동일 | O |
-| Primary padding | `py-md` | `py-[--spacing-md]` | O |
-| Primary radius | `rounded-xl` | `rounded-xl` | O |
-| Primary active | `active:scale-95 transition-transform` | 동일 | O |
-| Secondary color | `text-outline hover:text-primary` | 동일 | O |
-| Secondary transition | `transition-colors` | 동일 | O |
-| **Body px** | 없음 | `px-[--spacing-sm]` 추가됨 | **X** (구현 추가) |
+```diff
+- leading-[1.4]
++ leading-tight
+```
 
 ---
 
-## 4. 갭 종합 목록 (우선순위별)
+## TASK 8 — SharedResultPage CTA 버튼 hover 추가
 
-### P1 — 구조적 누락 (즉시 보완)
+**파일**: `pages/SharedResultPage.tsx`
+**디자인**: `_7/code.html` — `hover:scale-[0.98] transition-transform`
+**현재**: hover 없음
 
-| # | 항목 | 위치 | 디자인 값 | 현재 | 작업 |
-|---|---|---|---|---|---|
-| 1 | **바텀 네비게이션 바** | 전역 | 4탭 fixed bottom, `shadow-[0_-4px_20px_rgba(139,92,246,0.06)]`, `rounded-t-3xl` | 없음 | `BottomNav.tsx` 신규 생성 + AppLayout 통합 |
+하단 CTA 버튼에 추가:
 
-### P2 — 기능적 차이 (Phase 3~4 연계)
-
-| # | 항목 | 위치 | 디자인 값 | 현재 | Phase |
-|---|---|---|---|---|---|
-| 2 | 미완료 세션 토스트 | HomePage | `bg-zinc-900 rounded-full animate-bounce` | 없음 | Phase 3 |
-| 3 | AI 스트리밍 타이핑 | ResultPage | 마스코트 말풍선 타이핑 | 없음 | Phase 4 |
-
-### P3 — CSS 차이 (폴리싱)
-
-| # | 항목 | 파일 | 디자인 값 | 현재 값 | 비고 |
-|---|---|---|---|---|---|
-| 4 | InterpretationCard title weight | `InterpretationCard.tsx` | `font-bold` (700) | `font-semibold` (600) | 수정 필요 |
-| 5 | AdviceCard title weight | `AdviceCard.tsx` | `font-bold` (700) | `font-semibold` (600) | 수정 필요 |
-| 6 | ResultPage primary btn hover | `ResultPage.tsx` | `hover:bg-primary/90` | 없음 | 추가 |
-| 7 | ResultPage btn duration | `ResultPage.tsx` | `duration-200` | 없음 | 추가 |
-| 8 | ResultPage mascot mb | `ResultPage.tsx` | `mb-lg` | 없음 | 추가 |
-| 9 | ResultPage scrollbar | `ResultPage.tsx` | `no-scrollbar` | 없음 | 추가 |
-| 10 | SharedResult summary line-height | `SharedResultPage.tsx` | `leading-tight` (1.25) | `leading-[1.4]` | 수정 |
-| 11 | SharedResult CTA hover | `SharedResultPage.tsx` | `hover:scale-[0.98]` | 없음 | 추가 |
-| 12 | SharedResult footer branding | `SharedResultPage.tsx` | `text-caption text-zinc-400` 점하나 로고 | 없음 | 추가 |
-| 13 | LoadingScreen bounce timing | `LoadingScreen.tsx` | 커스텀 0.8s, -24px | 기본 `animate-bounce` (1s) | 커스텀 keyframe |
-| 14 | LoadingScreen shadow pulse | `LoadingScreen.tsx` | `w-16 h-3 bg-black/10 blur-sm animate-shadow-pulse` | 없음 | 추가 |
-| 15 | LoadingScreen dot duration | `LoadingScreen.tsx` | `1.5s` | 기본 `2s` | tailwind config 또는 arbitrary |
-| 16 | LoadingScreen footer text | `LoadingScreen.tsx` | `fixed bottom-12 opacity-40` "JeomHana AI Tarot System" | 없음 | 추가 |
-| 17 | ErrorModal mouth | `ErrorModal.tsx` | `w-8 h-3 bg-white/20 rounded-full` | `w-6 h-2 border-b-2 border-white/60` | 디자인 값으로 수정 |
-| 18 | ErrorModal eye transform | `ErrorModal.tsx` | 없음 | `-translate-y-1` | 의도적 개선? 유지 가능 |
-| 19 | ReadingPage disabled btn shadow | `ReadingPage.tsx` | `shadow-lg shadow-black/5` | 없음 | 추가 |
-| 20 | ReadingPage filled slot | `CardSlot.tsx` | border/shadow 없음 | `shadow-lg border-4 border-white` 추가됨 | 의도적 개선? 유지 가능 |
-| 21 | AdviceCard body opacity | `AdviceCard.tsx` | 없음 | `opacity-90` | 의도적 개선? 유지 가능 |
-| 22 | ReadingPage scrollbar thumb | `CardGrid.tsx` | `rgba(139,92,246,0.1)` | `bg-violet-100` | 미세 차이 |
-| 23 | ReadingPage main height | `ReadingPage.tsx` | flex 암시적 | `calc(100vh - 64px)` | 동작 동일, 유지 가능 |
+```diff
+- active:scale-95 transition-transform
++ hover:scale-[0.98] active:scale-95 transition-transform
+```
 
 ---
 
-## 5. 종합 평가
+## TASK 9 — SharedResultPage 하단 브랜딩 추가
 
-### 화면별 일치율
+**파일**: `pages/SharedResultPage.tsx`
+**디자인**: `_7/code.html` — CTA 버튼 아래에 브랜딩 텍스트
+**현재**: 없음
 
-| 화면 | 일치율 | 주요 갭 |
-|---|---|---|
-| HistoryPage | ~99% | 바텀 내비만 누락 |
-| ErrorModal | ~95% | 캐릭터 mouth 디테일 |
-| SharedResultPage | ~94% | CTA hover, footer branding, summary leading |
-| ResultPage | ~90% | font-weight, btn hover, mascot mb, scrollbar |
-| ReadingPage | ~90% | filled slot 스타일 차이, disabled btn shadow |
-| HomePage | ~88% | 바텀 내비, 토스트 누락 |
-| LoadingScreen | ~80% | shadow pulse 미구현, 애니메이션 타이밍, footer text |
+CTA 버튼 아래에 추가:
 
-### 주요 패턴 요약
-
-1. **구조적 누락 1건**: 바텀 네비게이션 바 (P1)
-2. **font-weight 불일치 2건**: InterpretationCard/AdviceCard title이 semibold(600)인데 디자인은 bold(700)
-3. **hover 상태 누락 2건**: ResultPage primary btn, SharedResult CTA
-4. **애니메이션 차이 3건**: LoadingScreen bounce/dot/shadow pulse 타이밍
-5. **의도적 개선 3건**: CardSlot filled 스타일, ErrorModal eye offset, AdviceCard opacity — 디자인에 없지만 시각적으로 나은 경우, 유지 판단 가능
-6. **font-family 적용 방식**: body 상속으로 동작하므로 현재 문제 없으나 잠재 리스크
+```tsx
+<p className="text-center text-[length:--font-size-caption] leading-[1.4]
+              tracking-[0.01em] text-zinc-400 mt-[--spacing-sm]">
+  JeomHana AI Tarot
+</p>
+```
 
 ---
 
-## 6. 디자인 에셋 참조
+## TASK 10 — LoadingScreen 바운스 커스텀 애니메이션
 
-| 항목 | 경로 |
-|---|---|
-| UI 스크린 HTML + PNG (7종) | `docs/frontend/stitch_jeomhana_tarot_ai/_1/` ~ `_7/` |
-| 디자인 시스템 | `docs/frontend/stitch_jeomhana_tarot_ai/mystic_dot_minimalism/DESIGN.md` |
-| 타로 카드 일러스트 | `docs/frontend/stitch_jeomhana_tarot_ai/a_cute_tarot_card_*` |
-| 카드 뒷면 디자인 | `docs/frontend/stitch_jeomhana_tarot_ai/a_tarot_card_back_*` |
-| 카드 앞면 예시 (교황) | `docs/frontend/stitch_jeomhana_tarot_ai/v/` |
+**파일**: `components/ui/LoadingScreen.tsx` + `tailwind.config.ts` (또는 CSS)
+**디자인**: `_2/code.html` — 커스텀 bounce (0.8s, translateY -24px)
+**현재**: 기본 `animate-bounce` (1s, translateY -25%)
+
+### 10-1. tailwind.config.ts에 커스텀 keyframe 추가
+
+```js
+keyframes: {
+  'bounce-custom': {
+    '0%, 100%': { transform: 'translateY(0)' },
+    '50%': { transform: 'translateY(-24px)' },
+  },
+  'shadow-pulse': {
+    '0%, 100%': { transform: 'scaleX(1)', opacity: '0.3' },
+    '50%': { transform: 'scaleX(0.7)', opacity: '0.15' },
+  },
+},
+animation: {
+  'bounce-custom': 'bounce-custom 0.8s ease-in-out infinite',
+  'shadow-pulse': 'shadow-pulse 0.8s ease-in-out infinite',
+},
+```
+
+### 10-2. LoadingScreen.tsx 수정
+
+캐릭터 바운스:
+
+```diff
+- animate-bounce
++ animate-bounce-custom
+```
+
+### 10-3. shadow pulse 요소 추가
+
+캐릭터 아래에 그림자 요소 추가:
+
+```tsx
+<div className="w-16 h-3 bg-black/10 blur-sm rounded-[100%] mt-4 animate-shadow-pulse" />
+```
+
+### 10-4. 로딩 도트 duration 수정
+
+```diff
+- animate-pulse
++ animate-[pulse_1.5s_ease-in-out_infinite]
+```
+
+3개 도트 모두 동일 적용 (delay는 기존 유지: 0ms, 200ms, 400ms).
+
+### 10-5. footer 텍스트 추가
+
+컴포넌트 하단에 추가:
+
+```tsx
+<div className="fixed bottom-12 left-0 right-0 flex justify-center opacity-40">
+  <span className="text-[length:--font-size-caption] leading-[1.4]
+                    tracking-[0.01em] text-on-surface-variant">
+    JeomHana AI Tarot System
+  </span>
+</div>
+```
+
+---
+
+## TASK 11 — ErrorModal mouth 스타일 수정
+
+**파일**: `components/ui/ErrorModal.tsx`
+**디자인**: `_4/code.html` — `w-8 h-3 bg-white/20 rounded-full` (채움형)
+**현재**: `w-6 h-2 border-b-2 border-white/60 rounded-full` (테두리형)
+
+```diff
+- w-6 h-2 border-b-2 border-white/60 rounded-full
++ w-8 h-3 bg-white/20 rounded-full
+```
+
+---
+
+## TASK 12 — ReadingPage disabled 버튼 shadow 추가
+
+**파일**: `pages/ReadingPage.tsx`
+**디자인**: `_1/code.html` — disabled 상태 버튼에 `shadow-lg shadow-black/5`
+**현재**: shadow 없음
+
+비활성 상태 버튼에 추가:
+
+```diff
+- bg-zinc-200 text-zinc-400 cursor-not-allowed
++ bg-zinc-200 text-zinc-400 cursor-not-allowed shadow-lg shadow-black/5
+```
+
+---
+
+## 판단 필요 (의도적 개선 가능성)
+
+아래 3건은 디자인에 없지만 구현에서 추가된 스타일. 시각적으로 나을 수 있으므로 유지/제거를 판단할 것.
+
+| # | 파일 | 현재 (디자인에 없음) | 판단 |
+|---|---|---|---|
+| A | `CardSlot.tsx` (filled 상태) | `shadow-lg border-4 border-white` 추가됨 | 카드에 입체감 부여 — **유지 권장** |
+| B | `ErrorModal.tsx` (눈) | `-translate-y-1` 추가됨 | 눈 위치 미세 보정 — **유지 권장** |
+| C | `AdviceCard.tsx` (body) | `opacity-90` 추가됨 | 본문 대비 살짝 낮춤 — **유지 권장** |
+
+---
+
+## 보류 (Phase 3~4 연계)
+
+| # | 항목 | 연계 Phase | 비고 |
+|---|---|---|---|
+| D | 미완료 세션 토스트 (HomePage) | Phase 3 | localStorage 세션 상태에 의존 |
+| E | AI 스트리밍 타이핑 효과 (ResultPage) | Phase 4 | 마스코트 말풍선 타이핑 애니메이션 |
+
+---
+
+## 참고: 무시해도 되는 차이
+
+아래는 표기법 차이이거나 동작에 영향 없는 항목이므로 수정 불필요.
+
+| 항목 | 디자인 | 구현 | 이유 |
+|---|---|---|---|
+| max-width 표기 | `max-w-md` | `max-w-[448px]` | 동일 값 (448px) |
+| spacing 표기 | `gap-sm` | `gap-[--spacing-sm]` | CSS var로 동일 값 해소 |
+| font-family 적용 | `font-display-title` | `text-[length:--font-size-*]` | body에 Pretendard 설정되어 상속 동작 |
+| ReadingPage height | flex 암시적 | `calc(100vh - 64px)` | 결과 동일 |
+| scrollbar thumb color | `rgba(139,92,246,0.1)` | `bg-violet-100` | 미세 차이, 시각적 동일 |
+| scrollbar thumb radius | `10px` | `rounded-full` | 시각적 동일 |
