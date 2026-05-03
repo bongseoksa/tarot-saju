@@ -21,6 +21,7 @@
 - TASK 8 완료 후: SharedResult 97%↑ (CTA 버튼 hover 추가)
 - TASK 9: 이미 구현됨 (브랜딩 텍스트 존재)
 - TASK 10 완료 후: Loading 95%↑ (커스텀 bounce + shadow-pulse + 도트 duration + footer)
+- TASK 11 완료 후: ErrorModal 98%↑ (mouth 채움형으로 변경)
 
 | 디자인 | 구현 파일 |
 |---|---|
@@ -283,9 +284,10 @@ animation: {
 
 ## TASK 11 — ErrorModal mouth 스타일 수정
 
+**상태**: ✅ 완료
 **파일**: `components/ui/ErrorModal.tsx`
 **디자인**: `_4/code.html` — `w-8 h-3 bg-white/20 rounded-full` (채움형)
-**현재**: `w-6 h-2 border-b-2 border-white/60 rounded-full` (테두리형)
+**현재**: ~~`w-6 h-2 border-b-2 border-white/60 rounded-full` (테두리형)~~ → `w-8 h-3 bg-white/20 rounded-full` (채움형)
 
 ```diff
 - w-6 h-2 border-b-2 border-white/60 rounded-full

@@ -13,7 +13,7 @@ export default function ErrorModal({ onHome, onRetry }: ErrorModalProps) {
           <div className="relative z-10 w-24 h-24 bg-primary rounded-full flex items-center justify-center">
             <div className="absolute top-1/2 left-1/4 w-3 h-3 bg-white rounded-full -translate-y-1" />
             <div className="absolute top-1/2 right-1/4 w-3 h-3 bg-white rounded-full -translate-y-1" />
-            <div className="absolute bottom-6 w-6 h-2 border-b-2 border-white/60 rounded-full" />
+            <div className="absolute bottom-6 w-8 h-3 bg-white/20 rounded-full" />
           </div>
         </div>
 
