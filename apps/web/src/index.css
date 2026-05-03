@@ -85,6 +85,16 @@
   --radius-full: 9999px;
 }
 
+@keyframes bounce-custom {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-24px); }
+}
+
+@keyframes shadow-pulse {
+  0%, 100% { transform: scaleX(1); opacity: 0.3; }
+  50% { transform: scaleX(0.7); opacity: 0.15; }
+}
+
 body {
   font-family: "Pretendard", sans-serif;
   -webkit-tap-highlight-color: transparent;

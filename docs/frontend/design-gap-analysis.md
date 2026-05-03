@@ -19,6 +19,8 @@
 - TASK 6 완료 후: Result 97%↑ (스크롤바 숨김)
 - TASK 7 완료 후: SharedResult 96%↑ (한줄 요약 leading-tight)
 - TASK 8 완료 후: SharedResult 97%↑ (CTA 버튼 hover 추가)
+- TASK 9: 이미 구현됨 (브랜딩 텍스트 존재)
+- TASK 10 완료 후: Loading 95%↑ (커스텀 bounce + shadow-pulse + 도트 duration + footer)
 
 | 디자인 | 구현 파일 |
 |---|---|
@@ -196,9 +198,10 @@ share 버튼에도 `duration-200` 추가:
 
 ## TASK 9 — SharedResultPage 하단 브랜딩 추가
 
+**상태**: ✅ 완료 (이미 구현됨)
 **파일**: `pages/SharedResultPage.tsx`
 **디자인**: `_7/code.html` — CTA 버튼 아래에 브랜딩 텍스트
-**현재**: 없음
+**현재**: 이미 `AI 타로 서비스 점하나(JeomHana)` 텍스트가 동일하게 구현되어 있음
 
 CTA 버튼 아래에 추가:
 
@@ -213,9 +216,10 @@ CTA 버튼 아래에 추가:
 
 ## TASK 10 — LoadingScreen 바운스 커스텀 애니메이션
 
-**파일**: `components/ui/LoadingScreen.tsx` + `tailwind.config.ts` (또는 CSS)
+**상태**: ✅ 완료
+**파일**: `components/ui/LoadingScreen.tsx` + `index.css`
 **디자인**: `_2/code.html` — 커스텀 bounce (0.8s, translateY -24px)
-**현재**: 기본 `animate-bounce` (1s, translateY -25%)
+**현재**: ~~기본 `animate-bounce` (1s, translateY -25%)~~ → 커스텀 bounce-custom 적용
 
 ### 10-1. tailwind.config.ts에 커스텀 keyframe 추가
 
