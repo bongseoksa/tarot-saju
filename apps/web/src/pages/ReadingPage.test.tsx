@@ -10,6 +10,42 @@ vi.mock("react-router", async () => {
   return { ...actual, useNavigate: () => mockNavigate };
 });
 
+const mockStartReading = vi.fn();
+const mockSelectCard = vi.fn();
+const mockResetSelection = vi.fn();
+const mockReset = vi.fn();
+const mockSetPhase = vi.fn();
+const mockReadingState = {
+  themeId: "daily-today",
+  selectedCards: [] as { cardId: number; positionIndex: number; isReversed: boolean }[],
+  phase: "selecting" as string,
+  startReading: mockStartReading,
+  selectCard: mockSelectCard,
+  resetSelection: mockResetSelection,
+  reset: mockReset,
+  setPhase: mockSetPhase,
+};
+
+vi.mock("../stores/useReadingStore", () => ({
+  useReadingStore: Object.assign(
+    vi.fn((selector: (s: typeof mockReadingState) => unknown) =>
+      selector(mockReadingState),
+    ),
+    {
+      getState: () => mockReadingState,
+    },
+  ),
+}));
+
+vi.mock("../hooks/useAdGate", () => ({
+  useAdGate: () => ({ showAd: vi.fn().mockResolvedValue(false) }),
+}));
+
+const mockInterpret = vi.fn();
+vi.mock("../hooks/useInterpretation", () => ({
+  useInterpretation: () => ({ interpret: mockInterpret, abort: vi.fn() }),
+}));
+
 function renderReadingPage(themeId = "daily-today") {
   return render(
     <MemoryRouter initialEntries={[`/reading/${themeId}`]}>
@@ -21,11 +57,22 @@ function renderReadingPage(themeId = "daily-today") {
 }
 
 describe("ReadingPage", () => {
-  beforeEach(() => mockNavigate.mockClear());
+  beforeEach(() => {
+    mockNavigate.mockClear();
+    mockStartReading.mockClear();
+    mockSelectCard.mockClear();
+    mockResetSelection.mockClear();
+    mockReset.mockClear();
+    mockInterpret.mockClear();
+    mockReadingState.selectedCards = [];
+    mockReadingState.phase = "selecting";
+  });
 
   it("renders the guidance text", () => {
     renderReadingPage();
-    expect(screen.getByText("세 장의 카드를 신중하게 골라주세요")).toBeInTheDocument();
+    expect(
+      screen.getByText("세 장의 카드를 신중하게 골라주세요"),
+    ).toBeInTheDocument();
   });
 
   it("renders 3 empty slots with position labels", () => {
@@ -47,40 +94,44 @@ describe("ReadingPage", () => {
     expect(actionButton).toBeDisabled();
   });
 
-  it("selects a card on click and dims it in the grid", async () => {
+  it("calls selectCard when a card is clicked", async () => {
     const user = userEvent.setup();
     renderReadingPage();
 
     const cards = screen.getAllByRole("button", { name: /카드/ });
     await user.click(cards[0]);
 
-    expect(screen.getByText("점 보기 (1/3)")).toBeInTheDocument();
+    expect(mockSelectCard).toHaveBeenCalled();
   });
 
-  it("shows two buttons when 3 cards are selected", async () => {
-    const user = userEvent.setup();
+  it("shows two buttons when 3 cards are selected", () => {
+    mockReadingState.selectedCards = [
+      { cardId: 0, positionIndex: 0, isReversed: false },
+      { cardId: 6, positionIndex: 1, isReversed: true },
+      { cardId: 17, positionIndex: 2, isReversed: false },
+    ];
+
     renderReadingPage();
 
-    const cards = screen.getAllByRole("button", { name: /카드/ });
-    await user.click(cards[0]);
-    await user.click(cards[1]);
-    await user.click(cards[2]);
-
-    expect(screen.getByRole("button", { name: /다시 선택/ })).toBeInTheDocument();
-    expect(screen.getByRole("button", { name: /결과 보기/ })).toBeInTheDocument();
+    expect(
+      screen.getByRole("button", { name: /다시 선택/ }),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole("button", { name: /결과 보기/ }),
+    ).toBeInTheDocument();
   });
 
-  it("resets selection when '다시 선택' is clicked", async () => {
+  it("calls resetSelection when '다시 선택' is clicked", async () => {
     const user = userEvent.setup();
+    mockReadingState.selectedCards = [
+      { cardId: 0, positionIndex: 0, isReversed: false },
+      { cardId: 6, positionIndex: 1, isReversed: true },
+      { cardId: 17, positionIndex: 2, isReversed: false },
+    ];
+
     renderReadingPage();
-
-    const cards = screen.getAllByRole("button", { name: /카드/ });
-    await user.click(cards[0]);
-    await user.click(cards[1]);
-    await user.click(cards[2]);
-
     await user.click(screen.getByRole("button", { name: /다시 선택/ }));
 
-    expect(screen.getByText("점 보기 (0/3)")).toBeInTheDocument();
+    expect(mockResetSelection).toHaveBeenCalled();
   });
 });

@@ -1,14 +1,30 @@
+import { useEffect, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router";
 import AppHeader from "../components/AppHeader";
 import CategoryChip from "../components/ui/CategoryChip";
 import ThemeCard from "../components/ui/ThemeCard";
 import Icon from "../components/ui/Icon";
+import PendingSessionModal from "../components/ui/PendingSessionModal";
 import { THEMES, CATEGORIES, type CategoryId } from "../data/themes";
+import { usePendingStore } from "../stores/usePendingStore";
+import { isSuppressed, suppressUntilMidnight } from "../utils/suppressionUtil";
 
 export default function HomePage() {
   const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
   const activeCategory = searchParams.get("category") as CategoryId | null;
+  const [showModal, setShowModal] = useState(false);
+
+  const clearExpired = usePendingStore((s) => s.clearExpired);
+  const getActiveSessions = usePendingStore((s) => s.getActiveSessions);
+
+  useEffect(() => {
+    clearExpired();
+    const sessions = getActiveSessions();
+    if (sessions.length > 0 && !isSuppressed()) {
+      setShowModal(true);
+    }
+  }, [clearExpired, getActiveSessions]);
 
   const filteredThemes = activeCategory
     ? THEMES.filter((t) => t.category === activeCategory)
@@ -113,6 +129,18 @@ export default function HomePage() {
           </p>
         </footer>
       </main>
+
+      {showModal && (
+        <PendingSessionModal
+          sessions={getActiveSessions()}
+          onResume={(sessionId) => {
+            setShowModal(false);
+            navigate(`/reading/${usePendingStore.getState().sessions.find((s) => s.id === sessionId)?.themeId ?? ""}`);
+          }}
+          onClose={() => setShowModal(false)}
+          onSuppress={() => suppressUntilMidnight()}
+        />
+      )}
     </>
   );
 }

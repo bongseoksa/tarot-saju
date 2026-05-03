@@ -2,39 +2,37 @@ import { useNavigate } from "react-router";
 import AppHeader from "../components/AppHeader";
 import HistoryCard from "../components/history/HistoryCard";
 import EmptyState from "../components/ui/EmptyState";
+import { useHistoryStore } from "../stores/useHistoryStore";
+import { THEMES } from "../data/themes";
 
-// Mock data for Phase 2
-const MOCK_HISTORY = [
-  {
-    id: "h1",
-    categoryTag: "연애운",
-    categoryColor: "bg-pink-50 text-secondary",
-    date: "2024.05.20",
-    title: "그 사람과의 설레는 다음 단계는?",
-    cardIds: [6, 19, 17],
-  },
-  {
-    id: "h2",
-    categoryTag: "커리어",
-    categoryColor: "bg-violet-50 text-primary",
-    date: "2024.05.18",
-    title: "새로운 프로젝트를 시작해도 될까요?",
-    cardIds: [1, 14, 7],
-  },
-  {
-    id: "h3",
-    categoryTag: "오늘의 운세",
-    categoryColor: "bg-amber-50 text-tertiary",
-    date: "2024.05.15",
-    title: "5월 셋째 주, 나에게 찾아올 행운",
-    cardIds: [10, 3, 21],
-  },
-];
+const CATEGORY_COLORS: Record<string, string> = {
+  daily: "bg-amber-50 text-tertiary",
+  love: "bg-pink-50 text-secondary",
+  career: "bg-violet-50 text-primary",
+  wealth: "bg-emerald-50 text-emerald-600",
+  study: "bg-blue-50 text-blue-600",
+  general: "bg-zinc-50 text-zinc-600",
+};
+
+const CATEGORY_LABELS: Record<string, string> = {
+  daily: "일상",
+  love: "연애",
+  career: "직장",
+  wealth: "재물",
+  study: "학업",
+  general: "기타",
+};
 
 export default function HistoryPage() {
   const navigate = useNavigate();
-  const items = MOCK_HISTORY;
-  const isEmpty = items.length === 0;
+  const results = useHistoryStore((s) => s.results);
+  const isEmpty = results.length === 0;
+
+  const thisMonthCount = results.filter((r) => {
+    const d = new Date(r.createdAt);
+    const now = new Date();
+    return d.getFullYear() === now.getFullYear() && d.getMonth() === now.getMonth();
+  }).length;
 
   return (
     <>
@@ -60,15 +58,15 @@ export default function HistoryPage() {
                     이번 달 읽은 횟수
                   </span>
                   <span className="text-[length:--font-size-display-title] leading-[1.4] tracking-[-0.02em] font-bold text-primary">
-                    12회
+                    {thisMonthCount}회
                   </span>
                 </div>
                 <div className="bg-white p-[--spacing-md] rounded-xl shadow-[0_4px_20px_rgba(139,92,246,0.04)] border border-zinc-50">
                   <span className="text-[length:--font-size-caption] leading-[1.4] tracking-[0.01em] text-zinc-500 mb-[--spacing-base] block">
-                    주요 키워드
+                    총 기록
                   </span>
                   <span className="text-[length:--font-size-display-title] leading-[1.4] tracking-[-0.02em] font-bold text-secondary">
-                    성장, 인연
+                    {results.length}건
                   </span>
                 </div>
               </div>
@@ -86,17 +84,27 @@ export default function HistoryPage() {
 
             {/* History Items */}
             <div className="space-y-[--spacing-md]">
-              {items.map((item) => (
-                <HistoryCard
-                  key={item.id}
-                  categoryTag={item.categoryTag}
-                  categoryColor={item.categoryColor}
-                  date={item.date}
-                  title={item.title}
-                  cardIds={item.cardIds}
-                  onClick={() => navigate(`/result/${item.id}`)}
-                />
-              ))}
+              {results.map((result) => {
+                const theme = THEMES.find((t) => t.id === result.request.themeId);
+                const category = theme?.category ?? "general";
+                const date = new Date(result.createdAt).toLocaleDateString("ko-KR", {
+                  year: "numeric",
+                  month: "2-digit",
+                  day: "2-digit",
+                });
+
+                return (
+                  <HistoryCard
+                    key={result.id}
+                    categoryTag={CATEGORY_LABELS[category] ?? "기타"}
+                    categoryColor={CATEGORY_COLORS[category] ?? CATEGORY_COLORS.general}
+                    date={date}
+                    title={theme?.title ?? "타로 결과"}
+                    cardIds={result.request.cards.map((c) => c.cardId)}
+                    onClick={() => navigate(`/result/${result.id}`)}
+                  />
+                );
+              })}
             </div>
           </>
         )}

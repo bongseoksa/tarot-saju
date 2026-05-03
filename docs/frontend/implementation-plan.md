@@ -22,7 +22,7 @@
 | 0 | 프로젝트 초기 세팅 | [phase-0-setup.md](./phase-0-setup.md) | 완료 |
 | 1 | 정적 데이터 + 공용 컴포넌트 | [phase-1-data-components.md](./phase-1-data-components.md) | 완료 |
 | 2 | 페이지 구현 | [phase-2-pages.md](./phase-2-pages.md) | 완료 |
-| 3 | 비즈니스 로직 + 상태 관리 | [phase-3-logic.md](./phase-3-logic.md) | 대기 |
+| 3 | 비즈니스 로직 + 상태 관리 | [phase-3-logic.md](./phase-3-logic.md) | 진행 중 |
 | 4 | 애니메이션 + 폴리싱 | [phase-4-polish.md](./phase-4-polish.md) | 대기 |
 | 5 | 트래킹 + 배포 | [phase-5-deploy.md](./phase-5-deploy.md) | 대기 |
 

@@ -1,38 +1,71 @@
-import { useState } from "react";
+import { useEffect } from "react";
 import { useParams, useNavigate } from "react-router";
 import AppHeader from "../components/AppHeader";
 import CardSlot from "../components/reading/CardSlot";
 import CardGrid from "../components/reading/CardGrid";
 import { THEMES } from "../data/themes";
 import { THREE_CARD_SPREAD } from "../data/spreads";
-
-interface SelectedCard {
-  cardId: number;
-  positionIndex: number;
-}
+import { useReadingStore } from "../stores/useReadingStore";
+import { useAdGate } from "../hooks/useAdGate";
+import { useInterpretation } from "../hooks/useInterpretation";
+import { determineOrientation } from "../utils/cardUtils";
 
 export default function ReadingPage() {
   const { themeId } = useParams<{ themeId: string }>();
   const navigate = useNavigate();
   const theme = THEMES.find((t) => t.id === themeId);
-  const [selectedCards, setSelectedCards] = useState<SelectedCard[]>([]);
+  const { showAd } = useAdGate();
+  const { interpret } = useInterpretation();
+
+  const selectedCards = useReadingStore((s) => s.selectedCards);
+  const phase = useReadingStore((s) => s.phase);
+  const startReading = useReadingStore((s) => s.startReading);
+  const selectCard = useReadingStore((s) => s.selectCard);
+  const resetSelection = useReadingStore((s) => s.resetSelection);
+  const setPhase = useReadingStore((s) => s.setPhase);
+  const reset = useReadingStore((s) => s.reset);
+  const resultId = useReadingStore((s) => s.resultId);
+
   const isComplete = selectedCards.length >= 3;
+
+  useEffect(() => {
+    if (themeId) {
+      startReading(themeId);
+    }
+    return () => {
+      // Only reset if not navigating to result
+      if (phase === "selecting") {
+        reset();
+      }
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [themeId]);
+
+  // Navigate to result when streaming is done
+  useEffect(() => {
+    if (phase === "done" && resultId) {
+      navigate(`/result/${resultId}`, { replace: true });
+    }
+  }, [phase, resultId, navigate]);
 
   function handleCardClick(cardId: number) {
     if (isComplete) return;
     if (selectedCards.some((c) => c.cardId === cardId)) return;
-    setSelectedCards((prev) => [
-      ...prev,
-      { cardId, positionIndex: prev.length },
-    ]);
+    const isReversed = determineOrientation();
+    selectCard(cardId, selectedCards.length, isReversed);
   }
 
   function handleReset() {
-    setSelectedCards([]);
+    resetSelection();
   }
 
-  function handleSubmit() {
-    navigate("/result/mock-id");
+  async function handleSubmit() {
+    setPhase("loading");
+    await showAd();
+    interpret({
+      themeId: themeId ?? "",
+      cards: selectedCards,
+    });
   }
 
   function getSlotCardId(positionIndex: number): number | undefined {

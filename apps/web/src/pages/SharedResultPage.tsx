@@ -1,36 +1,112 @@
-import { useNavigate } from "react-router";
+import { useEffect, useState } from "react";
+import { useNavigate, useParams } from "react-router";
 import TarotCardImage from "../components/ui/TarotCardImage";
 import Icon from "../components/ui/Icon";
 import TimelineInterpretation from "../components/shared/TimelineInterpretation";
+import { getSharedReading } from "../utils/shareService";
+import type { SharedReading } from "../utils/shareService";
+import { getCardById } from "../data/cards";
+import { THREE_CARD_SPREAD } from "../data/spreads";
 
-// Mock data for Phase 2
-const MOCK_CARDS = [
-  { position: "과거", cardId: 0, cardName: "The Fool" },
-  { position: "현재", cardId: 6, cardName: "The Lovers" },
-  { position: "미래", cardId: 17, cardName: "The Star" },
-];
+function parseTimelineFromInterpretation(interpretation: string) {
+  const sections = interpretation.split(/^## /m).filter(Boolean);
+  const items: {
+    position: string;
+    title: string;
+    body: string;
+    highlight?: boolean;
+  }[] = [];
 
-const MOCK_TIMELINE = [
-  {
-    position: "과거",
-    title: "새로운 시작",
-    body: "무언가를 새롭게 시작하려던 순수한 에너지가 가득했습니다. 결과보다는 과정 자체에서 즐거움을 찾던 시기였네요.",
-  },
-  {
-    position: "현재",
-    title: "선택의 순간",
-    body: "중요한 선택의 기로에 서 있습니다. 머리보다는 마음이 이끄는 대로, 조화로운 관계를 우선시하는 것이 좋습니다.",
-    highlight: true,
-  },
-  {
-    position: "미래",
-    title: "희망의 발견",
-    body: "길었던 고민이 해결되고 명확한 비전이 보이기 시작합니다. 당신의 노력은 곧 밝은 빛으로 보상받을 거예요.",
-  },
-];
+  for (const section of sections) {
+    const lines = section.trim().split("\n");
+    const header = lines[0] ?? "";
+    const body = lines.slice(1).join("\n").trim();
+
+    // Match "과거 — title" or "현재 — title" etc.
+    const match = header.match(/^(과거|현재|미래|종합 조언)\s*[—-]\s*(.+)/);
+    if (match) {
+      items.push({
+        position: match[1],
+        title: match[2],
+        body,
+        highlight: match[1] === "현재",
+      });
+    } else if (header.startsWith("종합 조언")) {
+      items.push({
+        position: "종합 조언",
+        title: "종합 조언",
+        body,
+      });
+    }
+  }
+
+  return items;
+}
 
 export default function SharedResultPage() {
   const navigate = useNavigate();
+  const { shareId } = useParams<{ shareId: string }>();
+  const [data, setData] = useState<SharedReading | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [notFound, setNotFound] = useState(false);
+
+  useEffect(() => {
+    if (!shareId) return;
+
+    getSharedReading(shareId)
+      .then((result) => {
+        if (result) {
+          setData(result);
+        } else {
+          setNotFound(true);
+        }
+      })
+      .catch(() => {
+        setNotFound(true);
+      })
+      .finally(() => {
+        setLoading(false);
+      });
+  }, [shareId]);
+
+  if (loading) {
+    return (
+      <div className="w-full max-w-[448px] mx-auto bg-white min-h-screen shadow-xl flex items-center justify-center">
+        <p className="text-zinc-500">불러오는 중...</p>
+      </div>
+    );
+  }
+
+  if (notFound || !data) {
+    return (
+      <div className="w-full max-w-[448px] mx-auto bg-white min-h-screen shadow-xl flex flex-col items-center justify-center gap-4 p-8">
+        <p className="text-zinc-600 text-center">
+          만료되었거나 존재하지 않는 결과입니다.
+        </p>
+        <button
+          onClick={() => navigate("/")}
+          className="h-12 px-6 bg-primary text-white rounded-2xl font-bold"
+        >
+          홈으로 돌아가기
+        </button>
+      </div>
+    );
+  }
+
+  const cardDisplays = data.cards
+    .sort((a, b) => a.positionIndex - b.positionIndex)
+    .map((drawn) => {
+      const card = getCardById(drawn.cardId);
+      const position = THREE_CARD_SPREAD.positions[drawn.positionIndex];
+      return {
+        position: position?.label ?? "",
+        cardId: drawn.cardId,
+        cardName: card?.nameKo ?? card?.name ?? "",
+        isReversed: drawn.isReversed,
+      };
+    });
+
+  const timelineItems = parseTimelineFromInterpretation(data.interpretation);
 
   return (
     <div className="w-full max-w-[448px] mx-auto bg-white min-h-screen shadow-xl flex flex-col">
@@ -64,7 +140,7 @@ export default function SharedResultPage() {
         {/* Card Summary */}
         <section className="mb-[--spacing-xl]">
           <div className="grid grid-cols-3 gap-[--spacing-gutter]">
-            {MOCK_CARDS.map((card, i) => {
+            {cardDisplays.map((card, i) => {
               const isCurrent = i === 1;
               return (
                 <div
@@ -77,7 +153,7 @@ export default function SharedResultPage() {
                   <div
                     className={`relative w-full aspect-[2/3] rounded-xl overflow-hidden shadow-sm border border-zinc-100 bg-white ${
                       isCurrent ? "scale-110 z-10" : ""
-                    }`}
+                    } ${card.isReversed ? "rotate-180" : ""}`}
                   >
                     <TarotCardImage cardId={card.cardId} />
                   </div>
@@ -87,6 +163,7 @@ export default function SharedResultPage() {
                     }`}
                   >
                     {card.cardName}
+                    {card.isReversed ? " (역방향)" : ""}
                   </span>
                 </div>
               );
@@ -100,28 +177,36 @@ export default function SharedResultPage() {
             오늘의 한 줄 요약
           </span>
           <h2 className="text-[length:--font-size-display-title] leading-tight tracking-[-0.02em] font-bold text-on-surface-variant">
-            "망설임은 끝내고,
-            <br />
-            진심이 닿는 방향으로 움직이세요."
+            {data.summary}
           </h2>
         </div>
 
         {/* Timeline Interpretation */}
-        <TimelineInterpretation items={MOCK_TIMELINE} />
+        {timelineItems.length > 0 ? (
+          <TimelineInterpretation items={timelineItems} />
+        ) : (
+          <div className="prose prose-sm max-w-none">
+            <p className="text-[length:--font-size-body-main] leading-[1.6] text-on-surface-variant whitespace-pre-wrap">
+              {data.interpretation}
+            </p>
+          </div>
+        )}
 
         {/* Advice Card */}
-        <div className="bg-surface-container rounded-2xl p-[--spacing-lg] mt-[--spacing-xl]">
-          <div className="flex items-center gap-2 mb-[--spacing-sm]">
-            <Icon name="lightbulb" size={24} className="text-primary" />
-            <h3 className="text-[length:--font-size-section-header] leading-[1.4] tracking-[-0.01em] font-semibold text-on-surface">
-              점하나의 조언
-            </h3>
+        {timelineItems.some((item) => item.position === "종합 조언") && (
+          <div className="bg-surface-container rounded-2xl p-[--spacing-lg] mt-[--spacing-xl]">
+            <div className="flex items-center gap-2 mb-[--spacing-sm]">
+              <Icon name="lightbulb" size={24} className="text-primary" />
+              <h3 className="text-[length:--font-size-section-header] leading-[1.4] tracking-[-0.01em] font-semibold text-on-surface">
+                점하나의 조언
+              </h3>
+            </div>
+            <p className="text-[length:--font-size-body-main] leading-[1.6] text-on-surface-variant">
+              {timelineItems.find((item) => item.position === "종합 조언")
+                ?.body ?? ""}
+            </p>
           </div>
-          <p className="text-[length:--font-size-body-main] leading-[1.6] text-on-surface-variant">
-            지금 가장 필요한 것은 스스로에 대한 믿음입니다. 타인의 시선보다는
-            당신이 느끼는 행복의 가치에 집중하세요.
-          </p>
-        </div>
+        )}
       </main>
 
       {/* Bottom CTA */}

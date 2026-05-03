@@ -12,6 +12,7 @@
     "test:watch": "vitest"
   },
   "dependencies": {
+    "@supabase/supabase-js": "^2.105.1",
     "@tarot-saju/shared": "workspace:*",
     "crypto-js": "^4.2.0",
     "framer-motion": "^12.12.1",

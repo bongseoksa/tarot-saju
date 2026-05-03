@@ -1,47 +1,78 @@
-import { useNavigate } from "react-router";
+import { useParams, useNavigate } from "react-router";
 import AppHeader from "../components/AppHeader";
 import CardSummary from "../components/result/CardSummary";
-import InterpretationCard from "../components/result/InterpretationCard";
 import AdviceCard from "../components/result/AdviceCard";
 import Icon from "../components/ui/Icon";
+import { useReadingStore } from "../stores/useReadingStore";
+import { useHistoryStore } from "../stores/useHistoryStore";
+import { useShare } from "../hooks/useShare";
+import { getCardById } from "../data/cards";
+import { THREE_CARD_SPREAD } from "../data/spreads";
+import type { DrawnCard } from "@tarot-saju/shared";
 
-// Mock data for Phase 2 — will be replaced with real data in Phase 3
-const MOCK_CARDS = [
-  { position: "과거", cardId: 0, cardName: "0. 광대", isReversed: false },
-  { position: "현재", cardId: 6, cardName: "6. 연인", isReversed: false },
-  { position: "미래", cardId: 17, cardName: "17. 별", isReversed: true },
-];
-
-const MOCK_INTERPRETATIONS = [
-  {
-    icon: "history",
-    title: "과거의 흐름",
-    body: "당신은 최근 새로운 시작을 위해 많은 것을 내려놓았습니다. '광대' 카드는 당신이 가졌던 순수한 열정과 두려움 없는 도전을 상징합니다.",
-  },
-  {
-    icon: "favorite",
-    title: "현재의 상황",
-    body: "현재 당신의 중심에는 '관계'와 '선택'이 놓여 있습니다. '연인' 카드는 조화로운 결합을 의미하며, 주변 사람들과의 긍정적인 상호작용이 당신에게 큰 에너지를 주고 있습니다.",
-    highlight: true,
-  },
-  {
-    icon: "auto_awesome",
-    title: "미래의 가능성",
-    body: "머지않아 당신의 목표가 뚜렷해지고 희망적인 소식이 찾아올 것입니다. '별' 카드는 치유와 영감을 상징합니다.",
-  },
-];
-
-const MOCK_ADVICE = {
-  advice:
-    "너무 멀리 보려 하기보다, 지금 당신 곁에 있는 소중한 사람들의 손을 꼭 잡아보세요.",
-  summary: "마음이 이끄는 대로, 사랑을 선택하세요.",
-};
+function buildCardSummary(cards: DrawnCard[]) {
+  return cards
+    .sort((a, b) => a.positionIndex - b.positionIndex)
+    .map((drawn) => {
+      const card = getCardById(drawn.cardId);
+      const position = THREE_CARD_SPREAD.positions[drawn.positionIndex];
+      return {
+        position: position?.label ?? "",
+        cardId: drawn.cardId,
+        cardName: card?.nameKo ?? card?.name ?? "",
+        isReversed: drawn.isReversed,
+      };
+    });
+}
 
 export default function ResultPage() {
+  const { resultId } = useParams<{ resultId: string }>();
   const navigate = useNavigate();
+  const { share, isSharing } = useShare();
+
+  const phase = useReadingStore((s) => s.phase);
+  const storeCards = useReadingStore((s) => s.selectedCards);
+  const storeInterpretation = useReadingStore((s) => s.interpretation);
+  const storeSummary = useReadingStore((s) => s.summary);
+  const storeResultId = useReadingStore((s) => s.resultId);
+
+  // Determine data source: new reading from store or historical from history
+  const isNewReading = storeResultId === resultId && phase === "done";
+  const historyResult = !isNewReading
+    ? useHistoryStore.getState().getResult(resultId ?? "")
+    : undefined;
+
+  const cards = isNewReading
+    ? storeCards
+    : historyResult?.request.cards ?? [];
+  const interpretation = isNewReading
+    ? storeInterpretation
+    : historyResult?.interpretation ?? "";
+  const summary = isNewReading
+    ? storeSummary
+    : historyResult?.summary ?? "";
+
+  const cardSummary = buildCardSummary(cards);
+
+  function handleShare() {
+    const result = historyResult ?? {
+      id: resultId ?? "",
+      request: {
+        themeId: useReadingStore.getState().themeId ?? "",
+        cards: storeCards,
+      },
+      interpretation,
+      summary,
+      createdAt: new Date().toISOString(),
+    };
+    share(result);
+  }
 
   const shareButton = (
-    <button className="w-10 h-10 flex items-center justify-center hover:bg-zinc-50 rounded-full transition-colors">
+    <button
+      onClick={handleShare}
+      className="w-10 h-10 flex items-center justify-center hover:bg-zinc-50 rounded-full transition-colors"
+    >
       <Icon name="share" />
     </button>
   );
@@ -54,7 +85,7 @@ export default function ResultPage() {
         rightAction={shareButton}
       />
       <main className="max-w-[448px] mx-auto px-[--spacing-container-padding] pt-[--spacing-lg] pb-40 space-y-[--spacing-lg] overflow-y-auto [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
-        <CardSummary cards={MOCK_CARDS} />
+        {cardSummary.length > 0 && <CardSummary cards={cardSummary} />}
 
         {/* Mascot Indicator */}
         <div className="flex items-center gap-[--spacing-sm] mb-[--spacing-lg]">
@@ -70,19 +101,19 @@ export default function ResultPage() {
           </div>
         </div>
 
-        {/* Interpretation Cards */}
-        <section className="space-y-[--spacing-md]">
-          {MOCK_INTERPRETATIONS.map((interp) => (
-            <InterpretationCard
-              key={interp.title}
-              icon={interp.icon}
-              title={interp.title}
-              body={interp.body}
-              highlight={interp.highlight}
-            />
-          ))}
-          <AdviceCard advice={MOCK_ADVICE.advice} summary={MOCK_ADVICE.summary} />
-        </section>
+        {/* Interpretation Text */}
+        {interpretation && (
+          <section className="bg-white p-[--spacing-lg] rounded-[24px] shadow-sm border border-zinc-100">
+            <p className="text-[length:--font-size-body-main] leading-[1.6] text-on-surface-variant whitespace-pre-wrap">
+              {interpretation}
+            </p>
+          </section>
+        )}
+
+        {/* Summary / Advice */}
+        {summary && (
+          <AdviceCard advice="" summary={summary} />
+        )}
 
         {/* Ad Banner */}
         <section className="w-full py-[--spacing-md]">
@@ -97,7 +128,11 @@ export default function ResultPage() {
       {/* Sticky Footer */}
       <footer className="fixed bottom-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-md px-6 pb-8 pt-4 max-w-[448px] mx-auto space-y-3 rounded-t-[32px] shadow-[0_-8px_30px_rgba(0,0,0,0.05)] border-t border-zinc-50">
         <div className="flex gap-3">
-          <button className="flex-1 h-14 bg-white border border-violet-200 text-primary font-bold rounded-2xl flex items-center justify-center gap-2 hover:bg-violet-50 transition-colors active:scale-95 duration-200">
+          <button
+            onClick={handleShare}
+            disabled={isSharing}
+            className="flex-1 h-14 bg-white border border-violet-200 text-primary font-bold rounded-2xl flex items-center justify-center gap-2 hover:bg-violet-50 transition-colors active:scale-95 duration-200"
+          >
             <Icon name="share" />
             공유하기
           </button>
