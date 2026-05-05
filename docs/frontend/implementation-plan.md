@@ -8,33 +8,44 @@
 ## 현재 상태 요약
 
 - 기획/정의: 32개 항목 전체 완료 (`docs/기획-정의목록.md`)
-- 프론트엔드: Phase 0~4 완료 (UI + 비즈니스 로직 + 애니메이션, 126 tests PASS)
+- 레이아웃 리서치: 완료 (`docs/specs/deep-research-report.md`)
+- **프론트엔드: 재작업 필요** — deep-research-report 기반 반응형 레이아웃으로 전면 재구현
 - 백엔드/AI/인프라: 미착수
 - 배포: 미착수
+
+### 재작업 배경
+
+기존 Phase 0~4 (Stitch HTML 기반 모바일 전용 UI, 126 tests)를 deep-research-report의 반응형 레이아웃 체계로 전면 교체한다.
+
+**주요 변경점:**
+- KRDS 표준형 반응형 그리드 (360/768/1024/1280px 브레이크포인트)
+- 허브형 홈 → 집중형 카드 뽑기 → 리포트형 결과 레이아웃 조합
+- 데스크톱: 중앙 본문 + 보조 패널 적응형 구조
+- KWCAG 2.2 접근성 기준 적용
+- 광고와 콘텐츠의 명확한 시각 분리
 
 ---
 
 ## 전제 조건
 
-- 디자인 시안: Stitch HTML (`docs/design/stitch/screens/`) + 스크린샷 (`screenshots/`)
-- 디자인 시스템: `docs/design/stitch/design-system.md`
-- 카드 에셋: `docs/design/stitch/cards/` (22장 + 뒷면 = 23장 PNG)
+- 레이아웃 리서치: `docs/specs/deep-research-report.md`
 - 기술스택: React + Vite + TypeScript + Tailwind CSS + React Router + Zustand + Framer Motion
-- 모바일 우선 반응형
+- 모바일 우선 반응형 (KRDS 브레이크포인트)
+- 기존 비즈니스 로직(storageUtil, Zustand 스토어, SSE 클라이언트 등)은 재활용 가능
 
 ---
 
 ## Phase 목록
 
-### 프론트엔드 (완료)
+### 프론트엔드 (재작업 필요)
 
 | Phase | 제목 | 세부 계획서 | 상태 |
 |---|---|---|---|
-| 0 | 프로젝트 초기 세팅 | [phase-0-setup.md](./phase-0-setup.md) | 완료 |
-| 1 | 정적 데이터 + 공용 컴포넌트 | [phase-1-data-components.md](./phase-1-data-components.md) | 완료 |
-| 2 | 페이지 구현 | [phase-2-pages.md](./phase-2-pages.md) | 완료 |
-| 3 | 비즈니스 로직 + 상태 관리 | [phase-3-logic.md](./phase-3-logic.md) | 완료 |
-| 4 | 애니메이션 + 폴리싱 | [phase-4-polish.md](./phase-4-polish.md) | 완료 |
+| 0 | 프로젝트 초기 세팅 | [phase-0-setup.md](./phase-0-setup.md) | 재작업 필요 |
+| 1 | 정적 데이터 + 공용 컴포넌트 | [phase-1-data-components.md](./phase-1-data-components.md) | 재작업 필요 |
+| 2 | 페이지 구현 | [phase-2-pages.md](./phase-2-pages.md) | 재작업 필요 |
+| 3 | 비즈니스 로직 + 상태 관리 | [phase-3-logic.md](./phase-3-logic.md) | 재작업 필요 |
+| 4 | 애니메이션 + 폴리싱 | [phase-4-polish.md](./phase-4-polish.md) | 재작업 필요 |
 
 ### 남은 작업 (우선순위순)
 
@@ -54,8 +65,9 @@
 ## 실행 순서
 
 ```
-[완료] Phase 0~4 (프론트엔드)
-  → 모노레포, 컴포넌트, 페이지, 비즈니스 로직, 애니메이션 (126 tests)
+[재작업] Phase 0~4 (프론트엔드)
+  → deep-research-report 기반 반응형 레이아웃 전면 재구현
+  → 기존 비즈니스 로직(storageUtil, 스토어, SSE)은 가능한 재활용
 
 [다음] 1. 백엔드 — Supabase 프로젝트 + DB 스키마 + interpret Edge Function
        2. AI — Ollama + Gemma 모델 + Cloudflare Tunnel + 프롬프트 품질 검증
@@ -67,32 +79,7 @@
        8. 배포 — Vercel 설정 + Supabase 배포 + Lighthouse 검증 + 프리뷰 QA
 ```
 
-### 의존 관계
-
-```
-1 (백엔드) ← 3 (통합): Edge Function 필요
-2 (AI)     ← 3 (통합): Ollama 엔드포인트 필요
-3 (통합)   ← 8 (배포): 전체 흐름 동작 확인 후 배포
-4 (광고)   ← 독립 (AdSense 승인에 시간 소요, 일찍 시작 가능)
-5 (트래킹) ← 독립 (백엔드 없이 프론트만으로 구현 가능)
-6 (SEO)    ← 독립 (정적 메타태그는 즉시, 동적 OG는 1 이후)
-7 (인프라)  ← 2 (AI): Ollama 설정 완료 후
-8 (배포)   ← 1~7 전체 완료 후 최종 단계
-```
-
-> **원칙: 프론트엔드 배포(Vercel)는 전체 기능 구현이 완료된 이후 최종 단계에서 진행한다.**
-
 ---
-
-## 디자인 에셋 참조
-
-| 에셋 | 경로 |
-|---|---|
-| UI 스크린 HTML | `docs/design/stitch/screens/*.html` |
-| UI 스크린샷 | `docs/design/stitch/screenshots/*.png` |
-| 타로 카드 이미지 | `docs/design/stitch/cards/*.png` |
-| 디자인 시스템 | `docs/design/stitch/design-system.md` |
-| 디자인 레퍼런스 | `docs/design/reference.md` |
 
 ## 테스트 인프라
 
@@ -100,14 +87,13 @@
 |---|---|
 | Vitest | 테스트 러너 |
 | React Testing Library | 컴포넌트 테스트 |
-| `@packages/msw-handler` | API 모킹 (MSW 기반). Supabase 등 외부 API 호출 테스트 시 네트워크 레벨에서 가로챔 |
-
-API 테스트 작성 시 `vi.mock`으로 Supabase 클라이언트를 직접 모킹하지 않고, `@packages/msw-handler`의 `createMock`으로 핸들러를 정의하여 MSW Node 서버(`server.ts`)에서 요청을 가로채는 방식을 사용한다. 상세 사용법은 `packages/msw-handler/README.md` 참조.
+| `@packages/msw-handler` | API 모킹 (MSW 기반) |
 
 ## 관련 스펙 문서
 
 | 문서 | 참조 내용 |
 |---|---|
+| `docs/specs/deep-research-report.md` | 레이아웃 리서치, 반응형 브레이크포인트, 접근성, KPI |
 | `docs/specs/02-taro-mvp.md` | 사용자 흐름, IA, 데이터 구조, API, 상태 관리 |
 | `docs/specs/03-ai-design.md` | 프롬프트 설계, 심리 기법 |
 | `docs/specs/tech-decisions.md` | 기술스택 근거, SEO 전략, 테스트 전략 |

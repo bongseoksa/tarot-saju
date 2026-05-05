@@ -1,8 +1,8 @@
 # Phase 4: 애니메이션 + 폴리싱
 
 > 목표: Phase 3까지 완성된 기능 코드에 Framer Motion 기반 애니메이션과 UX 폴리싱을 적용한다. 카드 선택 4단계 경험, 페이지 전환, 모달 진입, 해석 타이핑 효과를 구현한다.
-> 완료 기준: 스펙(`02-taro-mvp.md` 카드 선택 경험 4단계)이 모두 구현되고, 모든 애니메이션이 `prefers-reduced-motion` 시 비활성화되며, tsc/lint/test/build 통과. chrome-devtools 모바일(390x844) 검증 완료.
-> **상태: 코드 완료** (4-1 ~ 4-7 전체 구현, 126 tests PASS, chrome-devtools 검증 완료)
+> 완료 기준: 스펙(`02-taro-mvp.md` 카드 선택 경험 4단계)이 모두 구현되고, 모든 애니메이션이 `prefers-reduced-motion` 시 비활성화되며, tsc/lint/test/build 통과.
+> **상태: 재작업 필요** — 새 반응형 UI 컴포넌트에 애니메이션 재적용 필요
 
 ---
 

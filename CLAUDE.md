@@ -72,7 +72,7 @@ Strong success criteria let you loop independently. Weak criteria ("make it work
 1. **문서 먼저, 코드는 나중에** — `docs/frontend/` 세부 계획서 확인/작성 후 구현
 2. **작업 후 문서 최신화** — 코드 변경 시 관련 `docs/` 문서 반드시 갱신
 3. **TDD** — 테스트 케이스 먼저 작성 → 실패 확인 → 구현 → 통과 확인
-4. **MCP 도구 활용** — 화면 작업 시 Stitch MCP로 `docs/design/reference.md` 참조, 코드 검증 시 context7 + chrome-devtools MCP 사용
+4. **MCP 도구 활용** — 코드 검증 시 context7 + chrome-devtools MCP 사용
 5. **스펙 문서 준수** — `docs/specs/02-taro-mvp.md` 기반 구현, 임의 기능 추가 금지
 6. **pnpm 사용** — npm/yarn 사용 금지, `apps/web/`에서 lint/test/build 실행
 
@@ -112,6 +112,7 @@ Strong success criteria let you loop independently. Weak criteria ("make it work
 - `docs/specs/04-harness-engineering.md` — 하네스 엔지니어링 적용 방안
 - `docs/specs/05-experiment-plan.md` — (예정) 결제/구독 검증 실험 (Phase 2)
 - `docs/specs/06-worldview.md` — "점" 세계관 (캐릭터 가문, 점하나 캐릭터, 확장 시나리오)
+- `docs/specs/deep-research-report.md` — 레이아웃 리서치 + 반응형 개선 제안 (KRDS 그리드, 접근성, KPI)
 - `docs/specs/backlog.md` — 백로그 (지연 항목)
 
 ## Git 컨벤션
