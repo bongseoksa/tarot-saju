@@ -12,7 +12,7 @@ export type SSEEventType = "chunk" | "done" | "error";
 /** SSE event data */
 export interface SSEEvent {
   type: SSEEventType;
-  data: string; // chunk: text fragment, done: full text, error: error message
+  data: string; // chunk: text fragment, done: JSON string of InterpretResult, error: error message
 }
 
 /** interpret final result (parsed from done event) */

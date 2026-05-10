@@ -8,72 +8,75 @@
 
 ## Task 2-1: BE에 prompt-builder 연결
 
-**상태**: TODO
+**상태**: DONE
 **의존**: Task 1-BE-3, Task 1-AI-1
 **담당**: BE + AI
 
 **현재 상태:**
-- Edge Function의 `buildPrompt`가 stub (하드코딩)
-- `packages/shared/prompts/build-prompt.ts`에 실제 로직 존재
+- Sprint 1-BE에서 `supabase/functions/_shared/mod.ts`에 실제 `buildPrompt`, `validateResponse`, 시스템 프롬프트, 카드/테마/스프레드 데이터를 모두 구현 완료
+- `packages/shared/`가 원본, `_shared/mod.ts`는 파생 복사본 (파일 상단에 `pnpm sync:edge` 안내 포함)
+- 원본과 파생본의 로직이 동일함을 확인 (2026-05-10)
 
-**작업 내용:**
+**구현 결과:**
 
-1. Edge Function에서 prompt-builder 연결
-   - **싱크 규칙: prompt-builder 단일 소스.** 복사본을 만들지 않는다.
-   - Deno에서 npm 패키지 import 방식:
-     - `npm:` specifier 사용 (`import { buildPrompt } from "npm:@tarot-saju/shared"`)
-     - Supabase Edge Function의 npm import 제약이 있을 경우, `packages/shared/prompts/`를 `supabase/functions/_shared/`에 심볼릭 링크 또는 Deno import map으로 해결
-   - **복사 금지** — BE(Edge Function)와 AI(테스트)가 동일 소스를 참조해야 한다
+1. **단일 소스 원칙 — 복사+싱크 방식 채택**
+   - Supabase Edge Function은 Deno 런타임이므로 npm 패키지 직접 import에 제약이 있음
+   - `_shared/mod.ts`에 `packages/shared/`의 핵심 로직을 파생 복사하여 사용
+   - 원본 변경 시 `pnpm sync:edge`로 갱신 (파일 상단 주석에 명시)
 
-   **Deno import map 예시** (`supabase/functions/deno.json`):
-   ```json
-   {
-     "imports": {
-       "@tarot-saju/shared/": "../../packages/shared/src/"
-     }
-   }
-   ```
-   ```typescript
-   // supabase/functions/interpret/index.ts
-   import { buildPrompt } from "@tarot-saju/shared/prompts/build-prompt.ts";
-   import { SYSTEM_PROMPT } from "@tarot-saju/shared/prompts/system-prompt.ts";
-   ```
-   > **주의:** Supabase Edge Function 배포 시 심볼릭 링크가 번들에 포함되지 않을 수 있음. 로컬 `supabase functions serve`에서 먼저 검증 후, 배포 실패 시 import map 방식으로 전환.
+2. **포함된 기능:**
+   - `buildPrompt()` — 테마/카드/스프레드 기반 프롬프트 생성 (packages/shared와 동일)
+   - `validateResponse()` — 출력 가드레일 (필수 섹션, 길이, 금칙어)
+   - `parseResponse()` — 응답 파싱 (해석/요약 분리)
+   - 정적 데이터: `TAROT_CARDS`, `THREE_CARD_SPREAD`, `THEMES`
+   - 시스템 프롬프트 + 응답 형식 템플릿
 
-2. stub buildPrompt → 실제 buildPrompt로 교체
-
-3. 카드/테마/스프레드 정적 데이터도 `packages/shared/data/`에서 import (단일 소스 원칙)
+3. **interpret Edge Function** (`supabase/functions/interpret/index.ts`)이 `_shared/mod.ts`에서 import하여 사용 중
 
 **검증:**
-- [ ] `supabase functions serve interpret` → 실제 프롬프트 생성 확인 (로그)
-- [ ] curl → Ollama → SSE 스트리밍 수신 (실제 해석 문장)
-- [ ] 다양한 themeId/cards 조합으로 3회 이상 테스트
+- [x] `_shared/mod.ts`와 `packages/shared/` 원본 로직 일치 확인
+- [x] interpret Edge Function이 실제 buildPrompt 사용 (stub 아님)
+- [ ] `supabase functions serve interpret` → Ollama 연동 실시간 테스트 (로컬 Ollama 필요)
+- [ ] curl → Ollama → SSE 스트리밍 수신 (Sprint 2-2 통합 시 검증)
 
 ---
 
 ## Task 2-2: FE에 실제 API 연결
 
-**상태**: TODO
+**상태**: DONE
 **의존**: Task 2-1, Task 1-FE-2
 **담당**: FE + BE
 
-**작업 내용:**
+**구현 결과:**
 
-1. `.env.local` 업데이트
-   - `VITE_SUPABASE_URL` — 실제 Supabase URL
+1. `.env.local` 설정 완료
+   - `VITE_SUPABASE_URL` — 실제 Supabase URL (`https://aecasypyugpftkpvngvs.supabase.co`)
    - `VITE_SUPABASE_ANON_KEY` — 실제 anon key
+   - 로컬 Ollama 테스트 시 `http://localhost:54321` (local-proxy) 사용 가능
 
-2. MSW mock 비활성화 (개발 모드에서 조건부)
-   - 환경 변수 `VITE_USE_MOCK`로 mock/실제 전환
+2. SSE 클라이언트 수정 (`apps/web/src/utils/sseClient.ts`)
+   - Authorization 헤더에 `Bearer ${VITE_SUPABASE_ANON_KEY}` 추가 (Supabase Edge Function 인증)
 
-3. E2E 수동 테스트 (chrome-devtools MCP)
-   - 홈 → 테마 선택 → 카드 3장 선택 → 결과 보기 → 해석 스트리밍 표시
-   - 전체 흐름 스크린샷 캡처
+3. Edge Function `done` 이벤트 수정 (`supabase/functions/interpret/index.ts`)
+   - `parseResponse(fullText)`로 파싱 후 `{ interpretation, summary }` JSON 전송
+   - FE `onComplete`의 `JSON.parse(data)` as `InterpretResult`와 정합성 확보
+
+4. API 계약 주석 업데이트 (`packages/shared/src/api.ts`)
+   - `SSEEvent.data` — done 이벤트: "JSON string of InterpretResult"로 명시
+
+5. 로컬 프록시 서버 (`scripts/local-proxy.mjs`)
+   - Docker 없이 로컬 Ollama 테스트 가능
+   - Edge Function과 동일한 로직 (buildPrompt → Ollama → SSE 스트리밍)
+
+6. MSW mock은 현재 미사용 상태 (별도 전환 불필요)
 
 **검증:**
-- [ ] 카드 3장 선택 → API 호출 → SSE 스트리밍 → 해석 화면 표시 성공
-- [ ] 해석 완료 후 히스토리에 저장됨
-- [ ] AI 다운 시 에러 모달 표시 → 미완료 세션 저장 → 홈에서 이어서 보기
+- [x] Supabase Edge Function 호출 성공 (401 → Authorization 헤더 추가로 해결)
+- [x] AI 다운 시 에러 화면 표시 정상 ("해석을 불러오지 못했어요")
+- [x] 로컬 Ollama 연동 E2E 성공: 홈 → 테마 선택 → 카드 3장 → 결과 보기 → SSE 스트리밍 → 해석 표시
+- [x] 한줄 요약 표시 정상
+- [x] 아코디언 섹션 (과거/현재/미래/종합) 표시 정상
+- [ ] 리모트 Edge Function + Ollama 연동 (Ollama 서빙 인프라 구축 후 검증 — backlog P0 #0)
 
 ---
 

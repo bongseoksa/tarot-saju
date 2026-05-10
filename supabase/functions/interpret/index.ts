@@ -1,6 +1,7 @@
 import {
   buildPrompt,
   validateResponse,
+  parseResponse,
   TAROT_CARDS,
   THREE_CARD_SPREAD,
 } from "../_shared/mod.ts";
@@ -75,8 +76,12 @@ Deno.serve(async (req: Request) => {
         const { done, value } = await reader.read();
         if (done) {
           const guardResult = validateResponse(fullText);
+          const parsed = parseResponse(fullText);
 
-          const doneEvent: SSEEvent = { type: "done", data: fullText };
+          const doneEvent: SSEEvent = {
+            type: "done",
+            data: JSON.stringify(parsed),
+          };
           controller.enqueue(
             encoder.encode(`data: ${JSON.stringify(doneEvent)}\n\n`),
           );

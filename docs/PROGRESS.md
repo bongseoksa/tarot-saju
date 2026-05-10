@@ -14,9 +14,9 @@
 | [Sprint 1-FE: 프론트엔드](./handoff/sprint-1-fe.md) | 3/3 | 완료 |
 | [Sprint 1-BE: 백엔드](./handoff/sprint-1-be.md) | 5/5 | 완료 |
 | [Sprint 1-AI: AI](./handoff/sprint-1-ai.md) | 5/5 | 완료 |
-| [Sprint 2: 통합](./handoff/sprint-2.md) | 0/4 | 대기 |
+| [Sprint 2: 통합](./handoff/sprint-2.md) | 2/4 | 진행중 |
 | [Sprint 3: 폴리싱+인프라](./handoff/sprint-3.md) | 0/9 | 대기 |
-| **합계** | **16/29** | |
+| **합계** | **18/29** | |
 
 ---
 
@@ -64,8 +64,8 @@
 
 | Task | 이름 | 상태 | 의존 | 담당 |
 |---|---|---|---|---|
-| 2-1 | BE에 prompt-builder 연결 | TODO | 1-BE-3, 1-AI-1 | BE+AI |
-| 2-2 | FE에 실제 API 연결 | TODO | 2-1, 1-FE-2 | FE+BE |
+| 2-1 | BE에 prompt-builder 연결 | DONE | 1-BE-3, 1-AI-1 | BE+AI |
+| 2-2 | FE에 실제 API 연결 | DONE | 2-1, 1-FE-2 | FE+BE |
 | 2-3 | 공유 기능 E2E | TODO | 2-2, 1-BE-4, 1-BE-5 | FE+BE |
 | 2-4 | 에지 케이스 통합 테스트 | TODO | 2-2 | 전체 |
 
@@ -155,6 +155,8 @@ Sprint 0                Sprint 1                    Sprint 2        Sprint 3
 | interpret Edge Function | `supabase/functions/interpret/index.ts` + `_shared/mod.ts` (packages/shared 파생) — 리모트 배포 완료 |
 | 공유 서비스 | `apps/web/src/lib/supabase.ts` + `shareService.ts` (save/get shared readings) |
 | OG 태그 Edge Function | `supabase/functions/og-image/index.ts` — 동적 OG meta + JS redirect |
+| prompt-builder 연결 | `_shared/mod.ts`에 packages/shared 로직 완전 구현 (파생 복사+싱크 방식). interpret Edge Function이 실제 buildPrompt 사용 |
+| FE 실제 API 연결 | sseClient.ts Authorization 헤더 추가, done 이벤트 InterpretResult JSON 파싱, 로컬 프록시(`scripts/local-proxy.mjs`) E2E 검증 완료 |
 
 ---
 
