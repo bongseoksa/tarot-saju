@@ -147,7 +147,83 @@
 
 ---
 
-## 5. 환경 변수
+## 5. 에러 트래킹: Sentry
+
+### 선정 이유
+
+GTM/GA4는 사용자 행동 분석용이며, API 오류·결제 실패·JS 예외 등 운영 에러 추적에는 부적합하다. Sentry를 에러 트래킹 전용으로 도입한다.
+
+- **SaaS 무료 티어**: 5K 에러/월 — MVP 100명 규모에 충분
+- **React SDK 내장**: ErrorBoundary, 소스맵, Session Replay
+- **Deno 지원**: `@sentry/deno`로 Edge Function 에러 수집
+- **알림 연동**: 텔레그램/Slack 웹훅으로 즉시 알림
+
+### 검토했지만 제외한 대안
+
+- **SigNoz**: OpenTelemetry 기반 풀 옵저버빌리티 플랫폼. 셀프호스팅 필요 (Docker 4~5개 컨테이너, ClickHouse). Ollama와 동일 PC에서 실행 시 RAM/CPU 경합. MVP 규모에서 과도
+- **BetterStack (Logtail)**: 로그 검색 강력하나 에러 컨텍스트(스택트레이스, 소스맵) 약함
+- **자체 DB 로깅**: 대시보드/알림을 직접 구축해야 함. MVP에서 비효율
+
+### 역할 분담
+
+| 도구 | 역할 | 추적 대상 |
+|---|---|---|
+| GTM + GA4 | 사용자 행동 분석 | 퍼널 전환율, 테마 인기도, 리텐션 |
+| Sentry | 에러/장애 추적 | JS 예외, API 실패, AI 타임아웃, 결제 오류 |
+| Supabase 내장 로그 | Edge Function 실행 로그 | 보조 디버깅 (보존 기간 짧음) |
+
+### 추적 대상
+
+#### 클라이언트 (프론트엔드)
+
+| 항목 | 심각도 | 설명 |
+|---|---|---|
+| 미처리 예외 (unhandled rejection) | error | `@sentry/react` 자동 수집 |
+| SSE 스트리밍 실패/타임아웃 | error | AI 해석 요청 실패 시 수동 캡처 |
+| localStorage 암호화/복호화 실패 | warning | 데이터 손상 감지 |
+| 네트워크 오프라인 API 호출 | warning | 오프라인 상태에서 요청 시도 |
+
+#### Edge Function (백엔드)
+
+| 항목 | 심각도 | 설명 |
+|---|---|---|
+| Ollama 연결 실패 (PC 다운) | critical | 텔레그램 알림 연동 |
+| Ollama 응답 타임아웃 (150초 초과) | error | 느린 응답 vs 완전 실패 구분 |
+| 프롬프트 조합 실패 (잘못된 입력) | error | 400 응답 원인 추적 |
+
+#### Phase 2 (결제)
+
+| 항목 | 심각도 | 설명 |
+|---|---|---|
+| 결제 검증 실패 | critical | 결제 시도 → 검증 실패 원인 |
+| 구독 상태 불일치 | error | 결제 완료인데 구독 미반영 |
+
+### 구현 방식
+
+#### 프론트엔드
+
+- `@sentry/react` 설치
+- App 최상위에 `Sentry.ErrorBoundary` 래핑
+- Vite 빌드 시 소스맵 업로드 (`@sentry/vite-plugin`)
+- SSE 스트리밍 에러는 `Sentry.captureException()`으로 수동 캡처
+- 환경 변수: `VITE_SENTRY_DSN`
+
+#### Edge Function
+
+- `@sentry/deno` 설치
+- interpret 함수에 try/catch + `Sentry.captureException()`
+- Ollama 연결 실패와 타임아웃을 구분하여 태그 부착
+- 환경 변수: `SENTRY_DSN` (Supabase Secret)
+
+#### 알림
+
+- Sentry → 텔레그램 봇 웹훅 (기존 Ollama health check 알림 채널과 통합)
+- critical 이벤트: 즉시 알림
+- error 이벤트: 1시간 내 동일 에러 5건 이상 시 알림
+
+---
+
+## 6. 환경 변수
 
 ### 프론트엔드 (`VITE_` 접두사, Vite 규칙)
 
@@ -157,12 +233,14 @@
 | `VITE_SUPABASE_ANON_KEY` | Supabase 익명 키 |
 | `VITE_GTM_ID` | Google Tag Manager 컨테이너 ID |
 | `VITE_ADSENSE_CLIENT_ID` | Google AdSense 클라이언트 ID |
+| `VITE_SENTRY_DSN` | Sentry 프론트엔드 DSN |
 
 ### Edge Function (Supabase Secrets)
 
 | 변수 | 용도 |
 |---|---|
 | `OLLAMA_URL` | Ollama 엔드포인트 (백엔드 전용) |
+| `SENTRY_DSN` | Sentry Edge Function DSN |
 
 ### 로컬 개발
 
@@ -176,7 +254,7 @@
 
 ---
 
-## 6. 개발 시점 하네스
+## 7. 개발 시점 하네스
 
 > 출처: 04-harness-engineering.md 섹션 1
 
@@ -223,7 +301,7 @@ Claude Code 작업 결과를 평가하고 개선하는 순환 구조.
 
 ---
 
-## 7. CI/CD
+## 8. CI/CD
 
 - **GitHub Actions** 사용
 - GitHub push 시 Vercel 자동 배포 연동
