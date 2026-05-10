@@ -126,7 +126,10 @@
 
 ### 구현 방식
 
-- GTM 컨테이너 스니펫을 `index.html`에 삽입
+- GTM 컨테이너 ID: `GTM-549LQWSC`
+- GTM 스니펫은 `apps/web/index.html`에 직접 삽입 (환경 변수 치환 아닌 하드코딩)
+  - `<head>`: GTM 스크립트 (`gtm.js` 로드)
+  - `<body>` 최상단: GTM noscript fallback (`<noscript><iframe>`)
 - 앱 내 이벤트는 `dataLayer.push()`로 GTM에 전달
 - GTM에서 GA4 태그로 라우팅
 - SPA 라우팅 변경 시 History Change 트리거로 page_view 자동 추적
