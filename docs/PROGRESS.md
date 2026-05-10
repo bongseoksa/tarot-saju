@@ -148,8 +148,8 @@ Sprint 0                Sprint 1                    Sprint 2        Sprint 3
 | prompt-builder | `packages/shared/src/prompts/` (system-prompt, v1-three-card, build-prompt, index) + 테스트 11건 |
 | 응답 파싱+가드레일 | `packages/shared/src/prompts/` (parse-response, guard) + 테스트 7건 |
 | AI 테스트 인프라 | `scripts/ai-test/` (runner, guard, scenarios, evaluator, report) + `pnpm test:ai:quick/full` |
-| 프롬프트 튜닝 | 시스템 프롬프트 v1 + 출력 형식 강화 (카드명 필수, 섹션 헤더 준수, 길이 제한) |
-| AI 테스트 100% | test:ai:quick 25/25 통과, evaluator에 22장 카드 이름 별칭(aliases) 추가 |
+| 프롬프트 튜닝 | 시스템 프롬프트 v1 + 출력 형식 강화 (섹션 헤더 준수, 길이 제한). 카드명 필수 언급 제약 제거 (UI에서 별도 표시) |
+| AI 테스트 100% | test:ai:quick 25/25 통과 |
 
 ---
 
