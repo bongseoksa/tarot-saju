@@ -209,14 +209,218 @@ flowchart TD
 
 전환은 “좋았던 경험 뒤에 바로 행동을 놓느냐”에 달려 있다. 공유, 저장, 다시 보기, 히스토리 진입은 결과를 읽기 시작한 직후 가장 힘이 세다. 반대로 홈이나 광고 이전에 프리미엄 업셀을 밀면 설득력이 떨어진다. 현재 점하나 구조처럼 광고는 카드 선택 완료 후, 공유/저장은 결과 상단 근처에 두는 편이 맞다. fileciteturn0file1 citeturn16view5
 
-## Figma Make 프롬프트 세트
+## 브랜드 컬러 팔레트
 
-아래 프롬프트는 **결과 안정성**을 위해 영어로 썼고, 화면에 보이는 라벨은 한국어로 지시했다. 공통 프롬프트를 먼저 붙여넣고, 이어서 화면별 프롬프트를 사용하면 된다. 브랜드명·컬러·폰트·KRDS 브레이크포인트·접근성 기준은 `docs/specs/02-taro-mvp.md`와 일치시켰다.
+Figma Make 프롬프트와 실제 구현에서 공통으로 사용할 컬러 시스템이다. 밝고 귀여운 톤을 기본으로 하되, 가독성과 접근성 기준(텍스트 4.5:1, 컨트롤 3:1)을 충족해야 한다.
 
-### 1. 공통 시스템 프롬프트
+### 기본 팔레트
+
+| 용도 | 토큰명 | HEX | 설명 |
+|---|---|---|---|
+| **Primary** | `violet-500` | `#6B38D4` | 주요 액센트, 활성 상태, 링크, 캐릭터 기본색 |
+| **Primary Light** | `violet-100` | `#EDE5FA` | 선택된 칩/카드 배경, 호버 상태 |
+| **Primary Dark** | `violet-700` | `#4A1FA8` | 텍스트 위 보라 강조, 진한 액센트 |
+| **Secondary (CTA)** | `coral-500` | `#B90538` | 주요 행동 버튼, "점 보기", "결과 보기" |
+| **Secondary Light** | `coral-100` | `#FDEAEF` | CTA 호버/프레스 배경 |
+| **Background** | `bg-warm` | `#FEF7FF` | 페이지 전체 배경 (따뜻한 오프화이트) |
+| **Surface** | `surface-white` | `#FFFFFF` | 카드, 패널, 모달 배경 |
+| **Surface Elevated** | `surface-elevated` | `#F8F0FC` | 구분이 필요한 섹션 배경 (결과 요약, 히스토리 헤더) |
+| **Text Primary** | `text-900` | `#1A1523` | 본문 텍스트 |
+| **Text Secondary** | `text-600` | `#6B6078` | 보조 텍스트, 캡션, 날짜 |
+| **Text Tertiary** | `text-400` | `#9E95A9` | 플레이스홀더, 비활성 라벨 |
+| **Border** | `border-200` | `#E8E0F0` | 카드 테두리, 구분선 |
+| **Border Active** | `border-violet` | `#6B38D4` | 선택된 카드/입력 필드 테두리 |
+| **Ad Label** | `ad-bg` | `#F0F0F0` | 광고 영역 배경 (콘텐츠와 명확히 구분) |
+
+### 확장 팔레트 (캐릭터·타로카드용)
+
+| 용도 | 토큰명 | HEX | 설명 |
+|---|---|---|---|
+| **캐릭터 몸체** | `char-violet` | `#A78BDB` | 점하나 몸체 기본색 (밝은 라벤더) |
+| **캐릭터 볼터치** | `char-blush` | `#E8A0B4` | 볼, 감정 표현 |
+| **캐릭터 모자** | `char-hat` | `#4A3570` | 마녀 모자, 어두운 보라 |
+| **구름/배경** | `cloud-white` | `#F5F0FF` | 구름, 부드러운 배경 요소 |
+| **파스텔 핑크** | `pastel-pink` | `#F8C8D8` | 카드 배경 악센트, 연애 테마 |
+| **파스텔 옐로** | `pastel-yellow` | `#FFF3D6` | 카드 배경 악센트, 재물 테마 |
+| **파스텔 민트** | `pastel-mint` | `#D6F5ED` | 카드 배경 악센트, 건강/일상 테마 |
+| **파스텔 블루** | `pastel-blue` | `#D6E8F8` | 카드 배경 악센트, 직장/학업 테마 |
+| **산/자연** | `mountain-blue` | `#8CBAD6` | 타로카드 배경 산, 하늘 |
+| **석양** | `sunset-peach` | `#F8D8C0` | 타로카드 배경 하늘 그라데이션 |
+| **카드 프레임** | `card-frame` | `#C4A050` | 타로카드 테두리 (골드가 아닌 머스터드/앤틱 톤) |
+
+### 시맨틱 팔레트
+
+| 용도 | HEX | 설명 |
+|---|---|---|
+| **Success** | `#2D8A4E` | 저장 완료, 성공 상태 |
+| **Warning** | `#D4920B` | 주의, 세션 만료 경고 |
+| **Error** | `#C53030` | 에러 상태, 실패 |
+| **Info** | `#2B6CB0` | 안내, 도움말 |
+
+---
+
+## 마스코트 캐릭터 정의: 점하나
+
+### 기본 형태
+
+점하나는 **떡/모찌 같은 물방울 형태의 보라색 캐릭터**다. 한국 캐릭터 이모티콘(몰랑, 까멜리아 등)과 비슷한 귀여운 일러스트 스타일이다. 몸통 자체가 얼굴이며, 심플한 물방울 실루엣이 핵심 아이덴티티로, 어떤 악세서리를 붙여도 기본 형태가 유지되어야 한다.
+
+| 요소 | 설명 |
+|---|---|
+| **실루엣** | 위가 좁고 아래가 넓은 물방울/모찌 형태 (완전한 원이 아님). 바닥이 평평하게 눌린 느낌으로 안정감 있게 앉아 있음 |
+| **몸체 색상** | 밝은 라벤더 (`#A78BDB`), 배/아래쪽은 약간 더 밝은 그라데이션 |
+| **눈** | 몸체 상단 1/3 위치에 서로 가깝게 붙은 두 눈. 흰색 원형 눈에 크고 검은 동공. 동공 위치로 시선/감정 표현 |
+| **입** | 아주 작은 고양이 입 (:3 형태). 핑크색. 기본 상태에서 살짝 삐죽. 표정별로 변형 |
+| **볼터치** | 양쪽 눈 아래에 연한 핑크 (`#E8A0B4`) 원형 블러시 |
+| **팔/스텁** | 기본은 없음. 물건을 들 때만 몸체 옆에서 작고 짧은 스텁 팔이 나옴 (손가락 없음) |
+| **기본 악세서리** | 뾰족한 마녀 모자 (`#4A3570`), 끝이 살짝 접힌 클래식 위치 햇 형태, 머리 위에 기울어져 얹힘 |
+| **크기 비율** | 모자를 포함한 전체 높이에서 몸체가 약 65%, 모자가 약 35% |
+| **아트 스타일** | 한국 캐릭터 굿즈/이모티콘 스타일. 부드러운 다크 퍼플(`#4A3570`) 아웃라인 + 파스텔 수채화 채색. 깨끗한 라인, 단순한 형태, 밝은 색감 |
+
+### 악세서리 시스템
+
+캐릭터의 정체성은 **몸체 + 눈 + 볼터치**로 고정되며, 악세서리만 교체하여 다양한 상황과 시즌에 대응한다. 악세서리는 몸체 실루엣을 가리지 않는 범위에서 적용한다.
+
+| 슬롯 | 기본값 | 교체 예시 |
+|---|---|---|
+| **머리 위** | 마녀 모자 | 산타 모자, 벚꽃 머리띠, 졸업 모자, 왕관, 고깔모자 |
+| **손/앞 (스텁)** | 없음 | 지팡이, 타로카드, 선물 상자, 깃발, 나팔 |
+| **몸 주변** | 없음 | 망토, 스카프, 리본 |
+| **배경 소품** | 구름 위에 앉기 | 별, 달, 카드 더미, 수정 구슬 |
+
+### 표정 바리에이션
+
+서비스 내 다양한 상태에서 사용할 표정 세트. 눈과 입의 변형만으로 표현하며, 몸체 형태는 변하지 않는다.
+
+| 표정 | 눈 | 입 | 사용 위치 |
+|---|---|---|---|
+| **기본 (호기심)** | 크게 뜬 동공 | 작은 `ω` | 로고, 일반 안내 |
+| **두근두근** | 반짝이는 하이라이트 추가 | 살짝 벌린 `o` | 카드 뽑기 진입 |
+| **집중** | 눈 살짝 가늘게 | 일자 `—` | 결과 스트리밍 중 |
+| **기쁨** | 눈웃음 `^^` | 활짝 웃는 `∀` | 결과 완료, 공유 |
+| **미안** | 축 처진 눈썹 추가 | 삐죽 입 | 에러, 오류 |
+| **손 흔들기** | 기본 눈 | 열린 웃음 | 히스토리 빈 상태, 인사 |
+| **졸림/로딩** | 반감긴 눈 `– –` | 작은 `z` | 로딩, 대기 |
+
+### 타로카드 일러스트 컨셉
+
+점하나 캐릭터는 **타로카드 78장의 기본 일러스트 컨셉**으로 활용된다. 라이더-웨이트 전통 도상을 점하나 세계관으로 재해석하되, 아래 규칙을 따른다.
+
+| 규칙 | 설명 |
+|---|---|
+| **주인공은 항상 점하나 (또는 점하나 변형)** | 카드마다 점하나가 해당 아르카나의 역할을 수행. 예: 심판 카드 = 구름 위에서 나팔을 부는 점하나 |
+| **조연/배경 캐릭터** | 점하나와 같은 물방울/모찌 형태이지만 더 작고 단순함. 눈이 더 작고 모자 없음. 색상 변형: 연핑크(`#F8C8D8`), 연보라(`#C4B0E8`), 연노랑(`#FFF3D6`) 등. 다양한 표정으로 배경을 채움 |
+| **악세서리로 역할 구분** | 각 카드의 아르카나 의미에 맞는 소품으로 구분. 예: 여사제 = 책 + 달 장식, 전차 = 투구 |
+| **배경 스타일** | 파스텔 톤의 자연 풍경 (산, 구름, 하늘, 꽃밭). 그라데이션 하늘 (`sunset-peach` → `pastel-blue`) |
+| **카드 프레임** | 앤틱 머스터드 톤(`#C4A050`) 테두리 + 모서리 장식. 금박이 아닌 따뜻한 복고 느낌 |
+| **텍스트 영역** | 카드 하단에 번호(로마 숫자) + 한글 카드명. 예: `XX` `심판` |
+| **금지 요소** | 어두운 배경, 공포/고어 요소, 한자, 부적 이미지, 사실적 인체 묘사 |
+| **일러스트 톤** | 밝고 귀여운 라인 아트 + 파스텔 수채화 느낌 채색. 아웃라인은 부드러운 다크 퍼플 (`#4A3570`) |
+
+### 캐릭터 생성 프롬프트 (AI 이미지 생성용)
 
 ```text
-Create a responsive web app design for “점하나” (JeomHana), a Korean tarot and fortune service.
+A cute mochi-shaped mascot character named "JeomHana" for a Korean tarot service.
+Similar in style to Korean character emoticons like Molang or Kamellia — simple, round, adorable.
+
+Shape and body:
+- Body is a soft teardrop/mochi blob shape — narrower at the top, wider and flat at the bottom, like a sitting rice cake
+- NOT a perfect sphere — more like a water droplet or a small dumpling
+- Body color: muted lavender-purple (#A78BDB) with a slightly lighter gradient on the lower belly area
+- Soft dark purple outline (#4A3570), consistent line weight, clean and smooth
+
+Face (all features sit in the upper third of the body):
+- Two round white eyes with large black circular pupils, placed close together near the top of the body
+- A very tiny pink cat-like mouth (:3 shape), slightly pouting — pinkish color
+- Soft pink circular blush marks (#E8A0B4) on both cheeks, just below the eyes
+- NO nose, NO eyebrows in default expression
+
+Hat:
+- A classic pointed witch hat in dark purple (#4A3570) sitting on top of the head, tilted slightly to one side
+- The hat tip curls or bends slightly — NOT stiff and straight
+- The hat has a simple brim
+
+Limbs:
+- NO visible arms or legs in default pose
+- When holding objects (trumpet, flag, wand), very short rounded stubs appear from the sides of the body — NO fingers, NO joints
+
+Art style:
+- Korean character goods / emoticon illustration style (카카오 이모티콘 느낌)
+- Clean smooth outlines in dark purple (#4A3570)
+- Flat pastel watercolor-like coloring with subtle shading
+- Bright, warm, cute mood
+- NOT realistic, NOT anime, NOT 3D rendered, NOT chibi, NOT pixel art
+- Think: Molang meets a tiny witch on a cloud
+
+Background: soft pastel clouds (#F5F0FF) or simple gradient sky (#F8D8C0 sunset peach to #D6E8F8 pastel blue)
+```
+
+### 타로카드 이미지 생성 프롬프트 템플릿 (AI 이미지 생성용)
+
+```text
+A tarot card illustration in the "JeomHana" style — Korean character emoticon art (카카오 이모티콘 느낌).
+Card: [CARD_NAME] ([CARD_NUMBER])
+
+Main character:
+- A mochi/teardrop-shaped lavender-purple blob creature (#A78BDB) — narrower top, wider flat bottom
+- Two round white eyes with big black pupils placed close together near top of body
+- Tiny pink cat-like mouth (:3), pink blush circles on cheeks (#E8A0B4)
+- Wearing [ACCESSORY] on head (replacing the default pointed witch hat)
+- Short rounded stub arms (no fingers) only if holding items
+- Dark purple outlines (#4A3570)
+
+Scene: [SCENE_DESCRIPTION based on Rider-Waite iconography, reinterpreted with mochi blob characters]
+
+Supporting characters:
+- Smaller mochi blobs in pastel pink (#F8C8D8), pastel lavender (#C4B0E8), pastel yellow (#FFF3D6)
+- Simpler faces than main character — smaller eyes, no hat, various cute expressions
+- Same teardrop/mochi body shape as main character but 40-60% the size
+
+Background: [BACKGROUND_DESCRIPTION] with soft pastel gradient sky (#F8D8C0 to #D6E8F8)
+- Fluffy white clouds (#F5F0FF), pastel mountains (#8CBAD6) where appropriate
+
+Card frame:
+- Warm antique mustard border (#C4A050) with subtle corner ornaments — NOT shiny gold
+- Bottom text area: Roman numeral "[NUMBER]" and Korean name "[한글명]" in clean font
+
+Style: Korean character emoticon illustration. Clean smooth lines, pastel watercolor coloring, dark purple outlines (#4A3570). Bright, warm, cute. NOT dark, NOT scary, NOT realistic, NOT anime.
+Aspect ratio: 2:3 (standard tarot card proportion)
+```
+
+---
+
+## Figma Make 프롬프트 세트
+
+Figma Make에 **순서대로 붙여넣기**하여 서비스 전체 디자인을 생성하기 위한 프롬프트 모음이다. 각 프롬프트는 자기 완결형으로, 브랜드·캐릭터·팔레트·반응형 규칙을 모두 포함한다. 위에서 정의한 팔레트·캐릭터 참조 섹션을 기반으로 작성했다.
+
+> **사용법:** 아래 번호 순서대로, 각 ```` ```text ```` 블록 안의 내용만 복사해서 Figma Make에 붙여넣는다. 한 번에 하나씩 생성하고, 이전 결과물의 컴포넌트 일관성을 확인한 뒤 다음으로 넘어간다.
+
+```
+┌─────────────────────────────────────────────────────┐
+│  Figma Make 붙여넣기 순서                              │
+│                                                     │
+│  STEP 1  디자인 시스템 + 컴포넌트 라이브러리              │
+│  STEP 2  허브형 홈 화면                                │
+│  STEP 3  카드 뽑기 화면                                │
+│  STEP 4  광고 친화 로딩 화면                            │
+│  STEP 5  리포트형 결과 화면                              │
+│  STEP 6  히스토리 화면                                  │
+│  STEP 7  공유 결과 랜딩 화면                             │
+│  ─ ─ ─ ─  MVP 여기까지  ─ ─ ─ ─                      │
+│  STEP 8  카테고리 탐색 (선택, MVP는 홈 필터로 대체)        │
+│  STEP 9  대화형 결과 변형 (부분 적용 전용)                │
+│  STEP 10 사주 리포트 대시보드 (Phase 2)                  │
+└─────────────────────────────────────────────────────┘
+```
+
+---
+
+### STEP 1. 디자인 시스템 + 컴포넌트 라이브러리
+
+> 가장 먼저 붙여넣는다. 브랜드 정체성, 팔레트, 캐릭터, 반응형 규칙, 공통 컴포넌트를 한 번에 정의한다. 이후 모든 화면 프롬프트는 이 시스템 위에서 생성된다.
+
+```text
+Create a complete design system and reusable component library for “점하나” (JeomHana), a Korean tarot and fortune web app.
 Brand tagline: “오늘, 점 하나 찍어볼까?”
 Tone: friendly, lightly mystical, approachable — like chatting with a friend, not a fortune teller.
 
@@ -225,335 +429,407 @@ Generate three frames:
 - tablet frame: 768x1024
 - desktop frame: 1440x1024
 
-Responsive rules (KRDS standard grid):
+=== COLOR PALETTE ===
+
+Primary colors:
+- violet-500 (primary accent): #6B38D4
+- violet-100 (light, hover/selected bg): #EDE5FA
+- violet-700 (dark, text emphasis): #4A1FA8
+- coral-500 (CTA buttons): #B90538
+- coral-100 (CTA hover bg): #FDEAEF
+
+Surfaces:
+- bg-warm (page background): #FEF7FF
+- surface-white (cards, panels): #FFFFFF
+- surface-elevated (section bg): #F8F0FC
+
+Text:
+- text-900 (body): #1A1523
+- text-600 (secondary): #6B6078
+- text-400 (placeholder): #9E95A9
+
+Border:
+- border-200 (card/divider): #E8E0F0
+- border-violet (active): #6B38D4
+
+Semantic:
+- success: #2D8A4E / warning: #D4920B / error: #C53030 / info: #2B6CB0
+
+Ad area:
+- ad-bg: #F0F0F0 (visually distinct from content)
+
+Character & illustration palette:
+- char-violet (mascot body): #A78BDB
+- char-hat (witch hat): #4A3570
+- char-blush (cheek blush): #E8A0B4
+- cloud-white: #F5F0FF
+- pastel-pink: #F8C8D8, pastel-yellow: #FFF3D6, pastel-mint: #D6F5ED, pastel-blue: #D6E8F8
+- mountain-blue: #8CBAD6, sunset-peach: #F8D8C0
+- card-frame (tarot border): #C4A050 (antique mustard, not gold)
+
+=== MASCOT CHARACTER “JeomHana” ===
+
+Style reference: Korean character emoticon art (like Molang, Kamellia — 카카오 이모티콘 스타일)
+
+Shape and body:
+- A soft mochi/teardrop blob — narrower at top, wider and flat at bottom, like a sitting rice cake or water droplet
+- NOT a perfect circle or sphere. Sits stably with a flat bottom edge
+- Body color: muted lavender-purple (#A78BDB), lighter gradient on lower belly
+- Clean smooth outline in dark purple (#4A3570)
+
+Face (all features in the upper 1/3 of body):
+- Two round white eyes with large black circular pupils, placed close together
+- Very tiny pink cat-like mouth (:3 shape), slightly pouting
+- Soft pink circular blush marks (#E8A0B4) on both cheeks below eyes
+- NO nose, NO eyebrows in default state
+
+Hat:
+- Classic pointed witch hat in dark purple (#4A3570), tilted slightly, tip curls/bends
+- Simple brim, sits on top of the head
+
+Limbs:
+- Default: NO arms or legs visible
+- When holding items: very short rounded stubs from body sides, NO fingers
+
+Expression variants:
+  - curious (default): wide pupils, :3 mouth
+  - excited: sparkle highlights in eyes, open o mouth
+  - focused: slightly narrowed eyes, flat — mouth
+  - happy: ^^ closed eye smile, wide open grin
+  - sorry: small curved eyebrows added, frown
+  - waving: default eyes, open smile, one stub arm raised
+  - sleepy: half-closed droopy eyes, small z near head
+
+Art style:
+- Korean character goods / emoticon illustration (카카오 이모티콘 느낌)
+- Clean smooth outlines, flat pastel watercolor coloring with subtle shading
+- NEVER scary, realistic, anime, 3D rendered, chibi, or pixel art
+
+=== TYPOGRAPHY ===
+
+- Font family: Pretendard (Korean system font, clean and readable)
+- Hierarchy: clear heading/subheading/body/caption scale
+
+=== RESPONSIVE RULES (KRDS standard grid) ===
+
 - mobile-first layout
 - 360px+: 4-column grid, 16px gutters, 16px margins
 - 768px+: 8-column grid, 16px gutters, 24px margins
 - 1024px+: 12-column grid, 24px gutters, 24px margins — side panels allowed
 - 1280px+: 12-column grid, 24px gutters, centered max-width with auxiliary panels
 - never stretch the mobile layout on desktop
-- use adaptive regions such as left filter rail, center content area, and right sticky summary only at 1024px and above
+- adaptive regions (left filter rail, center content, right sticky summary) only at 1024px+
 
-Visual direction:
-- modern Korean editorial UI
-- light base with subtle mystical accents, not dark fantasy, not neon AI art
-- primary accent: soft violet/lavender (around #6b38d4)
-- secondary accent: warm coral/rose for CTAs (around #b90538)
-- background: warm off-white (#fef7ff), cards: white
-- font: Pretendard (Korean system font, clean and readable)
-- clean surfaces, restrained illustration accents
-- clear information hierarchy, real text blocks, visible labels
-- high readability: text contrast 4.5:1+, controls contrast 3:1+
-- touch targets at least 44x44px
-- obvious active states, focus states, and selected states — never rely on color alone
-- ads must be visually distinct from content cards with “광고” label
+=== REUSABLE COMPONENTS TO GENERATE ===
 
-Content direction:
-- labels and visible text must be in Korean
-- avoid generic AI-looking glowing panels
-- prefer structured cards, chips, tabs, and readable sections
-- use subtle character illustration only as a secondary accent
-- no gold borders, no Chinese characters, no talisman imagery
+1. Header (mobile: logo + history icon / desktop: logo + nav + history/login)
+2. Quick action card (title, subtitle, icon, CTA — used on home)
+3. Category chip bar (horizontal scrollable chips with active state: color + underline)
+4. Theme card (title, subtitle, hashtag chips, category tag — used on home and category)
+5. Tarot card back (tappable, with selected/unselected/disabled states)
+6. Card slot (empty state with label: 과거/현재/미래, filled state with card image)
+7. Action button (primary coral, secondary outline, disabled gray — 44x44px min touch target)
+8. Mascot bubble (avatar + speech text, used in loading/result/empty states)
+9. Result section block (collapsible accordion: title + body text)
+10. Ad slot (clearly labeled “광고”, visually distinct from content cards, gray bg)
+11. History list item (category tag, date, theme title, 3 card thumbnails, chevron)
+12. Empty state (mascot illustration + friendly message + CTA button)
+13. Share/save action cluster (share, save, copy link icons with labels)
+14. Footer (개인정보처리방침 | 이용약관)
+
+=== VISUAL DIRECTION ===
+
+- Modern Korean editorial UI
+- Light base with subtle mystical accents — NOT dark fantasy, NOT neon AI art
+- Clean surfaces, restrained illustration accents
+- Clear information hierarchy, real text blocks, visible labels
+- High readability: text contrast 4.5:1+, controls contrast 3:1+
+- Touch targets at least 44x44px
+- Obvious active/focus/selected states — never rely on color alone
+- No gold borders, no Chinese characters, no talisman imagery
+- No bottom tab bar — linear flow with header back navigation
+- Labels and visible text in Korean
 ```
 
-### 2. 점하나에 바로 적용할 조합
+---
+
+### STEP 2. 허브형 홈 화면
 
 ```text
-Create a responsive screen set for the MVP of “점하나” (JeomHana).
-Tagline: “오늘, 점 하나 찍어볼까?”
-
-Generate these screens in one coherent system:
-1. hub-style home with quick actions and category chips
-2. focused three-card selection with 4-column card grid
-3. ad-safe transition/loading with mascot animation
-4. report-style result with collapsible sections and streaming text
-5. history list with empty state
-6. shared result landing with mascot greeting and CTA
-
-Brand:
-- friendly Korean tone, like chatting with a friend
-- light base with subtle mystical accents
-- soft violet primary (#6b38d4), warm coral CTA (#b90538), off-white background (#fef7ff)
-- Pretendard font throughout
-- trustworthy and readable
-- not AI-generic, not overly magical, not game-like
-- no gold borders, no traditional fortune-telling cliches
-
-Responsive behavior:
-- mobile-first (390x844)
-- tablet (768x1024): 2-region split begins
-- desktop (1440x1024): centered content with adaptive side panels
-- KRDS grid system: 4col → 8col → 12col
-- preserve the same identity across sizes
-- use reusable components and consistent spacing
-- no bottom tab bar — linear flow with header back navigation
-```
-
-### 3. 허브형 홈 화면
-
-```text
-Design the home screen of “점하나”, a Korean tarot web app.
-
-Include mobile, tablet, and desktop versions.
+Design the home screen of “점하나” (JeomHana), a Korean tarot web app.
+Use the design system established in STEP 1. Generate mobile (390x844), tablet (768x1024), and desktop (1440x1024) frames.
 
 Mobile layout:
-- top header with logo “점하나” and history icon (히스토리)
-- two quick action cards: “오늘의 타로”, “이번 주 타로”
-- horizontal category chips: 전체, 일상, 연애, 직장, 재물, 학업, 기타
-- structured theme card list below (11 themes total, show 6-8 initially)
-- each theme card includes title, short subtitle, and hashtag chips
-- one clearly separated ad slot after the second content block
+- top header: logo “점하나” (left) + mascot icon + history icon 히스토리 (right)
+- hero area: small mascot illustration (curious expression) with tagline “오늘, 점 하나 찍어볼까?”
+- two quick action cards side by side: “오늘의 타로”, “이번 주 타로”
+- horizontal scrollable category chips: 전체, 일상, 연애, 직장, 재물, 학업, 기타
+- structured theme card list below (show 6-8 of 11 themes)
+- each theme card: title, short subtitle, hashtag chips (e.g. #연애 #고민)
+- one clearly separated ad slot (labeled “광고”, gray bg) after the second content block
 - footer: 개인정보처리방침 | 이용약관
 - clean vertical scroll, no bottom tab bar
 
-Desktop layout:
+Tablet layout (768px):
+- 2-column theme card grid
+- quick actions remain side by side
+- category chips stay horizontal
+
+Desktop layout (1440px):
 - centered max-width container (1280px)
 - left filter rail for categories (240px)
-- center area with quick actions and theme card grid (3-4 columns)
-- right sticky panel with recent readings (3 items) and one separated ad block (280px)
-- do not use oversized hero art
+- center: hero + quick actions + theme card grid (3-4 columns)
+- right sticky panel (280px): recent readings (3 items) + one separated ad block
+- no oversized hero art — mascot stays small and accent-like
 
-Style:
-- warm off-white background (#fef7ff)
-- soft violet accent for active states and CTAs
-- subtle mystical illustration near the header only
-- efficient, trustworthy, and not cluttered
-- first viewport must show a clear primary action, not a wall of choices
+Colors: bg #FEF7FF, cards #FFFFFF, primary #6B38D4, CTA #B90538
+First viewport must show a clear primary action, not a wall of choices.
 ```
 
-### 4. 카드 뽑기 화면
+---
+
+### STEP 3. 카드 뽑기 화면
 
 ```text
-Design a responsive three-card tarot selection screen for “점하나”.
+Design a three-card tarot selection screen for “점하나” (JeomHana).
+Use the design system established in STEP 1. Generate mobile (390x844), tablet (768x1024), and desktop (1440x1024) frames.
 
-Include mobile, tablet, and desktop versions.
-
-Mobile:
-- sub-page header with back arrow and theme title (e.g. “오늘의 타로”)
-- instruction text: “세 장의 카드를 신중하게 골라주세요”
-- three empty slots labeled “과거”, “현재”, “미래”
-- center grid of 22 card backs in 4-column layout (4x5 rows + last 2 centered)
-- only the card grid area scrolls vertically
-- clear selected state: chosen cards show opacity reduction and grayscale in grid
-- selected cards appear in their corresponding slot above
+Mobile layout:
+- sub-page header: back arrow (left) + theme title e.g. “오늘의 타로” (center)
+- instruction: “세 장의 카드를 신중하게 골라주세요”
+- three card slots in a row labeled “과거”, “현재”, “미래” (empty state: dashed border, filled state: card thumbnail)
+- below slots: 22 card backs in a 4-column grid (4x5 rows + last 2 centered)
+- only the card grid scrolls vertically; slots stay fixed at top
+- selected state in grid: opacity reduction + grayscale overlay
+- selected cards animate into their corresponding slot
 - bottom sticky action bar:
-  - before 3 cards: single disabled button “점 보기 (N/3)”
-  - after 3 cards: “다시 선택” secondary + “결과 보기” primary
-- selection must work by simple tap, not swipe or drag
+  - before 3 cards selected: disabled button “점 보기 (N/3)” with count
+  - after 3 cards: “다시 선택” (secondary outline) + “결과 보기” (primary coral #B90538)
+- selection by simple tap only, no swipe or drag required
 
-Desktop:
-- left panel (360px): theme title, instruction, three slots, CTA buttons
-- right panel: 22-card selection board with generous spacing
-- use whitespace to avoid card crowding
+Desktop layout (1440px):
+- left panel (360px): theme title, instruction text, three card slots vertically, CTA buttons
+- right panel: 22-card selection board with generous spacing (5-6 columns)
+- whitespace to avoid card crowding
+
+Mascot: small excited expression mascot near the instruction text
+Card back design: soft violet (#6B38D4) with subtle pattern, rounded corners
+Style: focused, immersive, minimal decoration, no flashy game UI
+Each card must be a tappable button with accessible label (e.g. “카드 1번”)
+```
+
+---
+
+### STEP 4. 광고 친화 로딩 화면
+
+```text
+Design a loading/transition screen placed between card selection and result for “점하나” (JeomHana).
+Use the design system established in STEP 1. Generate mobile (390x844) and desktop (1440x1024) frames.
+
+Mobile layout:
+- centered mascot character (sleepy/focused expression) with gentle bounce animation
+- branded loading text below: “당신을 위한 점, 하나 준비 중”
+- subtle progress indicator or gentle spinner
+- one clearly separated ad area below (labeled “광고”, #F0F0F0 bg, never looks like a tarot card)
+- accessible status text for screen readers (aria-live)
+- all user interaction blocked during loading (no touch, no back navigation)
+
+Desktop layout:
+- centered loading module (mascot + text + spinner) in a card-like container
+- ad placement in a lower or side panel, clearly separated
+- preserve focus on the transition experience
 
 Style:
-- focused, immersive experience
-- minimal decoration, subtle category-toned background
-- no flashy game UI
-- clear contrast between selected and unselected cards
-- each card must be a tappable button with accessible label
+- calm, branded, uncluttered
+- bg: #FEF7FF, mascot body: #A78BDB, hat: #4A3570
+- no flashy effects — gentle and trustworthy
+- the ad block must never be confused with tarot content
 ```
 
-### 5. 광고 친화 로딩 화면
+---
+
+### STEP 5. 리포트형 결과 화면
 
 ```text
-Design a responsive loading/transition screen placed between card selection and result for “점하나”.
+Design a tarot result/reading screen for “점하나” (JeomHana), focused on reading quality.
+Use the design system established in STEP 1. Generate mobile (390x844), tablet (768x1024), and desktop (1440x1024) frames.
 
-Include mobile and desktop versions.
+Mobile layout:
+- sub-page header: back arrow + theme title + share icon (right)
+- card summary strip: 3 selected cards in a row (past/present/future labels, card images, Korean card names, upright/reversed indicator badge)
+- mascot bubble (focused expression): “점하나가 당신의 카드를 읽고 있어요...” (shown during AI streaming)
+- one-line takeaway summary in a highlighted card (#EDE5FA bg)
+- collapsible accordion sections: “과거 해석”, “현재 해석”, “미래 해석”, “종합 조언”
+- AI text streams with a typing cursor effect in the active section
+- share/save actions near top and bottom
+- one separated ad slot (labeled “광고”) only after the last section, never between paragraphs
+- bottom sticky bar: “공유하기” (secondary outline) + “점 하나 더 찍어볼까?” (primary coral CTA)
 
-Requirements:
-- show a calm branded loading state with mascot character (round violet avatar with simple face)
-- branded text: “당신을 위한 점, 하나 준비 중”
-- include one clearly separated sponsored/ad area
-- the ad area must never look like a tarot content card
-- show a gentle bounce animation or spinner with accessible status text (aria-live)
-- block all user interaction (touch, back navigation) during loading
-- keep the page simple and uncluttered
+Desktop layout (1440px):
+- left sticky table of contents (220px): section anchors with active indicator
+- center reading column (680-760px): comfortable text width for long-form reading
+- right sticky summary panel (260-320px): card thumbnails, share, save, “점 하나 더” retry
+- no ads inside paragraphs
+- never a stretched mobile layout
 
-Mobile:
-- centered mascot bounce animation
-- status text below
-- ad block separated by spacing and background tone
-
-Desktop:
-- centered loading module
-- optional side panel or lower panel for ad placement
-- preserve focus on the transition to result
+Mascot: happy expression appears when streaming completes
+Style: editorial reading interface, Pretendard typography, calm and trustworthy, streaming area feels alive but not flashy
+Colors: bg #FEF7FF, sections on #FFFFFF cards, accent #6B38D4
 ```
 
-### 6. 리포트형 결과 화면
+---
+
+### STEP 6. 히스토리 화면
 
 ```text
-Design a responsive tarot result screen for “점하나”, focused on reading quality.
+Design a history (past readings) screen for “점하나” (JeomHana).
+Use the design system established in STEP 1. Generate mobile (390x844), tablet (768x1024), and desktop (1440x1024) frames.
 
-Include mobile, tablet, and desktop versions.
+Mobile layout:
+- sub-page header: back arrow + title “히스토리”
+- summary statistics at top: readings this month count, key keyword chips
+- list of past readings, each item showing:
+  - category tag chip (e.g. 연애, 직장)
+  - date (e.g. 2026.05.10)
+  - theme title
+  - 3 card thumbnails in a row
+  - chevron icon for navigation
+- one-column list with clear item boundaries
+- empty state (when no readings exist):
+  - mascot with waving expression, centered
+  - text: “여기는 아직 비어있어요.”
+  - sub-text: “점 하나 찍으러 가볼까요?”
+  - CTA button: “타로 보러 가기” (primary coral)
 
-Mobile:
-- sub-page header with back arrow, theme title, and share icon
-- card summary strip for 3 selected cards (past/present/future labels, card images, names, upright/reversed indicator)
-- mascot bubble: avatar + “점하나가 당신의 카드를 읽고 있어요...” (shown during AI streaming)
-- one-line takeaway summary at the top
-- sections for “과거 해석”, “현재 해석”, “미래 해석”, “종합 조언” — collapsible accordion
-- AI interpretation text streams in with a typing cursor effect
-- share and save actions visible near the top and bottom
-- one separated ad slot only after the last section (never between paragraphs)
-- bottom sticky bar: “공유하기” secondary + “점 하나 더 찍어볼까?” primary CTA
-
-Desktop:
-- left table of contents (220px) with section anchors, sticky
-- center reading column (680-760px) with comfortable text width
-- right sticky summary panel (260-320px) with card thumbnails, share, save, retry
-- do not place ads inside paragraphs
-- do not make desktop a stretched mobile page
-
-Visual style:
-- editorial reading interface
-- highly readable Pretendard typography
-- calm, trustworthy, immersive but not dark
-- streaming text area should feel alive but not flashy
-```
-
-### 7. 히스토리와 공유 결과 화면
-
-```text
-Design a responsive history and shared-result screen for “점하나”, a Korean tarot web app.
-
-Include mobile, tablet, and desktop versions.
-
-History screen:
-- sub-page header with back arrow and title “히스토리”
-- summary statistics at top: readings this month, key keywords
-- list of past readings with category tag, date, theme title, and 3 card thumbnails
-- clear empty state with friendly mascot illustration:
-  “여기는 아직 비어있어요.” + “점 하나 찍으러 가볼까요?” + CTA button
-- each item is tappable with chevron icon
-- mobile uses one-column list
-- desktop uses list (left) plus result preview pane (right)
+Desktop layout (1440px):
+- left panel: history list with same item structure
+- right panel: result preview pane (shows selected reading's summary)
 - no search icon, no bottom tab bar
 
-Shared result screen:
-- centered logo header (no back button, no navigation)
-- mascot greeting bubble: “점하나가 전해준 타로 결과예요...”
-- card summary (3 cards in a row)
-- one-line takeaway in a highlighted card
-- readable result sections in timeline style (vertical line + dots)
-- advice card at the bottom
-- clear CTA: “나도 점 하나 찍어볼까?” → navigates to home
-- service caption: “AI 타로 서비스 점하나(JeomHana)”
-- no confusing navigation — this is a social traffic landing page
-
-Accessibility:
-- obvious item boundaries
-- enough tapping space (44x44px minimum)
-- visible current item state
-- accessible labels on all interactive elements
+Colors: bg #FEF7FF, list items on #FFFFFF cards, active item border #6B38D4
+Touch targets: 44x44px minimum, enough spacing between items
 ```
 
-### 8. 카테고리 탐색 화면 (선택 — MVP는 홈 필터로 대체)
+---
+
+### STEP 7. 공유 결과 랜딩 화면
+
+```text
+Design a shared result landing page for “점하나” (JeomHana).
+This is a social traffic entry point — users arrive via shared links (KakaoTalk, Instagram, etc.)
+Use the design system established in STEP 1. Generate mobile (390x844) and desktop (1440x1024) frames.
+
+Mobile layout:
+- centered logo header: “점하나” logo + mascot (happy expression), no back button, no navigation
+- mascot greeting bubble: “점하나가 전해준 타로 결과예요...”
+- card summary: 3 cards in a row (past/present/future) with card images and Korean names
+- one-line takeaway in a highlighted card (#EDE5FA bg)
+- result sections in timeline style (vertical line + dots for each section: 과거, 현재, 미래, 종합)
+- each section shows a condensed version of the interpretation
+- advice card at the bottom with accent border
+- clear CTA button: “나도 점 하나 찍어볼까?” → navigates to home (primary coral, full-width)
+- service caption below: “AI 타로 서비스 점하나(JeomHana)”
+- no confusing navigation — single-purpose landing page
+
+Desktop layout (1440px):
+- centered single-column layout (max-width 680px) for focused reading
+- same structure as mobile but with comfortable desktop spacing
+- CTA centered and prominent
+
+Colors: bg #FEF7FF, cards #FFFFFF, timeline accent #6B38D4, CTA #B90538
+Style: warm, inviting, makes the viewer want to try the service
+```
+
+---
+
+> **MVP는 여기까지.** 아래 STEP 8-10은 선택 사항이거나 Phase 2 대상이다.
+
+---
+
+### STEP 8. 카테고리 탐색 화면 (선택 — MVP는 홈 필터로 대체)
 
 > MVP에서는 별도 카테고리 화면 없이 홈의 카테고리 칩 필터(`/?category=love`)로 처리한다.
 > 테마가 20개 이상으로 늘어날 경우 별도 화면을 검토할 수 있다.
 
 ```text
-Design a responsive category browsing screen for a Korean tarot and fortune service.
-
-Include mobile, tablet, and desktop frames.
+Design a category browsing screen for “점하나” (JeomHana), a Korean tarot web app.
+Use the design system established in STEP 1. Generate mobile (390x844), tablet (768x1024), and desktop (1440x1024) frames.
 
 Mobile:
-- page title and currently selected category
-- horizontal filter chips
-- theme cards as a structured list, not decorative posters
-- each card must have a clear CTA
+- sub-page header: back arrow + page title (currently selected category name)
+- horizontal filter chips with active state (color + underline, not color alone)
+- theme cards as a structured list (title, subtitle, hashtag chips, CTA button)
 - optional sort or filter row
-- infinite scroll or load more area at bottom
+- infinite scroll or “더 보기” load-more button at bottom
 
-Desktop:
-- left category/filter rail
-- center search + sort toolbar
-- 3-column theme card grid
-- right narrow panel for “최근 본 결과” and “추천 테마”
-- cards should feel like readable content modules, not ads
+Desktop (1440px):
+- left category/filter rail (240px)
+- center: sort toolbar + 3-column theme card grid
+- right panel (280px): “최근 본 결과” and “추천 테마”
+- cards feel like readable content modules, not ads
 
-Accessibility:
-- visible selected state on category chips (color + underline or bold, not color alone)
-- readable card titles
-- enough spacing between cards
-- avoid tiny tags and low-contrast gradients
+Colors: bg #FEF7FF, cards #FFFFFF, active chip #6B38D4 with underline
+Accessibility: readable card titles, enough spacing, no tiny tags or low-contrast gradients
 ```
 
-### 9. 대화형 결과 변형 화면 (부분 적용 전용)
+---
+
+### STEP 9. 대화형 결과 변형 (부분 적용 전용)
 
 > 점하나에서는 전체 결과를 채팅형으로 만들지 않는다.
 > 리포트형 결과의 **첫 2~3문단만** 순차 리빌하는 패턴으로 제한 차용한다.
-> 전체 화면을 채팅형으로 통일하면 스캔 속도가 떨어지고 다시 읽기 어려워진다.
 
 ```text
-Design a responsive chat-lite result variation for a Korean tarot app “점하나”.
-This is NOT a full chat screen — it is a partial reveal pattern used only for the first 2-3 paragraphs of the report-style result.
-
-Include mobile and desktop versions.
+Design a chat-lite result reveal variation for “점하나” (JeomHana).
+This is NOT a full chat screen — it is a partial reveal intro pattern used only for the first 2-3 paragraphs before transitioning to the full report-style result from STEP 5.
+Use the design system established in STEP 1. Generate mobile (390x844) and desktop (1440x1024) frames.
 
 Mobile:
-- progress header
-- conversation-style explanation blocks (2-3 blocks only)
-- each block reveals one idea at a time with a typing animation
-- card image or card summary appears before the final advice
-- one main CTA per step: “다음 보기”
-- no inline ad between message steps
-- after the reveal sequence, transition to the full report-style result
+- progress header showing reading progress
+- mascot (focused expression) introduces the reading
+- 2-3 conversation-style explanation blocks that reveal one idea at a time with typing animation
+- card image or card summary appears between blocks
+- one CTA per step: “다음 보기” (secondary outline)
+- no inline ads between message steps
+- after the 2-3 block reveal, smooth transition to the full report-style result screen
 
-Desktop:
-- left column for conversation flow
-- right column for card summary and final takeaway
-- keep it readable and compact
-- this is not a full messenger clone; it is a guided reading intro
+Desktop (1440px):
+- left column: conversation reveal flow
+- right column: card summary and final takeaway preview
+- compact and readable, not a full messenger clone
 
-Tone:
-- warm, calm, lightly personal
-- not childish
-- not overly robotic
+Mascot: transitions from focused → happy as blocks reveal
+Tone: warm, calm, lightly personal — not childish, not robotic
+Colors: bg #FEF7FF, message blocks on #FFFFFF, accent #6B38D4
 ```
 
-### 10. 사주 리포트 대시보드 변형 화면 (Phase 2 — MVP 범위 아님)
+---
+
+### STEP 10. 사주 리포트 대시보드 (Phase 2 — MVP 범위 아님)
 
 > 사주 기능은 Phase 2(유료 수익화 레이어)에서 개발 예정. MVP에서는 구현하지 않는다.
 > 디자인 시안만 미리 확보해두면 Phase 2 착수 시 도움이 된다.
 
 ```text
-Design a responsive saju report dashboard screen for a Korean fortune service “점하나”.
-
-Include mobile and desktop versions.
+Design a saju (Korean four pillars) report dashboard screen for “점하나” (JeomHana).
+Use the design system established in STEP 1. Generate mobile (390x844) and desktop (1440x1024) frames.
 
 Mobile:
-- summary score cards
-- date or period tabs
-- compact report sections
-- sticky bottom CTA for saving or sharing
-- collapsible detail areas
+- sub-page header: back arrow + “사주 리포트” title
+- mascot bubble (curious expression): greeting for saju reading
+- summary score cards (ohaeng balance, overall fortune rating)
+- date or period tabs (오늘, 이번 주, 이번 달)
+- compact report sections with collapsible details
+- sticky bottom CTA: save or share
 
-Desktop:
-- left navigation for report sections
-- center main report content
-- right panel for calendar, highlights, and actions
+Desktop (1440px):
+- left navigation rail for report sections (220px)
+- center main report content (680-760px)
+- right panel (260-320px): calendar widget, highlights, action buttons
 - suitable for long-form reading and comparison
-- preserve a strong document structure
 
-Style:
-- modern editorial dashboard
-- not finance-like, not fantasy-like
-- calm icons, subtle traditional Korean visual reference
-- must feel like a natural extension of the tarot result screen
-```
-
-이 프롬프트 세트는 “장식적인 AI 느낌”보다 **구조·가독성·행동 유도**를 먼저 잡기 위한 것이다. Figma Make에서 처음부터 완성형을 기대하지 말고, 위 번호 순서대로 진행하면 된다.
-
-### 프롬프트 사용 순서 요약
-
-```
-1. 공통 시스템 프롬프트 붙여넣기
-2. “점하나에 바로 적용할 조합” → 전체 톤 확인
-3. 허브형 홈 → 카드 뽑기 → 광고 로딩 → 리포트형 결과 → 히스토리/공유 순서로 개별 생성
-4. 컴포넌트(칩, 카드, 버튼, 헤더) 일관성 교차 확인
-5. 대화형 결과 변형은 리포트형 결과 확정 후 부분 패턴으로만 시도
-6. 사주 리포트 대시보드는 MVP 이후 별도 진행
+Style: modern editorial dashboard — not finance-like, not fantasy-like
+Calm icons, subtle traditional Korean visual references (ohaeng color accents from pastel palette)
+Must feel like a natural extension of the tarot result screen
+Colors: bg #FEF7FF, cards #FFFFFF, primary #6B38D4, CTA #B90538
 ```

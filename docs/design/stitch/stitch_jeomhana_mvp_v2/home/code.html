@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+
+<html lang="ko"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>점하나</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;500;700;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              primary: {
+                DEFAULT: '#6B38D4',
+                light: '#EDE5FA',
+                dark: '#4A1FA8'
+              },
+              secondary: {
+                DEFAULT: '#B90538',
+                light: '#FDEAEF'
+              },
+              surface: {
+                DEFAULT: '#FFFFFF',
+                elevated: '#F8F0FC',
+                background: '#FEF7FF'
+              },
+              text: {
+                primary: '#1A1523',
+                secondary: '#6B6078',
+                tertiary: '#9E95A9'
+              },
+              border: {
+                DEFAULT: '#E8E0F0',
+                active: '#6B38D4'
+              },
+              ad: '#F0F0F0'
+            },
+            borderRadius: {
+              DEFAULT: "0.5rem",
+              lg: "1rem",
+              xl: "1.5rem",
+              full: "9999px"
+            },
+            fontFamily: {
+              headline: ["Public Sans", "sans-serif"],
+              display: ["Public Sans", "sans-serif"],
+              body: ["Public Sans", "sans-serif"],
+              label: ["Public Sans", "sans-serif"]
+            }
+          }
+        }
+      }
+    </script>
+<style>
+        body {
+            background-color: #FEF7FF;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+</head>
+<body class="font-body text-text-primary antialiased bg-surface-background min-h-screen flex flex-col">
+<!-- TopAppBar -->
+<header class="bg-surface dark:bg-surface-elevated fixed top-0 w-full z-50 border-b border-border flat no shadows">
+<div class="flex justify-between items-center px-4 h-14 max-w-screen-xl mx-auto">
+<div class="flex items-center gap-2">
+<img alt="JeomHana mascot lavender mochi-shaped blob with witch hat 3D render" class="w-8 h-8 rounded-full" data-alt="A cute, lavender mochi-shaped blob mascot wearing a dark purple witch hat. It has a round, soft, squishy body, small friendly eyes with a gentle smile, and soft pink rosy cheeks. High-quality 3D render style." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCVNv_qUMtU7WI6ghUnJuW2vk6kwT4tNLQAB3vGEDHDXSjkNZOpeicty_NvklWKZbrcSD8Ywt0inCvL93dnUJEMnkDWz7ymPvNT0uE_8EZgYpSmMAzdB1Vd5_mncc7eIOCh9gA7067RGjrdtE0-bXaAILJaeAWmuVhNPjYa9LTjScUQ2lDtws5VhPCqiNaarzyyrhZCpQFzjroVlN6rTkJ6rHdwt4LaIXG-sr2cyXfGbWQ7KFTlwqfWbvJR03eyvoVzYWMa-veL8Kg"/>
+<span class="font-headline text-xl font-black text-primary-dark text-primary dark:text-primary-light">점하나</span>
+</div>
+<button class="text-secondary hover:bg-primary-light transition-colors active:scale-95 p-2 rounded-full flex items-center justify-center">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">history</span>
+</button>
+</div>
+</header>
+<!-- Main Content -->
+<main class="flex-1 mt-14 pb-8 max-w-screen-xl mx-auto w-full px-4 sm:px-6 lg:px-8">
+<!-- Hero Area -->
+<section class="flex flex-col items-center justify-center py-10">
+<div class="w-32 h-32 mb-4 relative">
+<img alt="JeomHana mascot 3D illustration" class="w-full h-full object-contain drop-shadow-md" data-alt="A cute, lavender mochi-shaped blob mascot wearing a dark purple witch hat. It has a round, soft, squishy body, small friendly eyes with a gentle smile, and soft pink rosy cheeks. High-quality 3D render style with soft, diffused lighting and smooth textures. Isolated on a white background." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCVNv_qUMtU7WI6ghUnJuW2vk6kwT4tNLQAB3vGEDHDXSjkNZOpeicty_NvklWKZbrcSD8Ywt0inCvL93dnUJEMnkDWz7ymPvNT0uE_8EZgYpSmMAzdB1Vd5_mncc7eIOCh9gA7067RGjrdtE0-bXaAILJaeAWmuVhNPjYa9LTjScUQ2lDtws5VhPCqiNaarzyyrhZCpQFzjroVlN6rTkJ6rHdwt4LaIXG-sr2cyXfGbWQ7KFTlwqfWbvJR03eyvoVzYWMa-veL8Kg"/>
+</div>
+<h1 class="font-headline text-2xl font-bold text-text-primary text-center">오늘, 점 하나 찍어볼까?</h1>
+</section>
+<!-- Quick Actions -->
+<section class="grid grid-cols-2 gap-4 mb-8">
+<div class="bg-surface rounded-xl p-4 border border-border flex flex-col items-center justify-center gap-2 hover:bg-primary-light transition-colors cursor-pointer active:scale-95 shadow-sm">
+<span class="material-symbols-outlined text-primary text-3xl" style="font-variation-settings: 'FILL' 1;">auto_awesome</span>
+<span class="font-bold text-text-primary">오늘의 타로</span>
+<span class="text-xs text-text-secondary">오늘 하루 운세</span>
+</div>
+<div class="bg-surface rounded-xl p-4 border border-border flex flex-col items-center justify-center gap-2 hover:bg-primary-light transition-colors cursor-pointer active:scale-95 shadow-sm">
+<span class="material-symbols-outlined text-primary text-3xl" style="font-variation-settings: 'FILL' 1;">calendar_month</span>
+<span class="font-bold text-text-primary">이번 주 타로</span>
+<span class="text-xs text-text-secondary">주간 흐름 보기</span>
+</div>
+</section>
+<!-- Category Chips -->
+<section class="mb-6 overflow-x-auto no-scrollbar">
+<div class="flex gap-2 pb-2 px-1">
+<button class="whitespace-nowrap px-4 py-2 rounded-full font-medium text-sm transition-colors bg-primary text-white border border-primary">전체</button>
+<button class="whitespace-nowrap px-4 py-2 rounded-full font-medium text-sm transition-colors bg-surface text-text-secondary border border-border hover:bg-primary-light hover:text-primary">일상</button>
+<button class="whitespace-nowrap px-4 py-2 rounded-full font-medium text-sm transition-colors bg-surface text-text-secondary border border-border hover:bg-primary-light hover:text-primary">연애</button>
+<button class="whitespace-nowrap px-4 py-2 rounded-full font-medium text-sm transition-colors bg-surface text-text-secondary border border-border hover:bg-primary-light hover:text-primary">직장</button>
+<button class="whitespace-nowrap px-4 py-2 rounded-full font-medium text-sm transition-colors bg-surface text-text-secondary border border-border hover:bg-primary-light hover:text-primary">재물</button>
+<button class="whitespace-nowrap px-4 py-2 rounded-full font-medium text-sm transition-colors bg-surface text-text-secondary border border-border hover:bg-primary-light hover:text-primary">학업</button>
+<button class="whitespace-nowrap px-4 py-2 rounded-full font-medium text-sm transition-colors bg-surface text-text-secondary border border-border hover:bg-primary-light hover:text-primary">기타</button>
+</div>
+</section>
+<!-- Theme Card List -->
+<section class="flex flex-col gap-4">
+<!-- Card 1 -->
+<div class="bg-surface rounded-xl border border-border overflow-hidden flex shadow-sm hover:border-primary transition-colors cursor-pointer group">
+<div class="w-2 bg-primary group-hover:bg-primary-dark transition-colors"></div>
+<div class="p-4 flex-1 flex flex-col justify-center">
+<h3 class="font-bold text-lg text-text-primary mb-1">오늘의 운세</h3>
+<p class="text-sm text-text-secondary mb-2">가볍게 알아보는 오늘 하루</p>
+<div class="flex gap-2">
+<span class="text-xs text-primary bg-primary-light px-2 py-1 rounded-md">#일상</span>
+<span class="text-xs text-primary bg-primary-light px-2 py-1 rounded-md">#운세</span>
+</div>
+</div>
+<div class="p-4 flex items-center justify-center text-border group-hover:text-primary transition-colors">
+<span class="material-symbols-outlined">chevron_right</span>
+</div>
+</div>
+<!-- Card 2 -->
+<div class="bg-surface rounded-xl border border-border overflow-hidden flex shadow-sm hover:border-primary transition-colors cursor-pointer group">
+<div class="w-2 bg-pink-400 group-hover:bg-pink-500 transition-colors"></div>
+<div class="p-4 flex-1 flex flex-col justify-center">
+<h3 class="font-bold text-lg text-text-primary mb-1">연애 타로</h3>
+<p class="text-sm text-text-secondary mb-2">그 사람의 진짜 마음은?</p>
+<div class="flex gap-2">
+<span class="text-xs text-pink-600 bg-pink-50 px-2 py-1 rounded-md">#연애</span>
+<span class="text-xs text-pink-600 bg-pink-50 px-2 py-1 rounded-md">#속마음</span>
+</div>
+</div>
+<div class="p-4 flex items-center justify-center text-border group-hover:text-primary transition-colors">
+<span class="material-symbols-outlined">chevron_right</span>
+</div>
+</div>
+<!-- Ad Slot -->
+<div class="bg-ad rounded-xl p-4 flex flex-col items-center justify-center min-h-[100px] border border-border border-dashed relative">
+<span class="absolute top-2 right-2 text-[10px] text-text-tertiary font-bold px-1.5 py-0.5 border border-text-tertiary rounded">광고</span>
+<span class="text-text-secondary text-sm">광고 영역</span>
+</div>
+<!-- Card 3 -->
+<div class="bg-surface rounded-xl border border-border overflow-hidden flex shadow-sm hover:border-primary transition-colors cursor-pointer group">
+<div class="w-2 bg-blue-400 group-hover:bg-blue-500 transition-colors"></div>
+<div class="p-4 flex-1 flex flex-col justify-center">
+<h3 class="font-bold text-lg text-text-primary mb-1">직장 고민 타로</h3>
+<p class="text-sm text-text-secondary mb-2">이직할까? 버틸까?</p>
+<div class="flex gap-2">
+<span class="text-xs text-blue-600 bg-blue-50 px-2 py-1 rounded-md">#직장</span>
+<span class="text-xs text-blue-600 bg-blue-50 px-2 py-1 rounded-md">#이직</span>
+</div>
+</div>
+<div class="p-4 flex items-center justify-center text-border group-hover:text-primary transition-colors">
+<span class="material-symbols-outlined">chevron_right</span>
+</div>
+</div>
+<!-- Card 4 -->
+<div class="bg-surface rounded-xl border border-border overflow-hidden flex shadow-sm hover:border-primary transition-colors cursor-pointer group">
+<div class="w-2 bg-yellow-400 group-hover:bg-yellow-500 transition-colors"></div>
+<div class="p-4 flex-1 flex flex-col justify-center">
+<h3 class="font-bold text-lg text-text-primary mb-1">재물운 타로</h3>
+<p class="text-sm text-text-secondary mb-2">내 지갑 사정은 언제쯤 나아질까?</p>
+<div class="flex gap-2">
+<span class="text-xs text-yellow-700 bg-yellow-50 px-2 py-1 rounded-md">#재물</span>
+<span class="text-xs text-yellow-700 bg-yellow-50 px-2 py-1 rounded-md">#금전운</span>
+</div>
+</div>
+<div class="p-4 flex items-center justify-center text-border group-hover:text-primary transition-colors">
+<span class="material-symbols-outlined">chevron_right</span>
+</div>
+</div>
+</section>
+</main>
+<!-- Footer -->
+<footer class="bg-surface-elevated dark:bg-surface border-t border-border flex flex-col items-center gap-4 w-full px-4 py-8 flat mt-auto">
+<div class="flex gap-4">
+<a class="font-body text-xs text-center text-text-secondary hover:text-primary underline" href="#">이용약관</a>
+<a class="font-body text-xs text-center text-text-secondary hover:text-primary underline" href="#">개인정보처리방침</a>
+<a class="font-body text-xs text-center text-text-secondary hover:text-primary underline" href="#">고객센터</a>
+</div>
+<p class="font-body text-xs text-center text-text-tertiary">© 2024 JeomHana. All rights reserved.</p>
+</footer>
+</body></html>

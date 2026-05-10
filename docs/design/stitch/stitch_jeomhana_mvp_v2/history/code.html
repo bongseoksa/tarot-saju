@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+
+<html lang="ko"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>히스토리 - 점하나</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;500;700;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        primary: {
+                            DEFAULT: "#6B38D4",
+                            light: "#EDE5FA",
+                            dark: "#4A1FA8"
+                        },
+                        secondary: {
+                            DEFAULT: "#B90538",
+                            light: "#FDEAEF"
+                        },
+                        surface: {
+                            DEFAULT: "#FFFFFF",
+                            elevated: "#F8F0FC",
+                            background: "#FEF7FF"
+                        },
+                        text: {
+                            primary: "#1A1523",
+                            secondary: "#6B6078",
+                            tertiary: "#9E95A9"
+                        },
+                        border: {
+                            DEFAULT: "#E8E0F0",
+                            active: "#6B38D4"
+                        },
+                        semantic: {
+                            success: "#2D8A4E",
+                            warning: "#D4920B",
+                            error: "#C53030",
+                            info: "#2B6CB0"
+                        },
+                        mascot: {
+                            body: "#A78BDB",
+                            hat: "#4A3570",
+                            blush: "#E8A0B4"
+                        },
+                        pastel: {
+                            pink: "#F8C8D8",
+                            yellow: "#FFF3D6",
+                            mint: "#D6F5ED",
+                            blue: "#D6E8F8"
+                        },
+                        card: {
+                            frame: "#C4A050"
+                        }
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.5rem",
+                        "lg": "1rem",
+                        "xl": "1.5rem",
+                        "full": "9999px"
+                    },
+                    fontFamily: {
+                        "headline": ["Public Sans", "sans-serif"],
+                        "display": ["Public Sans", "sans-serif"],
+                        "body": ["Public Sans", "sans-serif"],
+                        "label": ["Public Sans", "sans-serif"]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        body {
+            font-family: 'Public Sans', sans-serif;
+            background-color: #FEF7FF;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+</head>
+<body class="bg-surface-background text-text-primary antialiased min-h-screen flex flex-col items-center">
+<div class="w-full max-w-md bg-surface-background min-h-screen shadow-xl flex flex-col relative overflow-hidden">
+<!-- Header -->
+<header class="flex items-center justify-between px-4 h-14 bg-surface z-50 border-b border-border sticky top-0">
+<button class="text-text-primary p-2 -ml-2 rounded-full hover:bg-primary-light transition-colors active:scale-95 flex items-center justify-center">
+<span class="material-symbols-outlined">arrow_back</span>
+</button>
+<h1 class="font-headline text-lg font-bold text-text-primary">히스토리</h1>
+<div class="w-10"></div> <!-- Placeholder for balance -->
+</header>
+<!-- Main Content Scrollable Area -->
+<main class="flex-1 overflow-y-auto pb-20 p-4 space-y-6">
+<!-- Summary Stats -->
+<section class="bg-surface rounded-xl p-5 shadow-sm border border-border flex flex-col gap-3">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary" style="font-variation-settings: 'FILL' 1;">calendar_month</span>
+<h2 class="font-headline font-bold text-lg text-text-primary">이번 달 4회 리딩</h2>
+</div>
+<div class="flex flex-wrap gap-2">
+<span class="px-3 py-1 bg-pastel-pink text-text-primary rounded-full text-sm font-medium">#연애</span>
+<span class="px-3 py-1 bg-pastel-blue text-text-primary rounded-full text-sm font-medium">#직장</span>
+<span class="px-3 py-1 bg-pastel-yellow text-text-primary rounded-full text-sm font-medium">#일상</span>
+</div>
+</section>
+<!-- List Header -->
+<h3 class="font-headline font-bold text-base text-text-secondary mt-2 px-1">최근 리딩 기록</h3>
+<!-- List Items -->
+<div class="space-y-4">
+<!-- Item 1 -->
+<button class="w-full bg-surface rounded-xl p-4 shadow-sm border border-border flex flex-col gap-3 hover:bg-primary-light transition-colors text-left group active:scale-[0.98]">
+<div class="flex justify-between items-center w-full">
+<div class="flex items-center gap-2">
+<span class="px-2 py-0.5 bg-pastel-pink text-text-primary rounded-md text-xs font-bold">연애</span>
+<span class="text-xs text-text-tertiary">2026.05.10</span>
+</div>
+<span class="material-symbols-outlined text-text-tertiary group-hover:text-primary transition-colors">chevron_right</span>
+</div>
+<h4 class="font-headline font-bold text-base text-text-primary line-clamp-1">새로운 인연이 다가올까요?</h4>
+<div class="flex gap-2 mt-1">
+<!-- Mini Card Thumbnails placeholders -->
+<div class="w-8 h-12 bg-surface-elevated border border-card-frame rounded-sm flex items-center justify-center">
+<span class="material-symbols-outlined text-xs text-card-frame">star</span>
+</div>
+<div class="w-8 h-12 bg-surface-elevated border border-card-frame rounded-sm flex items-center justify-center">
+<span class="material-symbols-outlined text-xs text-card-frame">favorite</span>
+</div>
+<div class="w-8 h-12 bg-surface-elevated border border-card-frame rounded-sm flex items-center justify-center">
+<span class="material-symbols-outlined text-xs text-card-frame">auto_awesome</span>
+</div>
+</div>
+</button>
+<!-- Item 2 -->
+<button class="w-full bg-surface rounded-xl p-4 shadow-sm border border-border flex flex-col gap-3 hover:bg-primary-light transition-colors text-left group active:scale-[0.98]">
+<div class="flex justify-between items-center w-full">
+<div class="flex items-center gap-2">
+<span class="px-2 py-0.5 bg-pastel-blue text-text-primary rounded-md text-xs font-bold">직장</span>
+<span class="text-xs text-text-tertiary">2026.05.08</span>
+</div>
+<span class="material-symbols-outlined text-text-tertiary group-hover:text-primary transition-colors">chevron_right</span>
+</div>
+<h4 class="font-headline font-bold text-base text-text-primary line-clamp-1">이번 프로젝트 성공할 수 있을까?</h4>
+<div class="flex gap-2 mt-1">
+<div class="w-8 h-12 bg-surface-elevated border border-card-frame rounded-sm flex items-center justify-center">
+<span class="material-symbols-outlined text-xs text-card-frame">work</span>
+</div>
+<div class="w-8 h-12 bg-surface-elevated border border-card-frame rounded-sm flex items-center justify-center">
+<span class="material-symbols-outlined text-xs text-card-frame">trending_up</span>
+</div>
+<div class="w-8 h-12 bg-surface-elevated border border-card-frame rounded-sm flex items-center justify-center">
+<span class="material-symbols-outlined text-xs text-card-frame">lightbulb</span>
+</div>
+</div>
+</button>
+<!-- Item 3 -->
+<button class="w-full bg-surface rounded-xl p-4 shadow-sm border border-border flex flex-col gap-3 hover:bg-primary-light transition-colors text-left group active:scale-[0.98]">
+<div class="flex justify-between items-center w-full">
+<div class="flex items-center gap-2">
+<span class="px-2 py-0.5 bg-pastel-yellow text-text-primary rounded-md text-xs font-bold">일상</span>
+<span class="text-xs text-text-tertiary">2026.05.05</span>
+</div>
+<span class="material-symbols-outlined text-text-tertiary group-hover:text-primary transition-colors">chevron_right</span>
+</div>
+<h4 class="font-headline font-bold text-base text-text-primary line-clamp-1">오늘 하루의 조언</h4>
+<div class="flex gap-2 mt-1">
+<div class="w-8 h-12 bg-surface-elevated border border-card-frame rounded-sm flex items-center justify-center">
+<span class="material-symbols-outlined text-xs text-card-frame">wb_sunny</span>
+</div>
+</div>
+</button>
+<!-- Item 4 -->
+<button class="w-full bg-surface rounded-xl p-4 shadow-sm border border-border flex flex-col gap-3 hover:bg-primary-light transition-colors text-left group active:scale-[0.98]">
+<div class="flex justify-between items-center w-full">
+<div class="flex items-center gap-2">
+<span class="px-2 py-0.5 bg-pastel-pink text-text-primary rounded-md text-xs font-bold">연애</span>
+<span class="text-xs text-text-tertiary">2026.05.01</span>
+</div>
+<span class="material-symbols-outlined text-text-tertiary group-hover:text-primary transition-colors">chevron_right</span>
+</div>
+<h4 class="font-headline font-bold text-base text-text-primary line-clamp-1">짝사랑, 고백해도 될까요?</h4>
+<div class="flex gap-2 mt-1">
+<div class="w-8 h-12 bg-surface-elevated border border-card-frame rounded-sm flex items-center justify-center">
+<span class="material-symbols-outlined text-xs text-card-frame">volunteer_activism</span>
+</div>
+<div class="w-8 h-12 bg-surface-elevated border border-card-frame rounded-sm flex items-center justify-center">
+<span class="material-symbols-outlined text-xs text-card-frame">chat_bubble</span>
+</div>
+</div>
+</button>
+</div>
+<!-- Divider -->
+<div class="w-full h-px bg-border my-8"></div>
+<!-- Empty State Variant -->
+<section class="flex flex-col items-center justify-center py-10 px-4 text-center bg-surface rounded-xl border border-border shadow-sm border-dashed">
+<!-- Mascot Waving (CSS Representation) -->
+<img alt="Neutral mascot with witch hat" class="w-32 h-32 mb-2 object-contain" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBmIasGLb_VYT2iI5RRAR2Udpwjdm_DkinllT8QHAx9gDhpbGdwQJIck8F-Nv_l0ZvYlgpPcfUwVrkChlQ2z0iV3FdCX6jMeKrdigW-asfu3eAcSbsdu-SrBpMiBXFCRxoWFdKdhan_YAYymYT2BqNyVxYB0msW9rwyN_3ScPe8wg1kgvI4JAfzNACc9fD6qzoMmsx_rKUu6YJmjCGpi3IeOsLV6Q6nvTBuZz2_7ooGAuJAAtGvbf_BvWKH8mA1TMcwLkE2joftx-Y"/>
+<h3 class="font-headline font-bold text-lg text-text-primary mb-1">여기는 아직 비어있어요.</h3>
+<p class="font-body text-sm text-text-secondary mb-6">점 하나 찍으러 가볼까요?</p>
+<button class="bg-secondary text-white font-bold py-3 px-6 rounded-lg shadow-md hover:bg-[#A00430] active:scale-95 transition-all w-full max-w-[200px]">
+                    타로 보러 가기
+                </button>
+</section>
+</main>
+</div>
+</body></html>

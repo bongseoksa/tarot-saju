@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+
+<html lang="ko"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>점하나 - 타로 결과 공유</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;500;700;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        primary: {
+                            DEFAULT: '#6B38D4',
+                            light: '#EDE5FA',
+                            dark: '#4A1FA8'
+                        },
+                        secondary: {
+                            DEFAULT: '#6B6078',
+                            cta: '#B90538'
+                        },
+                        tertiary: {
+                            DEFAULT: '#9E95A9'
+                        },
+                        cta: {
+                            light: '#FDEAEF'
+                        },
+                        surface: {
+                            DEFAULT: '#FFFFFF',
+                            elevated: '#F8F0FC',
+                            bg: '#FEF7FF'
+                        },
+                        border: {
+                            default: '#E8E0F0',
+                            active: '#6B38D4'
+                        },
+                        mascot: {
+                            body: '#A78BDB',
+                            hat: '#4A3570',
+                            blush: '#E8A0B4'
+                        },
+                        card: {
+                            frame: '#C4A050'
+                        }
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.5rem",
+                        "lg": "1rem",
+                        "xl": "1.5rem",
+                        "full": "9999px"
+                    },
+                    fontFamily: {
+                        "headline": ["Public Sans", "sans-serif"],
+                        "display": ["Public Sans", "sans-serif"],
+                        "body": ["Public Sans", "sans-serif"],
+                        "label": ["Public Sans", "sans-serif"]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        body {
+            background-color: #FEF7FF;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .material-symbols-outlined.fill {
+            font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="font-body text-[#1A1523] antialiased min-h-screen pb-20">
+<main class="max-w-screen-md mx-auto px-4 pt-12 flex flex-col gap-8">
+<!-- Header / Mascot -->
+<header class="flex flex-col items-center text-center gap-4">
+<h1 class="font-headline text-3xl font-black text-primary-dark tracking-tight">점하나</h1>
+<div class="relative inline-block mt-4">
+<div class="bg-surface rounded-2xl p-4 shadow-sm border border-border-default relative z-10 before:content-[''] before:absolute before:-bottom-2 before:left-1/2 before:-translate-x-1/2 before:w-4 before:h-4 before:bg-surface before:border-b before:border-r before:border-border-default before:rotate-45">
+<p class="font-medium text-primary-dark">점하나가 전해준 타로 결과예요...</p>
+</div>
+<div class="w-32 h-32 mx-auto mt-6 bg-mascot-body rounded-full relative overflow-hidden shadow-inner flex items-center justify-center">
+<!-- Placeholder for Mascot Image, described carefully in data-alt -->
+<img alt="JeomHana Mascot" class="w-full h-full object-cover" data-alt="A soft, teardrop-shaped lavender mochi blob character with a happy expression. It has wide, bright eyes, a tiny pink cat-like mouth, and soft pink circular blush marks on its cheeks. It wears a classic pointed dark purple witch hat tilted slightly. The background is a clean, warm off-white surface to match the UI. The style is modern Korean character emoticon art, clean vector-like smoothness." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCv3xs-85LQt_j6Dm51Ir8okVgo0dRn6CVPwfPXlEb5X7PXTZysydBHlm2oSxXXfxdq-Fuikxry-WKQISaGEHMfBC_SJxU7izy6ItzcXFpwjlbVdRB6SvXBIHEA-4ZgFEp2COaTWxpL7HvvZhSoiPTwfnwR6zBBPF7oLC89TknBR0vsBmXZIiL0DIRZGIOZ-2GJ8keTtZLcgiPKIdPXAEMAtQueQJHryzWgI6F0TFVvKj9BOeI6LOG4RJ6EmQCxFMXdi7WB3tu_40I"/>
+</div>
+</div>
+</header>
+<!-- Card Summary (Past/Present/Future) -->
+<section class="bg-surface rounded-xl p-6 shadow-sm border border-border-default">
+<h2 class="text-lg font-bold mb-4 text-center">뽑은 카드</h2>
+<div class="grid grid-cols-3 gap-4">
+<!-- Past -->
+<div class="flex flex-col items-center gap-2">
+<span class="text-xs font-bold text-secondary bg-surface-elevated px-2 py-1 rounded-full">과거</span>
+<div class="w-full aspect-[2/3] bg-card-frame p-1 rounded-lg shadow-md">
+<img alt="The Fool" class="w-full h-full object-cover rounded-md" data-alt="A beautifully illustrated tarot card showing 'The Fool'. The art style is light, lightly mystical, and approachable, avoiding dark fantasy themes. It features soft pastel colors, a clean modern composition, and a subtle glowing effect. The card is framed within a mustard yellow border." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDaUhn5WPqIo4uWeFp1D3PpbRt9k19kviwyThtQI5zhH5TTvoDJsZEsSnhj212Ii1eqyUBty1BtSkn3_wPUjOf5GKbkdqA3s0NtYLgdt8H9TrP2V0RmwGJnqdV1uORHV8Szc17lNkq1NRzusUp6Oq9l_SWw3KKxxrU2CCNfKD5rAzZtPOLl-BmfHN2saZsuDeUgymwvqJWTpRhZAti6wjHC9YOLnOlaCNN1Ew0E8wvsRxjkv6AY2ZlIKLIIiXT-kxQD5kyfpgLFRxE"/>
+</div>
+<span class="text-sm font-medium text-center line-clamp-1">바보</span>
+</div>
+<!-- Present -->
+<div class="flex flex-col items-center gap-2">
+<span class="text-xs font-bold text-primary bg-primary-light px-2 py-1 rounded-full">현재</span>
+<div class="w-full aspect-[2/3] bg-card-frame p-1 rounded-lg shadow-md">
+<img alt="The Magician" class="w-full h-full object-cover rounded-md" data-alt="A beautifully illustrated tarot card showing 'The Magician'. The art style is light, lightly mystical, and approachable, avoiding dark fantasy themes. It features soft pastel colors, a clean modern composition, and a subtle glowing effect. The card is framed within a mustard yellow border." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDP3iVjmaQcvL9M1sMJ8nikvQNr2A6Ov-9_2AACiZIdE-XuyaBcTREq8ue9rvazZomM5UrzZFnE8QEi2sfm6J3fhFQujcxjTUe8wUIKqaaX4okA20HtRAyj59lc9fPVJfCGbPQqtwMwRDIFVLBzUfqxZS6y029wWWm_PY0p-T_xM_1IOzs3D5Zb-gK_i2jUyjReKeFgQUw4kvqC09BMJhZu085zE0ykXeZYd4x3FHQpSicwva-w-XUt3lleM92ezG1yPHsdJ0F8c9E"/>
+</div>
+<span class="text-sm font-medium text-center line-clamp-1">마법사</span>
+</div>
+<!-- Future -->
+<div class="flex flex-col items-center gap-2">
+<span class="text-xs font-bold text-secondary bg-surface-elevated px-2 py-1 rounded-full">미래</span>
+<div class="w-full aspect-[2/3] bg-card-frame p-1 rounded-lg shadow-md">
+<img alt="The Sun" class="w-full h-full object-cover rounded-md" data-alt="A beautifully illustrated tarot card showing 'The Sun'. The art style is light, lightly mystical, and approachable, avoiding dark fantasy themes. It features bright warm colors, a clean modern composition, and a cheerful sun motif. The card is framed within a mustard yellow border." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCUoK0h74anuYuEPwBQ2GELBj4FYh3G-lnibf5LHtVtXLhWgzqgMlrFBArJm8XQtx65QAj2wNpXOdEWHBlXft_ZuKNqJP8wfc51Xc0gcpWg74QiIXxmJdT_3-ygtL3Fzvtr49S3q1wXxapP03YxrwNPg0vw9kUN5o6oq1RAZb0KK8Xo4olOcTRcP-MVJ46YZNJvdXB29GSOmmwedRT-D4uwW6zZpdmPeLFZM458MZfwoqa9Ng8cRgr8B3I70v_VM95gHXvER83LpPI"/>
+</div>
+<span class="text-sm font-medium text-center line-clamp-1">태양</span>
+</div>
+</div>
+</section>
+<!-- Highlighted Takeaway -->
+<section class="bg-primary-light rounded-xl p-5 text-center shadow-sm">
+<p class="font-bold text-primary-dark text-lg">"새로운 시작의 기운이 가득해요. 자신감을 가지세요!"</p>
+</section>
+<!-- Result Timeline -->
+<section class="bg-surface rounded-xl p-6 shadow-sm border border-border-default">
+<h2 class="text-lg font-bold mb-6">상세 풀이</h2>
+<div class="relative pl-6 space-y-8 before:absolute before:inset-y-0 before:left-[11px] before:w-0.5 before:bg-border-default">
+<!-- Past Detail -->
+<div class="relative">
+<div class="absolute -left-[30px] top-1 w-3 h-3 bg-tertiary rounded-full border-2 border-surface"></div>
+<h3 class="font-bold text-secondary mb-1">과거 (바보)</h3>
+<p class="text-sm text-[#1A1523] leading-relaxed">자유로운 영혼으로 새로운 도전을 두려워하지 않았던 시기입니다. 얽매임 없이 본인의 직관을 따랐습니다.</p>
+</div>
+<!-- Present Detail -->
+<div class="relative">
+<div class="absolute -left-[30px] top-1 w-3 h-3 bg-primary rounded-full border-2 border-surface ring-4 ring-primary-light"></div>
+<h3 class="font-bold text-primary mb-1">현재 (마법사)</h3>
+<p class="text-sm text-[#1A1523] leading-relaxed">모든 준비가 갖춰졌습니다. 당신이 가진 능력과 자원을 바탕으로 창조적인 에너지를 발산할 때입니다.</p>
+</div>
+<!-- Future Detail -->
+<div class="relative">
+<div class="absolute -left-[30px] top-1 w-3 h-3 bg-tertiary rounded-full border-2 border-surface"></div>
+<h3 class="font-bold text-secondary mb-1">미래 (태양)</h3>
+<p class="text-sm text-[#1A1523] leading-relaxed">밝고 긍정적인 결과가 기다리고 있습니다. 노력의 결실을 맺고 큰 성취감과 기쁨을 누리게 될 것입니다.</p>
+</div>
+</div>
+</section>
+<!-- Advice Card -->
+<section class="bg-surface rounded-xl p-6 shadow-md border-2 border-primary relative overflow-hidden">
+<div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-primary to-primary-light"></div>
+<div class="flex items-center gap-2 mb-3">
+<span class="material-symbols-outlined text-primary fill">auto_awesome</span>
+<h2 class="text-lg font-bold text-primary-dark">종합 조언</h2>
+</div>
+<p class="text-sm text-[#1A1523] leading-relaxed font-medium">
+                과거의 자유로움과 현재의 준비된 능력이 만나 눈부신 미래를 만들어낼 것입니다. 주저하지 말고 당신의 직감을 믿고 행동으로 옮기세요. 점하나가 당신의 빛나는 앞날을 응원합니다!
+            </p>
+</section>
+<!-- CTA Section -->
+<section class="mt-8 flex flex-col items-center gap-3">
+<button class="w-full bg-secondary-cta hover:bg-[#9c042f] text-white font-bold text-lg py-4 rounded-xl shadow-lg active:scale-95 transition-all flex items-center justify-center gap-2">
+                나도 점 하나 찍어볼까?
+                <span class="material-symbols-outlined">arrow_forward</span>
+</button>
+<p class="text-xs text-secondary font-medium">AI 타로 서비스 점하나(JeomHana)</p>
+</section>
+</main>
+</body></html>

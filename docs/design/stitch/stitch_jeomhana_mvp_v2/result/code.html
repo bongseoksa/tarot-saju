@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+
+<html lang="ko"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>점하나 - 오늘의 타로</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;500;700;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              primary: {
+                DEFAULT: "#6B38D4",
+                light: "#EDE5FA",
+                dark: "#4A1FA8"
+              },
+              secondary: {
+                DEFAULT: "#6B6078"
+              },
+              tertiary: {
+                DEFAULT: "#9E95A9"
+              },
+              cta: {
+                DEFAULT: "#B90538",
+                light: "#FDEAEF"
+              },
+              surface: {
+                DEFAULT: "#FFFFFF",
+                elevated: "#F8F0FC"
+              },
+              background: "#FEF7FF",
+              default: "#E8E0F0",
+              success: "#2D8A4E",
+              warning: "#D4920B",
+              error: "#C53030",
+              info: "#2B6CB0",
+              mascot: {
+                body: "#A78BDB",
+                hat: "#4A3570",
+                blush: "#E8A0B4"
+              },
+              card: {
+                frame: "#C4A050"
+              },
+              ad: "#F0F0F0"
+            },
+            fontFamily: {
+              headline: ["Public Sans", "sans-serif"],
+              display: ["Public Sans", "sans-serif"],
+              body: ["Public Sans", "sans-serif"],
+              label: ["Public Sans", "sans-serif"]
+            }
+          }
+        }
+      }
+    </script>
+<style>
+      body {
+        background-color: #FEF7FF;
+        font-family: 'Public Sans', sans-serif;
+      }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+</head>
+<body class="bg-background text-[#1A1523] min-h-screen pb-24 flex flex-col items-center">
+<!-- App Container (Mobile Constraint) -->
+<div class="w-full max-w-[390px] mx-auto bg-background min-h-screen shadow-lg relative flex flex-col">
+<!-- Header -->
+<header class="flex justify-between items-center px-4 h-14 bg-surface border-b border-default sticky top-0 z-50">
+<button class="w-10 h-10 flex items-center justify-center text-[#1A1523]">
+<span class="material-symbols-outlined">arrow_back</span>
+</button>
+<h1 class="font-headline font-bold text-lg text-[#1A1523]">오늘의 타로</h1>
+<button class="w-10 h-10 flex items-center justify-center text-[#1A1523]">
+<span class="material-symbols-outlined">share</span>
+</button>
+</header>
+<!-- Main Content Canvas -->
+<main class="flex-1 overflow-y-auto w-full">
+<!-- Card Summary Strip -->
+<section class="bg-surface-elevated py-6 px-4">
+<div class="flex justify-between gap-2">
+<!-- Past Card -->
+<div class="flex flex-col items-center flex-1 bg-surface rounded-xl p-3 shadow-sm border border-default">
+<span class="font-label text-xs font-medium text-secondary mb-2">과거</span>
+<div class="w-14 h-20 bg-card-frame rounded flex items-center justify-center mb-2 overflow-hidden relative">
+<img alt="The Magician Tarot Card" class="object-cover w-full h-full opacity-90" data-alt="A beautifully illustrated tarot card showing 'The Magician'. The artwork is in a modern, clean, lightly mystical Korean editorial style. Bright, calm colors with soft lighting. The card has an antique mustard border." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCAljOCrcp7jFpQB2sT4wlzUtM4CtSYpTx8D0dfggEfb-fv-BUbpzipu5vZQLyzTEbLSKl5lw_tul-8cFwefF9wWE4AOGO4JIKNDnRysjUR1n6E3vOAkoGrBODUoRLgfssJU9Q5lcWiqho6tx7wVx2wwXxHLof5Lo42lKDBsEDyuI3UH-3OZsH5ZGlvZRrpA8eh7L1uVpS1mkED6aghqQLf_zYvHcMWL9HOyjlsOdF4IWyWK3su27fdAuZC2VPBaOShtUxziFG7VvQ"/>
+</div>
+<span class="font-body text-sm font-bold text-[#1A1523]">마법사</span>
+<span class="font-label text-[10px] text-primary mt-1 px-1.5 py-0.5 bg-primary-light rounded">정방향</span>
+</div>
+<!-- Present Card -->
+<div class="flex flex-col items-center flex-1 bg-surface rounded-xl p-3 shadow-sm border border-default">
+<span class="font-label text-xs font-medium text-secondary mb-2">현재</span>
+<div class="w-14 h-20 bg-card-frame rounded flex items-center justify-center mb-2 overflow-hidden relative">
+<img alt="The Fool Tarot Card" class="object-cover w-full h-full opacity-90" data-alt="A beautifully illustrated tarot card showing 'The Fool'. The artwork is in a modern, clean, lightly mystical Korean editorial style. Bright, calm colors with soft lighting. The card has an antique mustard border." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCuyucSlVS6yBAZ-0ql4DA5Nut-V05ReWR74iFtmlM-hZj-4lDAU2AjjhTQQG6Qy7iNZevopQCo9aNbtu_m8f7R9A9lSjQzaDZ7vIGgTMhXn5VCMQvArYicTx7dbi3YvaXjng2q591HDrr72QmqCNlHJtInU5Bxd4R3hJgihPPJd4v27w7E2Thrpzsl9NHZ4lB9JKdmhQx0B3P8_72k6qRlg7UepJ74zIoUanKxG3W0ggDwe7PCaD9wV4NB5n6D6GrRrjykEYUvLfk"/>
+</div>
+<span class="font-body text-sm font-bold text-[#1A1523]">바보</span>
+<span class="font-label text-[10px] text-cta mt-1 px-1.5 py-0.5 bg-cta-light rounded">역방향</span>
+</div>
+<!-- Future Card -->
+<div class="flex flex-col items-center flex-1 bg-surface rounded-xl p-3 shadow-sm border border-default">
+<span class="font-label text-xs font-medium text-secondary mb-2">미래</span>
+<div class="w-14 h-20 bg-card-frame rounded flex items-center justify-center mb-2 overflow-hidden relative">
+<img alt="The Star Tarot Card" class="object-cover w-full h-full opacity-90" data-alt="A beautifully illustrated tarot card showing 'The Star'. The artwork is in a modern, clean, lightly mystical Korean editorial style. Bright, calm colors with soft lighting. The card has an antique mustard border." src="https://lh3.googleusercontent.com/aida-public/AB6AXuC20M_QBWvgQxBi7yRjpSj4Ni4duzf69BlODbIaAP1-KHjixUHQIIBYkNsX-5yNR5kikOtaQNZskvIoXhs6RZ7nKDRO0OhgYPQJG10oQTrFUPvctQNmlOtegyAT1a0rxvBneAdAbJ0AGjWLoTBWZLS2quPOfBdWzsRlSNa3asSO0cJIwXE8a_Hy24VM7uyFzlACyVE0Zb6YwaKFsJwd9TNhrQatUsF71OiBPthc7KDfdR0HLcEO2VLZcKqkYLxSMAdPsLt1dIveiMY"/>
+</div>
+<span class="font-body text-sm font-bold text-[#1A1523]">별</span>
+<span class="font-label text-[10px] text-primary mt-1 px-1.5 py-0.5 bg-primary-light rounded">정방향</span>
+</div>
+</div>
+</section>
+<!-- Mascot Bubble -->
+<section class="px-4 py-6 flex items-center gap-4">
+<div class="w-12 h-12 rounded-full overflow-hidden shrink-0 flex items-center justify-center bg-surface-elevated"><img alt="Jeomhana Mascot" class="w-full h-full object-contain" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCVNv_qUMtU7WI6ghUnJuW2vk6kwT4tNLQAB3vGEDHDXSjkNZOpeicty_NvklWKZbrcSD8Ywt0inCvL93dnUJEMnkDWz7ymPvNT0uE_8EZgYpSmMAzdB1Vd5_mncc7eIOCh9gA7067RGjrdtE0-bXaAILJaeAWmuVhNPjYa9LTjScUQ2lDtws5VhPCqiNaarzyyrhZCpQFzjroVlN6rTkJ6rHdwt4LaIXG-sr2cyXfGbWQ7KFTlwqfWbvJR03eyvoVzYWMa-veL8Kg"/></div>
+<div class="bg-surface py-3 px-4 rounded-2xl rounded-tl-none shadow-sm border border-default">
+<p class="font-body text-sm text-[#1A1523]">점하나가 당신의 카드를 읽고 있어요...</p>
+</div>
+</section>
+<!-- One-line Takeaway -->
+<section class="px-4 mb-6">
+<div class="bg-primary-light border border-primary/20 rounded-xl p-4 flex gap-3 items-start">
+<span class="material-symbols-outlined text-primary shrink-0">auto_awesome</span>
+<p class="font-body font-bold text-primary-dark leading-relaxed">
+                        변화의 시기를 맞이하고 있어요. 용기를 내볼 때입니다.
+                    </p>
+</div>
+</section>
+<!-- Result Sections (Accordion) -->
+<section class="px-4 flex flex-col gap-3 mb-8">
+<!-- Expanded: 과거 해석 -->
+<div class="bg-surface rounded-xl border border-default shadow-sm overflow-hidden">
+<button class="w-full px-4 py-4 flex justify-between items-center text-left">
+<span class="font-headline font-bold text-[#1A1523]">과거 해석</span>
+<span class="material-symbols-outlined text-secondary transition-transform rotate-180">expand_more</span>
+</button>
+<div class="px-4 pb-4">
+<div class="pl-3 border-l-2 border-primary">
+<p class="font-body text-sm text-[#1A1523] leading-relaxed">
+                                당신은 최근까지 무언가 새로운 것을 시작하려는 강한 의지를 가지고 있었어요. 마법사 카드는 당신이 이미 필요한 모든 도구와 능력을 갖추고 있었음을 의미합니다. 주변의 기대나 스스로의 기준 때문에 고민이 많았을 수 있지만, 내면의 잠재력을 믿고 첫 발을 내딛었던 시간이었네요. <span class="inline-block w-1 h-3.5 bg-primary animate-pulse align-middle ml-1"></span>
+</p>
+</div>
+</div>
+</div>
+<!-- Collapsed: 현재 해석 -->
+<div class="bg-surface rounded-xl border border-default shadow-sm">
+<button class="w-full px-4 py-4 flex justify-between items-center text-left">
+<span class="font-headline font-bold text-[#1A1523]">현재 해석</span>
+<span class="material-symbols-outlined text-secondary">expand_more</span>
+</button>
+</div>
+<!-- Collapsed: 미래 해석 -->
+<div class="bg-surface rounded-xl border border-default shadow-sm">
+<button class="w-full px-4 py-4 flex justify-between items-center text-left">
+<span class="font-headline font-bold text-[#1A1523]">미래 해석</span>
+<span class="material-symbols-outlined text-secondary">expand_more</span>
+</button>
+</div>
+<!-- Collapsed: 종합 조언 -->
+<div class="bg-surface rounded-xl border border-default shadow-sm">
+<button class="w-full px-4 py-4 flex justify-between items-center text-left">
+<span class="font-headline font-bold text-[#1A1523]">종합 조언</span>
+<span class="material-symbols-outlined text-secondary">expand_more</span>
+</button>
+</div>
+</section>
+<!-- Ad Slot -->
+<section class="px-4 mb-8">
+<div class="bg-ad rounded-xl h-24 flex items-center justify-center border border-default relative">
+<span class="absolute top-2 right-2 text-[10px] font-label text-tertiary bg-white/50 px-1.5 py-0.5 rounded">광고</span>
+<span class="text-tertiary font-body text-sm">Ad Space</span>
+</div>
+</section>
+</main>
+<!-- Bottom Sticky Bar -->
+<footer class="sticky bottom-0 left-0 right-0 bg-surface border-t border-default p-4 flex gap-3 z-50">
+<button class="flex-1 py-3.5 px-4 rounded-xl border border-default font-label font-bold text-[#1A1523] bg-surface flex justify-center items-center gap-2 hover:bg-surface-elevated transition-colors">
+                공유하기
+            </button>
+<button class="flex-[2] py-3.5 px-4 rounded-xl bg-cta text-white font-label font-bold flex justify-center items-center gap-2 hover:bg-[#A00430] transition-colors shadow-md">
+                점 하나 더 찍어볼까?
+            </button>
+</footer>
+</div>
+</body></html>

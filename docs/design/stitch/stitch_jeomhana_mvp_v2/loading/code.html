@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+
+<html class="light" lang="ko"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>점하나 준비 중</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;700;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        primary: {
+                            DEFAULT: '#6B38D4',
+                            light: '#EDE5FA',
+                            dark: '#4A1FA8'
+                        },
+                        secondary: {
+                            DEFAULT: '#B90538',
+                            light: '#FDEAEF'
+                        },
+                        surface: {
+                            bg: '#FEF7FF',
+                            DEFAULT: '#FFFFFF',
+                            elevated: '#F8F0FC'
+                        },
+                        text: {
+                            primary: '#1A1523',
+                            secondary: '#6B6078',
+                            tertiary: '#9E95A9'
+                        },
+                        border: {
+                            DEFAULT: '#E8E0F0',
+                            active: '#6B38D4'
+                        },
+                        mascot: {
+                            body: '#A78BDB',
+                            hat: '#4A3570',
+                            blush: '#E8A0B4'
+                        }
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.5rem",
+                        "lg": "1rem",
+                        "xl": "1.5rem",
+                        "full": "9999px"
+                    },
+                    fontFamily: {
+                        "headline": ["Public Sans", "sans-serif"],
+                        "display": ["Public Sans", "sans-serif"],
+                        "body": ["Public Sans", "sans-serif"],
+                        "label": ["Public Sans", "sans-serif"]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .loading-dots span {
+            animation: blink 1.4s infinite both;
+        }
+        .loading-dots span:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+        .loading-dots span:nth-child(3) {
+            animation-delay: 0.4s;
+        }
+        @keyframes blink {
+            0% { opacity: .2; }
+            20% { opacity: 1; }
+            100% { opacity: .2; }
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+</head>
+<body class="bg-surface-bg font-body text-text-primary antialiased min-h-screen flex flex-col justify-center relative overflow-hidden max-w-[390px] mx-auto shadow-2xl">
+<!-- Screen Reader Only -->
+<div class="sr-only">운세를 불러오는 중입니다. 잠시만 기다려 주세요.</div>
+<!-- Center Content -->
+<main class="flex-1 flex flex-col items-center justify-center px-6 z-10 pt-16">
+<!-- Mascot Image (JeomHana Sleepy) -->
+<div class="w-48 h-48 mb-8 relative flex justify-center items-center"><img alt="점하나 마스코트가 자고 있는 모습" class="w-48 h-48 object-contain" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCSObVfm-fk5Utsam0ardFvG9UNgaq-UbI8vJyojqSNzrg5zg_V6brRJj46xYX0Qv0WAOxtd3-_vaSLveoJHMs5KIWQ3x6WmH_Z6PvHwIA0SKoeaVaz3es05BC1YIQLHa2bw76taCrVgVhdDu9AQ6JqbW6gqiyv0vHeyfUg7iiHcI-Yzwl8cQgIP2z08_wpdbfwmHUXkLwoPlDFj6qwaMIOkGaEjmCeqeZw0b1DXa8r-VQRQb32WhujNVrMCEKE1vJR928PWPDSYYE"/></div>
+<!-- Text -->
+<h1 class="font-headline text-xl font-bold text-text-primary mb-4 text-center tracking-tight">
+            당신을 위한 점, 하나 준비 중
+        </h1>
+<!-- Loading Dots -->
+<div class="loading-dots flex gap-2 text-primary font-bold text-2xl">
+<span>.</span>
+<span>.</span>
+<span>.</span>
+</div>
+</main>
+<!-- Ad Area (Bottom) -->
+<div class="w-full px-4 pb-8 pt-8 z-10 mt-auto">
+<div class="bg-[#F0F0F0] rounded-xl p-4 flex flex-col justify-center min-h-[80px] relative border border-gray-200">
+<span class="absolute top-2 left-2 bg-white text-text-tertiary text-[10px] font-bold px-2 py-0.5 rounded-sm uppercase tracking-wider shadow-sm">광고</span>
+<div class="flex items-center justify-center h-full mt-2">
+<p class="text-text-secondary text-sm text-center w-full">스폰서 콘텐츠 배너 영역</p>
+</div>
+</div>
+</div>
+</body></html>
