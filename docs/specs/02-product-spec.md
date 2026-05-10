@@ -208,6 +208,16 @@ interface TarotCard {
   meaningUpright: string;      // 정방향 키워드 (예: "새로운 시작, 자유, 모험")
   meaningReversed: string;     // 역방향 키워드 (예: "무모함, 방향 상실")
   description: string;         // 카드 상세 설명 (프롬프트에 포함)
+  astrology?: string;          // 점성술 대응 (예: "천왕성 (Uranus) / 공기 원소")
+  symbols?: string[];          // 카드 내 주요 상징 목록
+  contextHints?: {             // 카테고리별 해석 힌트 (프롬프트 컨텍스트용)
+    daily?: string;            // 일상 카테고리 힌트
+    love?: string;             // 연애 카테고리 힌트
+    career?: string;           // 직장 카테고리 힌트
+    wealth?: string;           // 재물 카테고리 힌트
+    study?: string;            // 학업 카테고리 힌트
+    general?: string;          // 기타 카테고리 힌트
+  };
 }
 ```
 

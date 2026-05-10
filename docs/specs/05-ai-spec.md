@@ -249,22 +249,23 @@ function buildPrompt(request: ReadingRequest, cards: TarotCard[], spread: Spread
   const systemInstruction = SYSTEM_PROMPT; // 고정 텍스트
 
   // 카드 데이터 블록 생성
+  const theme = themes.find(t => t.id === request.themeId);
   const cardBlocks = request.cards.map((drawn) => {
     const card = cards.find(c => c.id === drawn.cardId);
     const position = spread.positions[drawn.positionIndex];
     const meaning = drawn.isReversed ? card.meaningReversed : card.meaningUpright;
     const direction = drawn.isReversed ? "역방향" : "정방향";
+    const contextHint = card.contextHints?.[theme.category] ?? "";
 
     return `### ${position.label}
 - 카드: ${card.nameKo} (${card.name})
 - 방향: ${direction}
 - 키워드: ${meaning}
-- 설명: ${card.description}`;
+- 설명: ${card.description}${contextHint ? `\n- 맥락 힌트: ${contextHint}` : ""}`;
   }).join("\n\n");
 
-  // 테마 정보 조회
-  const theme = themes.find(t => t.id === request.themeId);
-  const categoryMap = { love: "연애", career: "직장", wealth: "재물", study: "학업", daily: "일상", general: "일반" };
+  // 테마 정보 조회 (theme은 카드 블록 생성 시 이미 조회됨)
+  const categoryMap = { daily: "일상", love: "연애", career: "직장", wealth: "재물", study: "학업", general: "일반" };
   const question = theme.description;
   const category = categoryMap[theme.category];
 

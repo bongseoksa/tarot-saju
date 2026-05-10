@@ -12,9 +12,12 @@ export interface TarotCard {
   astrology?: string;
   symbols?: string[];
   contextHints?: {
+    daily?: string;
     love?: string;
     career?: string;
-    finance?: string;
+    wealth?: string;
+    study?: string;
+    general?: string;
   };
 }
 

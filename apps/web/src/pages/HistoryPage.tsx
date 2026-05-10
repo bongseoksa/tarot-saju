@@ -2,6 +2,7 @@ import { Link } from "react-router";
 import { useHistoryStore } from "@/stores/useHistoryStore";
 import { THEMES } from "@tarot-saju/shared";
 import { getCategoryMeta } from "@/data/categories";
+import mascotWait from "@/assets/mascot/mascot-wait.png";
 
 export default function HistoryPage() {
   const results = useHistoryStore((s) => s.results);
@@ -9,9 +10,9 @@ export default function HistoryPage() {
   if (results.length === 0) {
     return (
       <div className="flex flex-col items-center gap-4 px-4 pt-20 text-center">
-        <span className="material-symbols-outlined text-5xl text-on-surface-variant">
-          history
-        </span>
+        <div className="w-32 sm:w-40 md:w-48">
+          <img src={mascotWait} alt="빈 히스토리 마스코트" className="w-full h-auto" />
+        </div>
         <p className="text-on-surface-variant">아직 본 점이 없어요<br />점하나 추가하러 가요.</p>
         <Link
           to="/"
