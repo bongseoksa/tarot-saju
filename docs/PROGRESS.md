@@ -13,10 +13,10 @@
 | [Sprint 0: 공통 기반](./handoff/sprint-0.md) | 3/3 | 완료 |
 | [Sprint 1-FE: 프론트엔드](./handoff/sprint-1-fe.md) | 3/3 | 완료 |
 | [Sprint 1-BE: 백엔드](./handoff/sprint-1-be.md) | 0/5 | 대기 |
-| [Sprint 1-AI: AI](./handoff/sprint-1-ai.md) | 0/5 | 대기 |
+| [Sprint 1-AI: AI](./handoff/sprint-1-ai.md) | 3/5 | 진행중 |
 | [Sprint 2: 통합](./handoff/sprint-2.md) | 0/4 | 대기 |
 | [Sprint 3: 폴리싱+인프라](./handoff/sprint-3.md) | 0/9 | 대기 |
-| **합계** | **6/29** | |
+| **합계** | **9/29** | |
 
 ---
 
@@ -54,10 +54,10 @@
 
 | Task | 이름 | 상태 | 의존 | 담당 |
 |---|---|---|---|---|
-| 1-AI-1 | prompt-builder 구현 | TODO | 0-1 | AI |
+| 1-AI-1 | prompt-builder 구현 | DONE | 0-1 | AI |
 | 1-AI-2 | 시스템 프롬프트 v1 + Ollama 수동 테스트 | TODO | 1-AI-1 | AI |
-| 1-AI-3 | 응답 파싱 + 출력 가드레일 | TODO | 1-AI-1 | AI |
-| 1-AI-4 | AI 테스트 인프라 (runner/guard/evaluator) | TODO | 1-AI-1, 1-AI-3 | AI |
+| 1-AI-3 | 응답 파싱 + 출력 가드레일 | DONE | 1-AI-1 | AI |
+| 1-AI-4 | AI 테스트 인프라 (runner/guard/evaluator) | DONE | 1-AI-1, 1-AI-3 | AI |
 | 1-AI-5 | test:ai:quick 실행 + 프롬프트 튜닝 | TODO | 1-AI-4 | AI |
 
 ### Sprint 2: 통합
@@ -145,6 +145,9 @@ Sprint 0                Sprint 1                    Sprint 2        Sprint 3
 | 디자인 시스템 | `docs/design/stitch/design-system.md` (컬러, 타이포, 컴포넌트) |
 | 이미지 자산 | 타로 카드 22장(`card_00~21.png`) + 뒷면(`card_back.png`), 마스코트 3종, 파비콘 |
 | 핸드오프 디자인 가이드 | `docs/handoff/page-design-guide.md` (페이지별 시안↔코드 매핑) |
+| prompt-builder | `packages/shared/src/prompts/` (system-prompt, v1-three-card, build-prompt, index) + 테스트 11건 |
+| 응답 파싱+가드레일 | `packages/shared/src/prompts/` (parse-response, guard) + 테스트 7건 |
+| AI 테스트 인프라 | `scripts/ai-test/` (runner, guard, scenarios, evaluator, report) + `pnpm test:ai:quick/full` |
 
 ---
 

@@ -6,22 +6,24 @@
 
 ## Task 1-AI-1: prompt-builder 구현
 
-**상태**: TODO
+**상태**: DONE
 **의존**: Task 0-1
 **담당**: AI
 
-**작업 내용:**
-
-1. 디렉토리 생성
+**구현 결과:**
 
 ```
-packages/shared/prompts/
-  ├── system-prompt.ts    — 시스템 지시 (고정 텍스트)
-  ├── v1-one-card.ts      — 원카드 출력 형식 (MVP 미사용, 버전 관리용)
-  ├── v1-three-card.ts    — 쓰리카드 출력 형식
-  ├── build-prompt.ts     — 프롬프트 조합 함수
-  └── index.ts            — export (현재 활성 버전 = v1-three-card)
+packages/shared/src/prompts/
+  ├── system-prompt.ts    — 시스템 지시 (고정 텍스트, 05-ai-spec.md 섹션 4 기반)
+  ├── v1-three-card.ts    — 쓰리카드 출력 형식 (5개 섹션: 과거/현재/미래/종합/한줄요약)
+  ├── build-prompt.ts     — 프롬프트 조합 함수 (ReadingRequest + TarotCard[] + Spread → string)
+  └── index.ts            — export (SYSTEM_PROMPT, THREE_CARD_FORMAT, buildPrompt)
 ```
+
+- `packages/shared/src/index.ts`에 export 추가
+- 테스트 11건 작성 (`apps/web/src/utils/buildPrompt.test.ts`): 전 테마 생성, 카드명/방향/키워드/위치/카테고리/컨텍스트힌트/출력형식 포함 검증
+
+**작업 내용 (원본):**
 
 2. `system-prompt.ts` — 05-ai-spec.md 섹션 4의 시스템 지시 텍스트
 
@@ -88,15 +90,17 @@ packages/shared/prompts/
 
 ## Task 1-AI-3: 응답 파싱 (parseResponse) + 출력 가드레일
 
-**상태**: TODO
+**상태**: DONE
 **의존**: Task 1-AI-1
 **담당**: AI
 
-**현재 상태:**
-- `apps/web/src/utils/parseInterpretation.ts` — FE에 파싱 로직 존재
-- BE(Edge Function)에서도 동일 파싱 필요 → 공유 패키지로 이동
+**구현 결과:**
+- `packages/shared/src/prompts/parse-response.ts` — `parseResponse()`: AI 응답에서 한줄 요약 추출/분리
+- `packages/shared/src/prompts/guard.ts` — `validateResponse()`: 섹션 존재, 길이, 금칙어 검증
+- `packages/shared/src/index.ts`에 export 추가 (`parseResponse`, `validateResponse`, `ParsedResponse`, `GuardResult`)
+- 테스트 7건 (`apps/web/src/utils/parseResponse.test.ts`)
 
-**작업 내용:**
+**작업 내용 (원본):**
 
 1. `packages/shared/prompts/parse-response.ts` 생성
 
@@ -160,11 +164,27 @@ export function validateResponse(raw: string): GuardResult {
 
 ## Task 1-AI-4: AI 테스트 인프라 (runner + guard + evaluator)
 
-**상태**: TODO
+**상태**: DONE
 **의존**: Task 1-AI-1, Task 1-AI-3
 **담당**: AI
 
-**작업 내용:**
+**구현 결과:**
+
+```
+scripts/ai-test/
+  ├── runner.ts        — Ollama 직접 호출 + 결과 수집 (gemma2:2b)
+  ├── guard.ts         — 3중 방어 (URL 화이트리스트 + 연결 검증 + 환경 변수 분리)
+  ├── scenarios.ts     — quick(25회) / full(813회) 시나리오 자동 생성
+  ├── evaluator.ts     — 합격 기준 자동 판정 (validateResponse + 길이/카드명/한국어 비율)
+  └── report.ts        — 결과 리포트 (통과율, 실패 목록, 실패 유형 분석)
+```
+
+- root `package.json`에 `test:ai:quick`, `test:ai:full` 스크립트 추가
+- root `tsconfig.json` 추가 (`@shared/*`, `@tarot-saju/shared` 경로 별칭)
+- `tsx` dev dependency 추가
+- guard 검증 완료: non-local URL 차단, Ollama 미실행 시 거부
+
+**작업 내용 (원본):**
 
 1. 디렉토리 생성
 

@@ -1,4 +1,11 @@
 {
   "name": "tarot-saju",
-  "private": true
+  "private": true,
+  "scripts": {
+    "test:ai:quick": "tsx scripts/ai-test/runner.ts --mode quick",
+    "test:ai:full": "tsx scripts/ai-test/runner.ts --mode full"
+  },
+  "devDependencies": {
+    "tsx": "^4.21.0"
+  }
 }
