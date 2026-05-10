@@ -320,3 +320,19 @@
 - **실제 네트워크 동작 검증**: fetch/XHR을 네트워크 레벨에서 가로채므로 클라이언트 코드 변경 없이 테스트 가능
 - **일관된 모킹 패턴**: `createMock` 패턴으로 모든 API 모킹을 통일
 - **브라우저/Node 양쪽 지원**: 테스트(Node)와 개발 환경(브라우저) 동일 핸들러 재사용
+
+### 테스트 현황
+
+총 62건 테스트, 9개 파일 (2026-05-10 기준).
+
+| 파일 | 테스트 수 | 대상 |
+|---|---|---|
+| `stores/useReadingStore.test.ts` | 5 | 테마 설정, 카드 추가/삭제, 3장 제한, 초기화 |
+| `stores/useHistoryStore.test.ts` | 8 | 추가/조회, 최신순 정렬, 20건 용량 제한, FIFO, 중복 ID |
+| `utils/buildPrompt.test.ts` | 11 | 프롬프트 빌더 |
+| `utils/parseResponse.test.ts` | 7 | 응답 파싱 (해석/요약 분리) |
+| `utils/cardUtils.test.ts` | 3 | 카드 ID 조회, 이미지 URL |
+| `utils/storageUtil.test.ts` | 3 | AES 암복호화, 빈 문자열, 한국어 |
+| `utils/storageAdapter.test.ts` | 6 | Zustand 암호화 스토리지 어댑터 에지 케이스 |
+| `utils/sseClient.test.ts` | 11 | SSE 스트리밍 (청크 분할, 재시도, 에러, 비정상 JSON) |
+| `utils/parseSections.test.ts` | 8 | 마크다운 섹션 파싱 에지 케이스 |
