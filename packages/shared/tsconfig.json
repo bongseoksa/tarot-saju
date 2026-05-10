@@ -7,7 +7,12 @@
     "skipLibCheck": true,
     "declaration": true,
     "noEmit": true,
-    "verbatimModuleSyntax": true
+    "verbatimModuleSyntax": true,
+    "resolveJsonModule": true,
+    "baseUrl": ".",
+    "paths": {
+      "@shared/*": ["src/*"]
+    }
   },
-  "include": ["src"]
+  "include": ["src", "data"]
 }

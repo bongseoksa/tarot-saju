@@ -4,7 +4,6 @@
 import { setupWorker } from 'msw/browser';
 
 import { gatewayHandler } from './gateway';
+import { interpretHandler } from './gateway/interpret';
 
-// console.log('[MSW Browser] Handlers:', gatewayHandler);
-
-export const worker = setupWorker(gatewayHandler);
+export const worker = setupWorker(interpretHandler, gatewayHandler);

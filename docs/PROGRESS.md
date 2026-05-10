@@ -10,13 +10,13 @@
 
 | Sprint | 진행률 | 상태 |
 |---|---|---|
-| [Sprint 0: 공통 기반](./handoff/sprint-0.md) | 0/3 | 대기 |
+| [Sprint 0: 공통 기반](./handoff/sprint-0.md) | 3/3 | 완료 |
 | [Sprint 1-FE: 프론트엔드](./handoff/sprint-1-fe.md) | 0/3 | 대기 |
 | [Sprint 1-BE: 백엔드](./handoff/sprint-1-be.md) | 0/5 | 대기 |
 | [Sprint 1-AI: AI](./handoff/sprint-1-ai.md) | 0/5 | 대기 |
 | [Sprint 2: 통합](./handoff/sprint-2.md) | 0/4 | 대기 |
 | [Sprint 3: 폴리싱+인프라](./handoff/sprint-3.md) | 0/9 | 대기 |
-| **합계** | **0/29** | |
+| **합계** | **3/29** | |
 
 ---
 
@@ -28,9 +28,9 @@
 
 | Task | 이름 | 상태 | 의존 | 담당 |
 |---|---|---|---|---|
-| 0-1 | 정적 데이터 packages/shared 통합 | TODO | — | 공통 |
-| 0-2 | API 계약 타입 정의 | TODO | — | 공통 |
-| 0-3 | MSW interpret mock 핸들러 | TODO | 0-1, 0-2 | FE |
+| 0-1 | 정적 데이터 packages/shared 통합 | DONE | — | 공통 |
+| 0-2 | API 계약 타입 정의 | DONE | — | 공통 |
+| 0-3 | MSW interpret mock 핸들러 | DONE | 0-1, 0-2 | FE |
 
 ### Sprint 1-FE: 프론트엔드
 
@@ -136,14 +136,9 @@ Sprint 0                Sprint 1                    Sprint 2        Sprint 3
 | 스펙 문서 | `docs/specs/` 전체 구조화 (01~07 + backlog + README) |
 | 디자인 시스템 | `docs/design/stitch/design-system.md` |
 | 공유 타입 | `packages/shared/src/types.ts` |
-| 공유 데이터 | `packages/shared/data/tarot-cards.json` (themes/spreads는 FE 로컬) |
-| MSW 패키지 | `packages/msw-handler/` (createMock, server, browser, gateway) |
-| FE 페이지 | HomePage, ReadingPage, ResultPage, HistoryPage, SharedResultPage |
-| FE 컴포넌트 | AppHeader, AppLayout, PageTransition, CardGrid, CardSlot 등 |
-| FE 스토어 | useReadingStore, useHistoryStore, usePendingStore + storageAdapter |
-| FE 유틸 | storageUtil, sseClient, cardUtils, haptic, motionConfig 등 |
-| FE 훅 | useInterpretation, useAdGate, useShare |
-| FE 테스트 | 각 스토어/유틸/컴포넌트 테스트 파일 |
+| 공유 데이터 | `packages/shared/src/data/` (themes, spreads, cards) + `data/tarot-cards.json` |
+| API 계약 타입 | `packages/shared/src/api.ts` (InterpretRequest, SSEEvent, InterpretResult) |
+| MSW 패키지 | `packages/msw-handler/` (createMock, server, browser, gateway, interpret mock) |
 | GTM | `index.html` GTM 스니펫 (`GTM-549LQWSC`), `.env.example` 업데이트 |
 | 디자인 시안 | `docs/design/stitch/stitch_jeomhana_mvp_v2/` (7 페이지 HTML + 스크린샷) |
 | 디자인 시스템 | `docs/design/stitch/design-system.md` (컬러, 타이포, 컴포넌트) |

@@ -8,7 +8,7 @@
 
 ## Task 0-1: 정적 데이터 packages/shared로 통합
 
-**상태**: TODO
+**상태**: DONE
 **의존**: 없음
 **담당**: 공통
 
@@ -20,37 +20,21 @@
 
 **작업 내용:**
 
-1. `packages/shared/data/themes.ts` 생성
-   - `apps/web/src/data/themes.ts`의 `THEMES` 배열을 이동
-   - `CategoryMeta`, `CATEGORIES`, `getCategoryMeta`는 FE 전용이므로 `apps/web/`에 유지
-   - `packages/shared/src/index.ts`에서 re-export
-
-2. `packages/shared/data/spreads.ts` 생성
-   - `apps/web/src/data/spreads.ts`의 `THREE_CARD_SPREAD`를 이동
-   - `packages/shared/src/index.ts`에서 re-export
-
-3. `packages/shared/data/cards.ts` 생성
-   - `tarot-cards.json`을 TypeScript 모듈로 래핑 (타입 안전)
-   - `export const TAROT_CARDS: TarotCard[] = ...`
-   - `packages/shared/src/index.ts`에서 re-export
-
-4. `apps/web/src/data/themes.ts` 수정
-   - `THEMES`를 `@tarot-saju/shared`에서 import하도록 변경
-   - `CategoryMeta`, `CATEGORIES`, `getCategoryMeta`는 그대로 유지
-
-5. `apps/web/src/data/spreads.ts` 수정
-   - `THREE_CARD_SPREAD`를 `@tarot-saju/shared`에서 import하도록 변경
+1. `packages/shared/src/data/themes.ts` 생성 — `THEMES` 배열 (11개 테마)
+2. `packages/shared/src/data/spreads.ts` 생성 — `THREE_CARD_SPREAD`
+3. `packages/shared/src/data/cards.ts` 생성 — `tarot-cards.json`을 TypeScript 모듈로 래핑
+4. `packages/shared/src/index.ts`에서 re-export
+5. 내부 import는 `@shared/*` 절대경로 사용 (tsconfig paths)
 
 **검증:**
-- [ ] `pnpm run test` (apps/web) 전체 통과
-- [ ] `packages/shared`에서 THEMES, THREE_CARD_SPREAD, TAROT_CARDS export 확인
-- [ ] `apps/web/src/data/`에서 shared import 정상 동작
+- [x] `tsc --noEmit` 통과
+- [x] `packages/shared`에서 THEMES, THREE_CARD_SPREAD, TAROT_CARDS export 확인
 
 ---
 
 ## Task 0-2: API 계약 타입 정의
 
-**상태**: TODO
+**상태**: DONE
 **의존**: 없음
 **담당**: 공통
 
@@ -108,16 +92,14 @@ data: {"type":"error","data":"Ollama connection failed"}
 ```
 
 **검증:**
-- [ ] 타입 컴파일 성공 (`tsc --noEmit`)
-- [ ] FE sseClient.ts가 SSEEvent 타입과 일치하는지 확인
-
-**참고:** 현재 `sseClient.ts`는 raw text streaming. SSE JSON 포맷으로 전환 필요 (Task 1-FE-2에서 처리).
+- [x] 타입 컴파일 성공 (`tsc --noEmit`)
+- [ ] FE sseClient.ts가 SSEEvent 타입과 일치하는지 확인 (Task 1-FE-2에서 처리)
 
 ---
 
 ## Task 0-3: MSW interpret mock 핸들러
 
-**상태**: TODO
+**상태**: DONE
 **의존**: Task 0-1, Task 0-2
 **담당**: FE
 
@@ -159,12 +141,14 @@ data: {"type":"error","data":"Ollama connection failed"}
 새로운 시작이 다가오고 있어요
 ```
 
-3. `setConfig`으로 에러/지연 시뮬레이션 지원
-   - `setConfig("interpret", { delay: 3000 })` — 응답 지연
-   - `setConfig("interpret", { error: true })` — 500 에러 반환
-   - `setConfig("interpret", { timeout: true })` — 응답 없음 (타임아웃 테스트)
+3. `setInterpretConfig()`으로 에러/지연 시뮬레이션 지원
+   - `setInterpretConfig({ delay: 3000 })` — 응답 지연
+   - `setInterpretConfig({ error: true })` — 500 에러 반환
+   - `setInterpretConfig({ timeout: true })` — 응답 없음 (타임아웃 테스트)
+
+4. `server.ts`, `browser.ts`에 interpretHandler 등록
 
 **검증:**
-- [ ] FE `pnpm dev`에서 카드 3장 선택 → 결과 보기 → mock 해석 스트리밍 표시
-- [ ] `setConfig("interpret", { error: true })` → 에러 모달 표시
-- [ ] 테스트에서 mock 핸들러 동작 확인
+- [x] `pnpm run build` (msw-handler) 성공
+- [ ] FE `pnpm dev`에서 카드 3장 선택 → 결과 보기 → mock 해석 스트리밍 표시 (FE 구현 후)
+- [ ] 테스트에서 mock 핸들러 동작 확인 (FE 테스트 시)

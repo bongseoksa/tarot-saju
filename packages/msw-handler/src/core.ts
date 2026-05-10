@@ -66,3 +66,5 @@ const setConfig = (api: string, config: Partial<ConfigEntry>) => {
 };
 
 export { initMSW, closeMSW, createMock, setMocks, setConfigAll, setConfig };
+export { setInterpretConfig, resetInterpretConfig } from './gateway/interpret';
+export type { InterpretMockConfig } from './gateway/interpret';

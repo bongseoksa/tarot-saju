@@ -7,4 +7,16 @@ export type {
   DrawnCard,
   ReadingResult,
   PendingSession,
-} from "./types";
+} from "@shared/types";
+
+export { THEMES } from "@shared/data/themes";
+export { THREE_CARD_SPREAD } from "@shared/data/spreads";
+export { TAROT_CARDS } from "@shared/data/cards";
+
+export type {
+  InterpretRequest,
+  SSEEventType,
+  SSEEvent,
+  InterpretResult,
+  InterpretError,
+} from "@shared/api";
