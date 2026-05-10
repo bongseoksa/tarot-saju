@@ -1,9 +1,10 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { useParams, Link } from "react-router";
 import { useReadingStore } from "@/stores/useReadingStore";
 import { useHistoryStore } from "@/stores/useHistoryStore";
 import { getCardById, getCardImageUrl } from "@/utils/cardUtils";
 import { requestInterpretation } from "@/utils/sseClient";
+import { saveSharedReading } from "@/lib/shareService";
 import type { InterpretResult } from "@tarot-saju/shared";
 import { THEMES } from "@tarot-saju/shared";
 import LoadingScreen from "@/components/LoadingScreen";
@@ -37,6 +38,8 @@ export default function ResultPage() {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [openSection, setOpenSection] = useState(0);
+  const [sharing, setSharing] = useState(false);
+  const [shareToast, setShareToast] = useState("");
 
   const theme = THEMES.find((t) => t.id === (storedResult?.request.themeId ?? themeId));
   const isFromStore = !!storedResult;
@@ -105,6 +108,41 @@ export default function ResultPage() {
       </div>
     );
   }
+
+  const handleShare = useCallback(async () => {
+    if (sharing || isStreaming || !interpretation || !theme) return;
+    setSharing(true);
+    try {
+      const shareCards = isFromStore ? storedResult!.request.cards : cards;
+      const shareThemeId = isFromStore ? storedResult!.request.themeId : themeId!;
+      const shareId = await saveSharedReading({
+        themeId: shareThemeId,
+        themeTitle: theme.title,
+        cards: shareCards,
+        interpretation,
+        summary,
+      });
+      const shareUrl = `${window.location.origin}/shared/${shareId}`;
+      if (navigator.share) {
+        await navigator.share({ title: `점하나 - ${theme.title}`, text: summary, url: shareUrl });
+      } else {
+        await navigator.clipboard.writeText(shareUrl);
+        setShareToast("링크가 복사되었어요");
+        setTimeout(() => setShareToast(""), 2000);
+      }
+    } catch {
+      setShareToast("공유에 실패했어요");
+      setTimeout(() => setShareToast(""), 2000);
+    } finally {
+      setSharing(false);
+    }
+  }, [sharing, isStreaming, interpretation, summary, theme, isFromStore, storedResult, cards, themeId]);
+
+  useEffect(() => {
+    const handler = () => handleShare();
+    window.addEventListener("share-reading", handler);
+    return () => window.removeEventListener("share-reading", handler);
+  }, [handleShare]);
 
   const displayCards = isFromStore ? storedResult!.request.cards : cards;
   const sections = parseSections(interpretation);
@@ -211,10 +249,21 @@ export default function ResultPage() {
         <p className="text-sm text-on-surface-variant">Ad Space</p>
       </div>
 
+      {/* Share Toast */}
+      {shareToast && (
+        <div className="fixed left-1/2 top-16 z-50 -translate-x-1/2 rounded-full bg-on-surface px-5 py-2.5 text-sm text-surface shadow-lg">
+          {shareToast}
+        </div>
+      )}
+
       {/* Sticky Footer */}
       <div className="fixed inset-x-0 bottom-0 mx-auto flex max-w-screen-sm gap-3 bg-surface/80 px-5 py-3 backdrop-blur-sm">
-        <button className="rounded-2xl border border-outline-variant px-6 py-3.5 text-sm font-semibold text-on-surface">
-          공유하기
+        <button
+          onClick={handleShare}
+          disabled={sharing || isStreaming}
+          className="rounded-2xl border border-outline-variant px-6 py-3.5 text-sm font-semibold text-on-surface disabled:opacity-50"
+        >
+          {sharing ? "공유 중..." : "공유하기"}
         </button>
         <Link
           to="/"

@@ -54,6 +54,169 @@ MVP 출시 후 가장 먼저 착수할 항목. 유저 확보/리텐션에 직접
 
 ---
 
+## 디테일 기획: P0 #3 — 카카오톡 공유
+
+### 목표
+
+결과 페이지에서 카카오톡 공유를 통해 바이럴 유입 극대화. 공유받은 사람이 앱/서비스로 자연스럽게 진입하도록 유도.
+
+### 공유 방식
+
+#### 카카오톡 공유 (필수, MVP P0)
+
+**SDK:** Kakao JavaScript SDK (`kakao.min.js`) — 카카오톡 공유 API (Feed 템플릿)
+
+**공유 트리거:**
+- 결과 페이지(`/result/:readingId`) 하단 "카카오톡으로 공유" 버튼
+- 결과 페이지 헤더 공유 아이콘 탭 → 바텀시트에서 카카오톡 선택
+
+**카카오 Feed 템플릿 구성:**
+
+| 필드 | 값 |
+|---|---|
+| 이미지 | 선택한 카드 3장 합성 이미지 또는 대표 카드 1장 이미지 (1200x630) |
+| 타이틀 | `{테마명} 결과가 도착했어요` (예: "나의 연애운 결과가 도착했어요") |
+| 설명 | AI 해석 한줄 요약 (최대 50자) |
+| 버튼1 | "결과 보기" → `/shared/:shareId` |
+| 버튼2 | "나도 점 보기" → `/` (홈) |
+
+**공유 플로우:**
+```
+결과 페이지 → "카카오톡 공유" 탭
+  → shareId 미생성 시: Supabase DB에 결과 저장 → shareId 생성
+  → shareId 이미 있으면: 기존 shareId 재사용
+  → Kakao.Share.sendDefault() 호출 (Feed 템플릿)
+  → 카카오톡 앱으로 이동 → 친구/채팅방 선택 → 전송
+```
+
+**공유받은 사용자 랜딩:**
+- URL: `/shared/:shareId`
+- OG 태그 동적 생성 (기존 스펙 유지)
+- 결과 카드 + 해석 내용 열람 가능
+- 하단 CTA: "나도 점 하나 찍어볼까?" → 홈 이동
+
+### 기술 요구사항
+
+| 항목 | 내용 |
+|---|---|
+| 카카오 앱 등록 | Kakao Developers에서 앱 생성 → JavaScript 키 발급 |
+| 도메인 등록 | 카카오 앱 설정 > 플랫폼 > Web에 서비스 도메인 등록 |
+| SDK 초기화 | `Kakao.init(JAVASCRIPT_KEY)` — 앱 로드 시 1회 |
+| 환경 변수 | `VITE_KAKAO_JAVASCRIPT_KEY` 추가 |
+| 공유 이미지 | 카드 이미지를 public URL로 접근 가능해야 함 (Supabase Storage 또는 CDN) |
+| 모바일 웹 | 카카오톡 앱 미설치 시 → 카카오톡 설치 유도 또는 웹 공유 폴백 |
+| Capacitor 앱 | Custom URL Scheme 설정 필요 (카카오 SDK 앱 연동) |
+
+### 폴백 전략
+
+- 카카오톡 미설치 (데스크톱 웹): 링크 복사 폴백 제공
+- SDK 로드 실패: 링크 복사로 폴백 (조용히 처리)
+- Web Share API 지원 기기: 카카오톡 버튼 외에 "더보기" → `navigator.share()` 제공
+
+### 측정 지표 (GA4)
+
+| 이벤트 | 파라미터 |
+|---|---|
+| `share_click` | `method: kakao` / `method: link_copy` |
+| `share_success` | `method: kakao`, `share_id` |
+| `shared_page_view` | `share_id`, `referrer` |
+| `shared_page_cta_click` | `share_id` (홈 이동 클릭) |
+
+### 인스타그램 스토리 공유 (P1 — 카카오 이후)
+
+카카오톡 구현 완료 후 착수. 인스타 스토리 특성상 "이미지 중심 공유"로 바이럴 확산.
+
+**공유 트리거:**
+- 결과 페이지 하단 "인스타 스토리에 공유" 버튼
+- 헤더 공유 아이콘 → 바텀시트에서 인스타그램 선택
+
+**공유 이미지 생성:**
+
+| 항목 | 내용 |
+|---|---|
+| 비율 | 9:16 (1080x1920) — 스토리 풀스크린 |
+| 구성 | 배경(서비스 브랜드 컬러/그라데이션) + 카드 3장 이미지 + 테마명 + 한줄 요약 + 서비스 로고/URL |
+| 생성 방식 | 클라이언트 Canvas API (`html2canvas` 또는 `@napi-rs/canvas`) → PNG Blob |
+| 대체 방식 | 서버사이드 이미지 생성 (Edge Function + Satori/Sharp) — Canvas 성능 이슈 시 |
+
+**공유 플로우:**
+```
+결과 페이지 → "인스타 스토리 공유" 탭
+  → 스토리용 이미지 생성 (Canvas → PNG Blob)
+  → 분기:
+    [모바일 앱 (Capacitor)]
+      → Capacitor Share 플러그인으로 이미지 파일 공유
+      → Instagram 앱이 share target으로 표시됨
+      → 사용자가 Instagram 선택 → 스토리 편집 화면 진입
+    [모바일 웹 (iOS/Android)]
+      → Web Share API (navigator.share) with files
+      → Instagram 앱이 share target으로 표시됨
+    [데스크톱 웹]
+      → 이미지 다운로드 + 안내 토스트: "이미지를 저장했어요. 인스타그램 스토리에 업로드해보세요!"
+```
+
+**스토리 이미지 디자인 가이드:**
+- 상단 1/3: 서비스 로고 + 테마명
+- 중앙: 카드 3장 (과거/현재/미래 라벨 포함)
+- 하단 1/3: AI 한줄 요약 + 서비스 URL 텍스트 (유입 유도)
+- 전체: 브랜드 배경 컬러, 신비로운 톤
+
+**스티커 링크 (Instagram Story Link Sticker):**
+- Instagram Graph API 미사용 (인증 복잡도 높음)
+- 대신 이미지 하단에 서비스 URL 텍스트 삽입 → 사용자가 수동으로 링크 스티커 추가 유도
+- 안내 문구: "링크 스티커를 추가하면 친구들도 점을 볼 수 있어요"
+
+**기술 요구사항:**
+
+| 항목 | 내용 |
+|---|---|
+| 이미지 생성 | `html2canvas` 또는 Canvas 2D API로 클라이언트 렌더링 |
+| Web Share API | `navigator.share({ files: [pngFile] })` — iOS Safari 15+, Android Chrome 지원 |
+| Capacitor | `@capacitor/share` 플러그인 — 네이티브 공유 시트 |
+| 폴백 | Web Share API 미지원 시 → 이미지 다운로드 (`<a download>`) |
+| 카드 이미지 | CORS 허용 필요 (Canvas taint 방지) — 같은 도메인 또는 CORS 헤더 설정 |
+
+**폴백 전략:**
+- Web Share API 미지원 (구형 브라우저): 이미지 다운로드 + 안내 메시지
+- Instagram 미설치: Web Share API가 다른 앱 목록 표시 (OS 기본 동작)
+- Canvas 렌더링 실패: 카드 이미지 1장만 공유 (단순화 폴백)
+
+**측정 지표 (GA4):**
+
+| 이벤트 | 파라미터 |
+|---|---|
+| `share_click` | `method: instagram_story` |
+| `share_image_generated` | `method: instagram_story`, `share_id` |
+| `share_download` | `method: instagram_story` (데스크톱 폴백) |
+
+**선행 조건:**
+- 카카오톡 공유 구현 완료
+- 카드 이미지 CORS 설정
+- 스토리 이미지 디자인 확정 (디자인 시스템 반영)
+
+**구현 순서:**
+1. 스토리 이미지 템플릿 디자인 확정
+2. Canvas 기반 이미지 생성 유틸리티 구현
+3. 모바일: Web Share API / Capacitor Share 연동
+4. 데스크톱: 이미지 다운로드 폴백
+5. GA4 이벤트 트래킹
+
+### 선행 조건
+
+- 카카오 개발자 앱 등록 및 JavaScript 키 발급
+- 공유 결과 저장 API (기존 스펙의 `/shared/:shareId` 구현)
+- 카드 이미지 public URL 접근 가능
+
+### 우선순위 내 순서
+
+1. 공유 결과 DB 저장 + `/shared/:shareId` 페이지 구현
+2. 카카오 SDK 연동 + Feed 템플릿 공유
+3. 링크 복사 폴백
+4. GA4 이벤트 트래킹
+5. (P1) 인스타그램 스토리 공유
+
+---
+
 ## 스펙아웃 검토
 
 우선순위 밖. 도입 여부 자체가 미정인 항목.

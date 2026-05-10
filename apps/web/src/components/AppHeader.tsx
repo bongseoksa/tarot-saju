@@ -48,6 +48,7 @@ export default function AppHeader() {
 
       {isResult && (
         <button
+          onClick={() => window.dispatchEvent(new CustomEvent("share-reading"))}
           className="flex size-10 items-center justify-center"
           aria-label="공유하기"
         >

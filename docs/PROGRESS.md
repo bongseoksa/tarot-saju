@@ -14,9 +14,9 @@
 | [Sprint 1-FE: 프론트엔드](./handoff/sprint-1-fe.md) | 3/3 | 완료 |
 | [Sprint 1-BE: 백엔드](./handoff/sprint-1-be.md) | 5/5 | 완료 |
 | [Sprint 1-AI: AI](./handoff/sprint-1-ai.md) | 5/5 | 완료 |
-| [Sprint 2: 통합](./handoff/sprint-2.md) | 2/4 | 진행중 |
+| [Sprint 2: 통합](./handoff/sprint-2.md) | 3/4 | 진행중 |
 | [Sprint 3: 폴리싱+인프라](./handoff/sprint-3.md) | 0/9 | 진행중 |
-| **합계** | **18/29** | |
+| **합계** | **19/29** | |
 
 ---
 
@@ -66,7 +66,7 @@
 |---|---|---|---|---|
 | 2-1 | BE에 prompt-builder 연결 | DONE | 1-BE-3, 1-AI-1 | BE+AI |
 | 2-2 | FE에 실제 API 연결 | DONE | 2-1, 1-FE-2 | FE+BE |
-| 2-3 | 공유 기능 E2E | TODO | 2-2, 1-BE-4, 1-BE-5 | FE+BE |
+| 2-3 | 공유 기능 E2E | DONE | 2-2, 1-BE-4, 1-BE-5 | FE+BE |
 | 2-4 | 에지 케이스 통합 테스트 | TODO | 2-2 | 전체 |
 
 ### Sprint 3: 폴리싱 + 인프라
@@ -160,6 +160,7 @@ Sprint 0                Sprint 1                    Sprint 2        Sprint 3
 | Cloudflare Tunnel 설정 | cloudflared 설치, Named Tunnel `jeomhana` 시스템 데몬 등록, Quick Tunnel 방식으로 Ollama 외부 노출 확인 (`OLLAMA_ORIGINS=* OLLAMA_HOST=0.0.0.0:11434`). 도메인 미보유로 Public Hostname 미설정, Quick Tunnel 사용 중 |
 | 모델 업그레이드 | gemma2:2b → gemma4:e4b (8B). 존댓말/심리적 공감 규칙 준수율 크게 향상. FE SSE 타임아웃 30초→90초로 조정 |
 | 프롬프트 튜닝 v2 | 시스템 프롬프트에 심리적 공감 규칙 반영 (반말 금지 목록, 물음표 사용 금지, 양면 진술, 성찰 유도). packages/shared + local-proxy + Edge Function _shared/mod.ts 3곳 동기화 |
+| 공유 기능 E2E | ResultPage 공유 버튼 + handleShare (saveSharedReading → clipboard/Web Share API), AppHeader share-reading CustomEvent 연동, SharedResultPage 전체 구현 (카드/요약/해석 렌더링 + CTA). Supabase DB insert/select E2E 검증 완료 |
 
 ---
 
