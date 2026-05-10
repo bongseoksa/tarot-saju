@@ -12,11 +12,11 @@
 |---|---|---|
 | [Sprint 0: 공통 기반](./handoff/sprint-0.md) | 3/3 | 완료 |
 | [Sprint 1-FE: 프론트엔드](./handoff/sprint-1-fe.md) | 3/3 | 완료 |
-| [Sprint 1-BE: 백엔드](./handoff/sprint-1-be.md) | 0/5 | 대기 |
+| [Sprint 1-BE: 백엔드](./handoff/sprint-1-be.md) | 5/5 | 완료 |
 | [Sprint 1-AI: AI](./handoff/sprint-1-ai.md) | 5/5 | 완료 |
 | [Sprint 2: 통합](./handoff/sprint-2.md) | 0/4 | 대기 |
 | [Sprint 3: 폴리싱+인프라](./handoff/sprint-3.md) | 0/9 | 대기 |
-| **합계** | **11/29** | |
+| **합계** | **16/29** | |
 
 ---
 
@@ -44,11 +44,11 @@
 
 | Task | 이름 | 상태 | 의존 | 담당 |
 |---|---|---|---|---|
-| 1-BE-1 | Supabase 프로젝트 초기화 | TODO | — | BE |
-| 1-BE-2 | shared_readings DB 마이그레이션 | TODO | 1-BE-1 | BE |
-| 1-BE-3 | interpret Edge Function 스켈레톤 | TODO | 0-1, 0-2, 1-BE-1 | BE |
-| 1-BE-4 | 공유 결과 저장/조회 (SDK + RLS) | TODO | 1-BE-2 | BE |
-| 1-BE-5 | 동적 OG 태그 Edge Function | TODO | 1-BE-4 | BE |
+| 1-BE-1 | Supabase 프로젝트 초기화 | DONE | — | BE |
+| 1-BE-2 | shared_readings DB 마이그레이션 | DONE | 1-BE-1 | BE |
+| 1-BE-3 | interpret Edge Function 구현 | DONE | 0-1, 0-2, 1-BE-1 | BE |
+| 1-BE-4 | 공유 결과 저장/조회 (SDK + RLS) | DONE | 1-BE-2 | BE |
+| 1-BE-5 | 동적 OG 태그 Edge Function | DONE | 1-BE-4 | BE |
 
 ### Sprint 1-AI: AI
 
@@ -150,6 +150,11 @@ Sprint 0                Sprint 1                    Sprint 2        Sprint 3
 | AI 테스트 인프라 | `scripts/ai-test/` (runner, guard, scenarios, evaluator, report) + `pnpm test:ai:quick/full` |
 | 프롬프트 튜닝 | 시스템 프롬프트 v1 + 출력 형식 강화 (섹션 헤더 준수, 길이 제한). 카드명 필수 언급 제약 제거 (UI에서 별도 표시) |
 | AI 테스트 100% | test:ai:quick 25/25 통과 |
+| Supabase 초기화 | CLI 2.98.2 + `supabase init` + 리모트 프로젝트 연결 (`aecasypyugpftkpvngvs`) |
+| DB 마이그레이션 | `supabase/migrations/20260510000000_create_shared_readings.sql` → `supabase db push` 완료 |
+| interpret Edge Function | `supabase/functions/interpret/index.ts` + `_shared/mod.ts` (packages/shared 파생) — 리모트 배포 완료 |
+| 공유 서비스 | `apps/web/src/lib/supabase.ts` + `shareService.ts` (save/get shared readings) |
+| OG 태그 Edge Function | `supabase/functions/og-image/index.ts` — 동적 OG meta + JS redirect |
 
 ---
 
