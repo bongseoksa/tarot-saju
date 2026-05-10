@@ -6,8 +6,8 @@ interface SSECallbacks {
   onError: (error: Error) => void;
 }
 
-const INITIAL_TIMEOUT = 30_000;
-const RETRY_TIMEOUT = 15_000;
+const INITIAL_TIMEOUT = 90_000;
+const RETRY_TIMEOUT = 60_000;
 
 export async function requestInterpretation(
   request: InterpretRequest,

@@ -158,6 +158,8 @@ Sprint 0                Sprint 1                    Sprint 2        Sprint 3
 | prompt-builder 연결 | `_shared/mod.ts`에 packages/shared 로직 완전 구현 (파생 복사+싱크 방식). interpret Edge Function이 실제 buildPrompt 사용 |
 | FE 실제 API 연결 | sseClient.ts Authorization 헤더 추가, done 이벤트 InterpretResult JSON 파싱, 로컬 프록시(`scripts/local-proxy.mjs`) E2E 검증 완료 |
 | Cloudflare Tunnel 설정 | cloudflared 설치, Named Tunnel `jeomhana` 시스템 데몬 등록, Quick Tunnel 방식으로 Ollama 외부 노출 확인 (`OLLAMA_ORIGINS=* OLLAMA_HOST=0.0.0.0:11434`). 도메인 미보유로 Public Hostname 미설정, Quick Tunnel 사용 중 |
+| 모델 업그레이드 | gemma2:2b → gemma4:e4b (8B). 존댓말/심리적 공감 규칙 준수율 크게 향상. FE SSE 타임아웃 30초→90초로 조정 |
+| 프롬프트 튜닝 v2 | 시스템 프롬프트에 심리적 공감 규칙 반영 (반말 금지 목록, 물음표 사용 금지, 양면 진술, 성찰 유도). packages/shared + local-proxy + Edge Function _shared/mod.ts 3곳 동기화 |
 
 ---
 
