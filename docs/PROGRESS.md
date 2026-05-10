@@ -13,10 +13,10 @@
 | [Sprint 0: 공통 기반](./handoff/sprint-0.md) | 3/3 | 완료 |
 | [Sprint 1-FE: 프론트엔드](./handoff/sprint-1-fe.md) | 3/3 | 완료 |
 | [Sprint 1-BE: 백엔드](./handoff/sprint-1-be.md) | 0/5 | 대기 |
-| [Sprint 1-AI: AI](./handoff/sprint-1-ai.md) | 3/5 | 진행중 |
+| [Sprint 1-AI: AI](./handoff/sprint-1-ai.md) | 5/5 | 완료 |
 | [Sprint 2: 통합](./handoff/sprint-2.md) | 0/4 | 대기 |
 | [Sprint 3: 폴리싱+인프라](./handoff/sprint-3.md) | 0/9 | 대기 |
-| **합계** | **9/29** | |
+| **합계** | **11/29** | |
 
 ---
 
@@ -55,10 +55,10 @@
 | Task | 이름 | 상태 | 의존 | 담당 |
 |---|---|---|---|---|
 | 1-AI-1 | prompt-builder 구현 | DONE | 0-1 | AI |
-| 1-AI-2 | 시스템 프롬프트 v1 + Ollama 수동 테스트 | TODO | 1-AI-1 | AI |
+| 1-AI-2 | 시스템 프롬프트 v1 + Ollama 수동 테스트 | DONE | 1-AI-1 | AI |
 | 1-AI-3 | 응답 파싱 + 출력 가드레일 | DONE | 1-AI-1 | AI |
 | 1-AI-4 | AI 테스트 인프라 (runner/guard/evaluator) | DONE | 1-AI-1, 1-AI-3 | AI |
-| 1-AI-5 | test:ai:quick 실행 + 프롬프트 튜닝 | TODO | 1-AI-4 | AI |
+| 1-AI-5 | test:ai:quick 실행 + 프롬프트 튜닝 | DONE | 1-AI-4 | AI |
 
 ### Sprint 2: 통합
 
@@ -148,6 +148,8 @@ Sprint 0                Sprint 1                    Sprint 2        Sprint 3
 | prompt-builder | `packages/shared/src/prompts/` (system-prompt, v1-three-card, build-prompt, index) + 테스트 11건 |
 | 응답 파싱+가드레일 | `packages/shared/src/prompts/` (parse-response, guard) + 테스트 7건 |
 | AI 테스트 인프라 | `scripts/ai-test/` (runner, guard, scenarios, evaluator, report) + `pnpm test:ai:quick/full` |
+| 프롬프트 튜닝 | 시스템 프롬프트 v1 + 출력 형식 강화 (카드명 필수, 섹션 헤더 준수, 길이 제한) |
+| AI 테스트 100% | test:ai:quick 25/25 통과, evaluator에 22장 카드 이름 별칭(aliases) 추가 |
 
 ---
 
