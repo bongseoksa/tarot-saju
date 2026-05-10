@@ -11,12 +11,12 @@
 | Sprint | 진행률 | 상태 |
 |---|---|---|
 | [Sprint 0: 공통 기반](./handoff/sprint-0.md) | 3/3 | 완료 |
-| [Sprint 1-FE: 프론트엔드](./handoff/sprint-1-fe.md) | 2/3 | 진행중 |
+| [Sprint 1-FE: 프론트엔드](./handoff/sprint-1-fe.md) | 3/3 | 완료 |
 | [Sprint 1-BE: 백엔드](./handoff/sprint-1-be.md) | 0/5 | 대기 |
 | [Sprint 1-AI: AI](./handoff/sprint-1-ai.md) | 0/5 | 대기 |
 | [Sprint 2: 통합](./handoff/sprint-2.md) | 0/4 | 대기 |
 | [Sprint 3: 폴리싱+인프라](./handoff/sprint-3.md) | 0/9 | 대기 |
-| **합계** | **5/29** | |
+| **합계** | **6/29** | |
 
 ---
 
@@ -38,7 +38,7 @@
 |---|---|---|---|---|
 | 1-FE-1 | FE 재구축 + 테스트 통과 | DONE | — | FE |
 | 1-FE-2 | SSE 클라이언트 API 계약 정합성 | DONE | 0-2 | FE |
-| 1-FE-3 | 디자인 시안 적용 + 반응형 레이아웃 검증 | TODO | 1-FE-1 | FE |
+| 1-FE-3 | 디자인 시안 적용 + 반응형 레이아웃 검증 | DONE | 1-FE-1 | FE |
 
 ### Sprint 1-BE: 백엔드
 

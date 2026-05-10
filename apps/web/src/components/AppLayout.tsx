@@ -3,7 +3,7 @@ import AppHeader from "@/components/AppHeader";
 
 export default function AppLayout() {
   return (
-    <div className="mx-auto min-h-dvh max-w-screen-sm bg-surface">
+    <div className="relative mx-auto min-h-dvh max-w-screen-sm bg-surface">
       <AppHeader />
       <main>
         <Outlet />
