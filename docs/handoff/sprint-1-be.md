@@ -214,6 +214,8 @@ function buildPrompt(themeId: string, cards: DrawnCard[]): string {
 ```
 
 3. CORS 설정 확인
+   - MVP: `Access-Control-Allow-Origin: *` (개발용)
+   - **프로덕션 배포 시(Task 3-4)**: `*` → `https://jeomhana.vercel.app` 으로 제한 필수
 
 4. 로컬 테스트
    ```bash

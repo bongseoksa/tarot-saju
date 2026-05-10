@@ -15,8 +15,8 @@
 | [Sprint 1-BE: 백엔드](./handoff/sprint-1-be.md) | 0/5 | 대기 |
 | [Sprint 1-AI: AI](./handoff/sprint-1-ai.md) | 0/5 | 대기 |
 | [Sprint 2: 통합](./handoff/sprint-2.md) | 0/4 | 대기 |
-| [Sprint 3: 폴리싱+인프라](./handoff/sprint-3.md) | 0/7 | 대기 |
-| **합계** | **0/27** | |
+| [Sprint 3: 폴리싱+인프라](./handoff/sprint-3.md) | 0/9 | 대기 |
+| **합계** | **0/29** | |
 
 ---
 
@@ -80,6 +80,8 @@
 | 3-5 | GA4 이벤트 트래킹 | TODO | 3-4 | Infra |
 | 3-6 | Sentry 에러 트래킹 | TODO | 2-2 | Infra+FE+BE |
 | 3-7 | test:ai:full 실행 | TODO | 2-1, 1-AI-4 | AI |
+| 3-8 | SEO 프리렌더 + 메타데이터 | TODO | 3-4 | FE+Infra |
+| 3-9 | CI/CD + Git Hooks | TODO | 1-FE-1 | Infra |
 
 ---
 
@@ -94,7 +96,7 @@
 | **C** | 1-FE-2, 1-FE-3, 1-AI-2, 1-AI-3, 1-BE-4 | Group B |
 | **D** | 1-AI-4, 1-BE-5 | Group C |
 | **E** | 2-1→2-2→2-3→2-4 (순차), 1-AI-5 | Group D |
-| **F** | 3-1, 3-2, 3-3, 3-6 (병렬), 3-4→3-5 (순차), 3-7 | Group E |
+| **F** | 3-1, 3-2, 3-3, 3-6 (병렬), 3-4→3-5→3-8 (순차), 3-7, 3-9 | Group E (3-9는 Group A) |
 
 ---
 
@@ -117,8 +119,12 @@ Sprint 0                Sprint 1                    Sprint 2        Sprint 3
 
 1-FE-1 ──→ 1-FE-3
 
+1-FE-1 ──→ 3-9
+
 1-BE-1 ──→ 1-BE-2 ──→ 1-BE-4 ──→ 1-BE-5
      └──→ 1-BE-3                  └──→ 2-3
+
+3-4 ──→ 3-5 ──→ 3-8
 ```
 
 ---
@@ -139,6 +145,10 @@ Sprint 0                Sprint 1                    Sprint 2        Sprint 3
 | FE 훅 | useInterpretation, useAdGate, useShare |
 | FE 테스트 | 각 스토어/유틸/컴포넌트 테스트 파일 |
 | GTM | `index.html` GTM 스니펫 (`GTM-549LQWSC`), `.env.example` 업데이트 |
+| 디자인 시안 | `docs/design/stitch/stitch_jeomhana_mvp_v2/` (7 페이지 HTML + 스크린샷) |
+| 디자인 시스템 | `docs/design/stitch/design-system.md` (컬러, 타이포, 컴포넌트) |
+| 이미지 자산 | 타로 카드 22장 + 뒷면, 마스코트 3종, 파비콘 |
+| 핸드오프 디자인 가이드 | `docs/handoff/page-design-guide.md` (페이지별 시안↔코드 매핑) |
 
 ---
 

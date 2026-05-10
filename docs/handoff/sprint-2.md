@@ -25,6 +25,21 @@
      - Supabase Edge Function의 npm import 제약이 있을 경우, `packages/shared/prompts/`를 `supabase/functions/_shared/`에 심볼릭 링크 또는 Deno import map으로 해결
    - **복사 금지** — BE(Edge Function)와 AI(테스트)가 동일 소스를 참조해야 한다
 
+   **Deno import map 예시** (`supabase/functions/deno.json`):
+   ```json
+   {
+     "imports": {
+       "@tarot-saju/shared/": "../../packages/shared/src/"
+     }
+   }
+   ```
+   ```typescript
+   // supabase/functions/interpret/index.ts
+   import { buildPrompt } from "@tarot-saju/shared/prompts/build-prompt.ts";
+   import { SYSTEM_PROMPT } from "@tarot-saju/shared/prompts/system-prompt.ts";
+   ```
+   > **주의:** Supabase Edge Function 배포 시 심볼릭 링크가 번들에 포함되지 않을 수 있음. 로컬 `supabase functions serve`에서 먼저 검증 후, 배포 실패 시 import map 방식으로 전환.
+
 2. stub buildPrompt → 실제 buildPrompt로 교체
 
 3. 카드/테마/스프레드 정적 데이터도 `packages/shared/data/`에서 import (단일 소스 원칙)

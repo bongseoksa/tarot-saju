@@ -2,7 +2,7 @@
 
 > 대부분 구현 완료. 남은 작업은 검증 + 미비 사항 보완.
 >
-> [← 진행 관리](../PROGRESS.md)
+> [← 진행 관리](../PROGRESS.md) | [페이지별 디자인 가이드](./page-design-guide.md)
 
 ---
 
@@ -66,33 +66,90 @@ for (const line of lines) {
 }
 ```
 
+3. 타임아웃 로직 구현 (02-product-spec.md 에지 케이스 준수)
+   - 초기 요청 30초 타임아웃 (`AbortController` + `setTimeout`)
+   - 타임아웃 시 자동 1회 재시도 (타임아웃 15초)
+   - 재시도도 실패 시 `onError` 호출
+
+```typescript
+// AbortController + setTimeout 패턴
+const controller = new AbortController();
+const timeoutId = setTimeout(() => controller.abort(), timeoutMs);
+try {
+  const res = await fetch(url, { signal: controller.signal, ... });
+  clearTimeout(timeoutId);
+  // ... SSE 스트리밍 처리
+} catch (err) {
+  clearTimeout(timeoutId);
+  if (err instanceof DOMException && err.name === 'AbortError') {
+    // 타임아웃 처리: 재시도 또는 onError
+  }
+}
+```
+
+4. `ResultPage.tsx` 수정
+   - Line 129: `isStreaming={false}` 하드코딩 → 실제 스트리밍 상태에 따라 동적 제어
+
 **검증:**
 - [ ] sseClient.test.ts 통과
 - [ ] MSW mock 핸들러(Task 0-3)와 연동 테스트 통과
+- [ ] 30초 타임아웃 → 자동 재시도(15초) → 재실패 시 에러 콜백 호출
+- [ ] ResultPage에서 스트리밍 중 isStreaming=true, 완료 후 false
 
 ---
 
-## Task 1-FE-3: 반응형 레이아웃 검증 (chrome-devtools)
+## Task 1-FE-3: 디자인 시안 적용 + 반응형 레이아웃 검증
 
 **상태**: TODO
 **의존**: Task 1-FE-1
 **담당**: FE
 
+**디자인 참조:** [페이지별 디자인 가이드](./page-design-guide.md)
+**시안 디렉토리:** `docs/design/stitch/stitch_jeomhana_mvp_v2/` (HTML + 스크린샷)
+
 **작업 내용:**
 
-1. `pnpm dev` 실행
-2. chrome-devtools MCP로 각 페이지 모바일(390x844) 스크린샷 캡처
-3. 체크리스트 확인:
+1. 디자인 시안과 현재 코드 비교 → 주요 차이 보완
+   - 각 페이지의 HTML 시안(`code.html`)을 브라우저에서 열어 기준 확인
+   - [page-design-guide.md](./page-design-guide.md)의 "현재 FE 코드와 시안 차이점" 테이블 참조
 
-| 페이지 | 확인 항목 |
+2. 페이지별 이미지 자산 적용
+
+| 자산 | 적용 위치 |
 |---|---|
-| 홈 | 퀵 CTA 표시, 카테고리 칩 필터, 테마 카드 목록, 푸터 |
-| 카드 뽑기 | 상단 슬롯 3개, 22장 카드 그리드 (4열), 하단 결과 보기 버튼 |
-| 결과 | 카드 3장 요약, 해석 텍스트 영역, 공유/저장 버튼, 하단 CTA |
-| 히스토리 | 결과 목록 또는 빈 상태 표시 |
+| `mascot/mascot-idle.png` | 홈 히어로, 결과 마스코트 버블 |
+| `mascot/mascot-sleep.png` | 로딩 화면 |
+| `mascot/mascot-wait.png` | 히스토리 빈 상태 |
+| `cards/card_back.png` | 카드 뽑기 그리드 |
+| `cards/card_00~21.png` | 결과 카드 요약, 공유 페이지 |
+| `favicon.png` | `index.html` 파비콘 |
 
-4. 문제 발견 시 수정
+3. 페이지별 레이아웃 핵심 보완 (디테일은 작업 중 조정)
+
+| 페이지 | 핵심 보완 항목 |
+|---|---|
+| 홈 | Quick Actions 2열 카드 추가, 테마 카드 좌측 컬러바, 마스코트 히어로 |
+| 카드 뽑기 | 마스코트 말풍선 안내, 카드 뒷면 이미지 적용, 선택 상태 오버레이 |
+| 로딩 | mascot-sleep 이미지, 로딩 닷 애니메이션, 하단 광고 영역 |
+| 결과 | 한줄 요약 영역, 아코디언 섹션 구조, 스트리밍 커서 |
+| 히스토리 | 월간 요약 통계, 카테고리별 pastel 태그 색상, 빈 상태 마스코트 |
+| 공유 랜딩 | 타임라인 도트 마커, card-frame 색상 카드 이미지 |
+
+4. `pnpm dev` 실행 + chrome-devtools MCP로 모바일(390x844) 스크린샷 캡처
+
+5. 시안 스크린샷과 비교 확인:
+
+| 페이지 | 시안 참조 | 확인 항목 |
+|---|---|---|
+| 홈 | `home/screen.png` | 마스코트 히어로, Quick Actions, 카테고리 칩, 테마 카드, 푸터 |
+| 카드 뽑기 | `play/screen.png` | 마스코트 말풍선, 슬롯 3개, 카드 그리드 4열, 하단 CTA |
+| 로딩 | `loading/screen.png` | 마스코트 수면, 로딩 텍스트, 광고 영역 |
+| 결과 | `result/screen.png` | 카드 요약 스트립, 한줄 요약, 아코디언 섹션, 하단 CTA |
+| 히스토리 | `history/screen.png` | 월간 통계, 리딩 목록, 빈 상태 |
+| 공유 | `share/screen.png` | 타임라인 결과, CTA |
 
 **검증:**
 - [ ] 모바일 뷰포트(390x844)에서 모든 페이지 정상 표시
+- [ ] 시안 스크린샷과 레이아웃 구조 일치
+- [ ] 마스코트/카드 이미지 정상 로드
 - [ ] 콘솔 에러/경고 없음

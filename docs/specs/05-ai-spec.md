@@ -283,13 +283,13 @@ function buildPrompt(request: ReadingRequest, cards: TarotCard[], spread: Spread
 const TAROT_THEMES: TarotTheme[] = [
   { id: "daily-today",      category: "daily",   title: "오늘의 타로",       description: "오늘 하루는 어떨까?",          tags: ["#오늘", "#하루운세"],    spreadType: "three-card", positions: ["과거", "현재", "미래"] },
   { id: "daily-week",       category: "daily",   title: "이번 주 타로",      description: "이번 주는 어떤 흐름일까?",     tags: ["#이번주", "#주간운세"],  spreadType: "three-card", positions: ["과거", "현재", "미래"] },
-  { id: "love-luck",        category: "love",    title: "나의 연애운",       description: "나의 연애운은 어떤가요?",      tags: ["#연애", "#애정운"],      spreadType: "three-card", positions: ["과거", "현재", "미래"] },
-  { id: "love-feeling",     category: "love",    title: "그 사람의 마음",    description: "그 사람의 마음은 어떤가요?",   tags: ["#짝사랑", "#속마음"],    spreadType: "three-card", positions: ["과거", "현재", "미래"] },
+  { id: "love-feeling",     category: "love",    title: "나의 연애운",       description: "나의 연애운은 어떤가요?",      tags: ["#연애", "#애정운"],      spreadType: "three-card", positions: ["과거", "현재", "미래"] },
+  { id: "love-heart",       category: "love",    title: "그 사람의 마음",    description: "그 사람의 마음은 어떤가요?",   tags: ["#짝사랑", "#속마음"],    spreadType: "three-card", positions: ["과거", "현재", "미래"] },
   { id: "love-new",         category: "love",    title: "새로운 인연",       description: "새로운 인연이 올까요?",        tags: ["#인연", "#만남"],        spreadType: "three-card", positions: ["과거", "현재", "미래"] },
   { id: "career-outlook",   category: "career",  title: "직장에서의 전망",   description: "지금 직장에서의 전망은?",      tags: ["#직장", "#커리어"],      spreadType: "three-card", positions: ["과거", "현재", "미래"] },
   { id: "career-change",    category: "career",  title: "이직 타이밍",       description: "이직을 해도 괜찮을까요?",      tags: ["#이직", "#전환"],        spreadType: "three-card", positions: ["과거", "현재", "미래"] },
-  { id: "wealth-luck",      category: "wealth",  title: "나의 재물운",       description: "나의 재물운은 어떤가요?",      tags: ["#재물", "#금전운"],      spreadType: "three-card", positions: ["과거", "현재", "미래"] },
-  { id: "study-result",     category: "study",   title: "시험/학업 결과",    description: "시험/학업 결과가 어떨까요?",   tags: ["#시험", "#합격"],        spreadType: "three-card", positions: ["과거", "현재", "미래"] },
+  { id: "wealth-fortune",   category: "wealth",  title: "나의 재물운",       description: "나의 재물운은 어떤가요?",      tags: ["#재물", "#금전운"],      spreadType: "three-card", positions: ["과거", "현재", "미래"] },
+  { id: "study-exam",       category: "study",   title: "시험/학업 결과",    description: "시험/학업 결과가 어떨까요?",   tags: ["#시험", "#합격"],        spreadType: "three-card", positions: ["과거", "현재", "미래"] },
   { id: "general-message",  category: "general", title: "지금 필요한 메시지", description: "지금 가장 필요한 메시지는?",  tags: ["#조언", "#메시지"],      spreadType: "three-card", positions: ["과거", "현재", "미래"] },
   { id: "general-choice",   category: "general", title: "이 선택이 맞을까",  description: "이 선택이 맞을까요?",         tags: ["#선택", "#결정"],        spreadType: "three-card", positions: ["과거", "현재", "미래"] },
 ];

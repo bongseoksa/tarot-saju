@@ -61,9 +61,11 @@
 **의존**: Task 2-2
 **담당**: FE
 
+**디자인 참조:** [페이지별 디자인 가이드](./page-design-guide.md) | 데스크톱 시안: `home-pc/screen.png`
+
 **작업 내용:**
 
-chrome-devtools MCP로 4개 브레이크포인트 검증:
+chrome-devtools MCP로 5개 브레이크포인트 검증:
 
 | 뷰포트 | 디바이스 | 브레이크포인트 | 확인 |
 |---|---|---|---|
@@ -179,7 +181,21 @@ chrome-devtools MCP로 4개 브레이크포인트 검증:
 | `share_result` | 공유 클릭 | method (clipboard) |
 | `return_user` | 재방문 감지 | sessionCount |
 
-4. Vercel 환경 변수에 `VITE_GTM_ID` 추가
+4. FE 코드 삽입 위치 (현재 `dataLayer.push` 코드 0건 — 전부 신규 추가):
+
+| 이벤트 | 삽입 파일 | 위치/훅 |
+|---|---|---|
+| `select_theme` | `HomePage.tsx` | 테마 카드 onClick 핸들러 |
+| `cards_selected` | `ReadingPage.tsx` | 3장 선택 완료 시점 (useReadingStore 상태 변경 후) |
+| `view_result` | `ResultPage.tsx` | 컴포넌트 마운트 useEffect |
+| `ai_stream_start/complete/error` | `useInterpretation.ts` | SSE 콜백 내부 |
+| `share_result` | `useShare.ts` | 공유 함수 실행 시 |
+| `ad_*` | `useAdGate.ts` | 광고 콜백 내부 |
+| `return_user` | `App.tsx` 또는 루트 레이아웃 | 앱 초기화 시 sessionCount 기반 |
+
+   > **유틸 함수 권장:** `src/utils/analytics.ts`에 `trackEvent(name, params)` 래퍼 생성하여 일관된 `window.dataLayer.push()` 호출
+
+5. Vercel 환경 변수에 `VITE_GTM_ID` 추가
 
 **검증:**
 - [ ] GTM 미리보기 모드에서 이벤트 발화 확인
@@ -279,3 +295,96 @@ cd apps/web && pnpm add @sentry/react @sentry/vite-plugin
 - [ ] 전체 통과율 95% 이상
 - [ ] 즉시 탈락 케이스 0건
 - [ ] 3회 반복 일관성 검증 통과
+
+---
+
+## Task 3-8: SEO 프리렌더 + 메타데이터
+
+**상태**: TODO
+**의존**: Task 3-4
+**담당**: FE + Infra
+
+**배경:** SPA는 크롤러가 빈 HTML만 수집. 검색 노출을 위해 프리렌더 필요.
+
+**작업 내용:**
+
+1. `vite-ssg` 또는 `vite-plugin-prerender` 설치
+   ```bash
+   cd apps/web && pnpm add -D vite-ssg
+   ```
+
+2. 프리렌더 대상 경로:
+   - `/` (홈)
+   - `/reading` (카드 뽑기)
+   - `/history` (히스토리)
+
+3. 정적 파일 생성:
+   - `public/sitemap.xml` — 프리렌더 경로 목록
+   - `public/robots.txt` — `Sitemap:` 경로 포함
+
+4. 각 페이지별 `<title>`, `<meta name="description">` 설정
+   - react-helmet-async 또는 직접 `document.title` 설정
+
+**검증:**
+- [ ] `pnpm build` → `dist/` 에 각 경로별 `index.html` 생성
+- [ ] `curl` 로 빌드된 HTML에서 OG/meta 태그 확인
+- [ ] Google Search Console 등록 + sitemap 제출
+
+---
+
+## Task 3-9: CI/CD + Git Hooks
+
+**상태**: TODO
+**의존**: Task 1-FE-1
+**담당**: Infra
+
+**작업 내용:**
+
+### 1. GitHub Actions CI
+
+`.github/workflows/ci.yml`:
+```yaml
+name: CI
+on: [push, pull_request]
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm -F web lint
+      - run: pnpm -F web test -- --run
+      - run: pnpm -F web build
+```
+
+### 2. Git Hooks (husky + lint-staged)
+
+```bash
+pnpm add -D husky lint-staged
+npx husky init
+```
+
+`.husky/pre-commit`:
+```bash
+pnpm lint-staged
+```
+
+`package.json` (root):
+```json
+{
+  "lint-staged": {
+    "apps/web/src/**/*.{ts,tsx}": ["eslint --fix", "prettier --write"],
+    "packages/shared/src/**/*.ts": ["eslint --fix", "prettier --write"]
+  }
+}
+```
+
+**검증:**
+- [ ] `git commit` 시 lint-staged 실행 확인
+- [ ] GitHub push 시 CI 파이프라인 통과
+- [ ] lint/test/build 실패 시 CI red 확인
