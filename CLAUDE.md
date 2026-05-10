@@ -69,11 +69,11 @@ Strong success criteria let you loop independently. Weak criteria ("make it work
 
 반드시 `RULES.md`를 읽고 따를 것. 핵심 요약:
 
-1. **문서 먼저, 코드는 나중에** — `docs/frontend/` 세부 계획서 확인/작성 후 구현
+1. **문서 먼저, 코드는 나중에** — `docs/specs/` 스펙 문서 확인 후 구현
 2. **작업 후 문서 최신화** — 코드 변경 시 관련 `docs/` 문서 반드시 갱신
 3. **TDD** — 테스트 케이스 먼저 작성 → 실패 확인 → 구현 → 통과 확인
 4. **MCP 도구 활용** — 코드 검증 시 context7 + chrome-devtools MCP 사용
-5. **스펙 문서 준수** — `docs/specs/02-taro-mvp.md` 기반 구현, 임의 기능 추가 금지
+5. **스펙 문서 준수** — `docs/specs/02-product-spec.md` 기반 구현, 임의 기능 추가 금지
 6. **pnpm 사용** — npm/yarn 사용 금지, `apps/web/`에서 lint/test/build 실행
 
 ---
@@ -104,16 +104,23 @@ Strong success criteria let you loop independently. Weak criteria ("make it work
 
 ## 스펙 문서
 
-- `docs/specs/specs.md` — 마스터 서비스 스펙 (기술스택, 수익모델, 배포 타겟)
-- `docs/specs/tech-decisions.md` — 기술스택 선정 근거
-- `docs/specs/01-benchmark.md` — 경쟁 서비스 벤치마킹 분석 (점신/헬로우봇/보라/coto)
-- `docs/specs/02-taro-mvp.md` — 타로 MVP 기능 설계 (사용자 흐름, 데이터 타입, API 엔드포인트)
-- `docs/specs/03-ai-design.md` — AI 해석 품질 설계 (심리 설계 + 프롬프트 설계)
-- `docs/specs/04-harness-engineering.md` — 하네스 엔지니어링 적용 방안
-- `docs/specs/05-experiment-plan.md` — (예정) 결제/구독 검증 실험 (Phase 2)
-- `docs/specs/06-worldview.md` — "점" 세계관 (캐릭터 가문, 점하나 캐릭터, 확장 시나리오)
-- `docs/specs/deep-research-report.md` — 레이아웃 리서치 + 반응형 개선 제안 (KRDS 그리드, 접근성, KPI)
-- `docs/specs/backlog.md` — 백로그 (지연 항목)
+> 전체 인덱스: `docs/specs/README.md`
+
+### 스펙 (`docs/specs/`)
+- `01-benchmark.md` — 경쟁 서비스 벤치마킹 분석 (점신/헬로우봇/보라/coto)
+- `02-product-spec.md` — 제품 스펙: 사용자 흐름, IA, 화면 정의, 에지 케이스, 데이터 구조
+- `03-frontend-spec.md` — 프론트엔드: 라우팅, 상태관리, 반응형 레이아웃, 접근성
+- `04-backend-spec.md` — 백엔드: API 설계, DB 스키마 (Supabase는 옵션)
+- `05-ai-spec.md` — AI: 심리 설계, 프롬프트, 모델, 테스트, 하네스
+- `06-infra-spec.md` — 인프라: 배포, AI 서빙, 트래킹, 환경 변수
+- `07-worldview.md` — "점" 세계관 (캐릭터 가문, 확장 시나리오)
+- `backlog.md` — 백로그 (P0/P1/P2)
+
+### 디자인 (`docs/design/`)
+- `stitch/design-system.md` — 디자인 시스템 (컬러, 타이포, 컴포넌트, 마스코트)
+- `stitch/card-prompts.md` — 타로 카드 이미지 생성 프롬프트
+- `stitch/figma-prompts.md` — Figma Make 화면별 프롬프트
+- `layout-research.md` — 레이아웃 리서치 + 반응형 개선 제안
 
 ## Git 컨벤션
 
