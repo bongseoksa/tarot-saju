@@ -1,58 +1,96 @@
-import type { ReadingRequest } from "@tarot-saju/shared";
+import type { SSEEvent, InterpretRequest } from "@tarot-saju/shared";
 
-const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL ?? "";
-const SUPABASE_ANON_KEY = import.meta.env.VITE_SUPABASE_ANON_KEY ?? "";
+interface SSECallbacks {
+  onChunk: (text: string) => void;
+  onComplete: (data: string) => void;
+  onError: (error: Error) => void;
+}
 
-export async function streamInterpretation(
-  request: ReadingRequest,
-  onChunk: (text: string) => void,
-  onComplete: (fullText: string) => void,
-  onError: (error: Error) => void,
-  signal?: AbortSignal,
+const INITIAL_TIMEOUT = 30_000;
+const RETRY_TIMEOUT = 15_000;
+
+export async function requestInterpretation(
+  request: InterpretRequest,
+  callbacks: SSECallbacks,
+  apiUrl: string,
 ): Promise<void> {
   try {
-    const response = await fetch(
-      `${SUPABASE_URL}/functions/v1/interpret`,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${SUPABASE_ANON_KEY}`,
-        },
-        body: JSON.stringify({
-          themeId: request.themeId,
-          cards: request.cards,
-        }),
-        signal,
-      },
-    );
+    await fetchSSE(apiUrl, request, callbacks, INITIAL_TIMEOUT);
+  } catch (err) {
+    if (err instanceof DOMException && err.name === "AbortError") {
+      try {
+        await fetchSSE(apiUrl, request, callbacks, RETRY_TIMEOUT);
+      } catch (retryErr) {
+        callbacks.onError(
+          retryErr instanceof Error ? retryErr : new Error("Retry failed"),
+        );
+      }
+    } else {
+      callbacks.onError(err instanceof Error ? err : new Error("Unknown error"));
+    }
+  }
+}
 
-    if (!response.ok) {
-      onError(new Error(`HTTP ${response.status}`));
-      return;
+async function fetchSSE(
+  url: string,
+  body: InterpretRequest,
+  callbacks: SSECallbacks,
+  timeoutMs: number,
+): Promise<void> {
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), timeoutMs);
+
+  try {
+    const res = await fetch(url, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(body),
+      signal: controller.signal,
+    });
+
+    clearTimeout(timeoutId);
+
+    if (!res.ok) {
+      throw new Error(`HTTP ${res.status}`);
     }
 
-    const reader = response.body?.getReader();
-    if (!reader) {
-      onError(new Error("No response body"));
-      return;
-    }
+    const reader = res.body?.getReader();
+    if (!reader) throw new Error("No response body");
 
     const decoder = new TextDecoder();
-    let fullText = "";
+    let buffer = "";
 
     while (true) {
       const { done, value } = await reader.read();
       if (done) break;
 
-      const chunk = decoder.decode(value, { stream: true });
-      fullText += chunk;
-      onChunk(chunk);
-    }
+      buffer += decoder.decode(value, { stream: true });
+      const lines = buffer.split("\n");
+      buffer = lines.pop() ?? "";
 
-    onComplete(fullText);
+      for (const line of lines) {
+        if (!line.startsWith("data: ")) continue;
+        const json = line.slice(6);
+        try {
+          const event: SSEEvent = JSON.parse(json);
+          switch (event.type) {
+            case "chunk":
+              callbacks.onChunk(event.data);
+              break;
+            case "done":
+              callbacks.onComplete(event.data);
+              return;
+            case "error":
+              callbacks.onError(new Error(event.data));
+              return;
+          }
+        } catch {
+          // skip malformed JSON lines
+        }
+      }
+    }
   } catch (err) {
-    if (signal?.aborted) return;
-    onError(err instanceof Error ? err : new Error(String(err)));
+    clearTimeout(timeoutId);
+    throw err;
   }
 }

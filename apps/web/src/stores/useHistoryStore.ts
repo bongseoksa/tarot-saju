@@ -1,36 +1,31 @@
 import { create } from "zustand";
-import { persist, createJSONStorage } from "zustand/middleware";
+import { persist } from "zustand/middleware";
 import type { ReadingResult } from "@tarot-saju/shared";
-import { createStorageAdapter } from "./createStorageAdapter";
+import { createEncryptedStorage } from "@/utils/storageAdapter";
 
-const MAX_RESULTS = 20;
+const MAX_HISTORY = 20;
 
 interface HistoryState {
   results: ReadingResult[];
-
   addResult: (result: ReadingResult) => void;
   getResult: (id: string) => ReadingResult | undefined;
-  clearAll: () => void;
+  clear: () => void;
 }
 
 export const useHistoryStore = create<HistoryState>()(
   persist(
     (set, get) => ({
       results: [],
-
       addResult: (result) =>
-        set((state) => {
-          const updated = [result, ...state.results];
-          return { results: updated.slice(0, MAX_RESULTS) };
-        }),
-
+        set((state) => ({
+          results: [result, ...state.results].slice(0, MAX_HISTORY),
+        })),
       getResult: (id) => get().results.find((r) => r.id === id),
-
-      clearAll: () => set({ results: [] }),
+      clear: () => set({ results: [] }),
     }),
     {
-      name: "history",
-      storage: createJSONStorage(() => createStorageAdapter()),
+      name: "jeomhana-history",
+      storage: createEncryptedStorage(),
     },
   ),
 );

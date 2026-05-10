@@ -11,12 +11,12 @@
 | Sprint | 진행률 | 상태 |
 |---|---|---|
 | [Sprint 0: 공통 기반](./handoff/sprint-0.md) | 3/3 | 완료 |
-| [Sprint 1-FE: 프론트엔드](./handoff/sprint-1-fe.md) | 0/3 | 대기 |
+| [Sprint 1-FE: 프론트엔드](./handoff/sprint-1-fe.md) | 2/3 | 진행중 |
 | [Sprint 1-BE: 백엔드](./handoff/sprint-1-be.md) | 0/5 | 대기 |
 | [Sprint 1-AI: AI](./handoff/sprint-1-ai.md) | 0/5 | 대기 |
 | [Sprint 2: 통합](./handoff/sprint-2.md) | 0/4 | 대기 |
 | [Sprint 3: 폴리싱+인프라](./handoff/sprint-3.md) | 0/9 | 대기 |
-| **합계** | **3/29** | |
+| **합계** | **5/29** | |
 
 ---
 
@@ -36,9 +36,9 @@
 
 | Task | 이름 | 상태 | 의존 | 담당 |
 |---|---|---|---|---|
-| 1-FE-1 | 기존 FE 코드 점검 + 테스트 통과 | TODO | — | FE |
-| 1-FE-2 | SSE 클라이언트 API 계약 정합성 | TODO | 0-2 | FE |
-| 1-FE-3 | 반응형 레이아웃 검증 | TODO | 1-FE-1 | FE |
+| 1-FE-1 | FE 재구축 + 테스트 통과 | DONE | — | FE |
+| 1-FE-2 | SSE 클라이언트 API 계약 정합성 | DONE | 0-2 | FE |
+| 1-FE-3 | 디자인 시안 적용 + 반응형 레이아웃 검증 | TODO | 1-FE-1 | FE |
 
 ### Sprint 1-BE: 백엔드
 
@@ -139,10 +139,11 @@ Sprint 0                Sprint 1                    Sprint 2        Sprint 3
 | 공유 데이터 | `packages/shared/src/data/` (themes, spreads, cards) + `data/tarot-cards.json` |
 | API 계약 타입 | `packages/shared/src/api.ts` (InterpretRequest, SSEEvent, InterpretResult) |
 | MSW 패키지 | `packages/msw-handler/` (createMock, server, browser, gateway, interpret mock) |
+| FE 재구축 | `apps/web/` 처음부터 재구축 (라우팅, 페이지, 스토어, SSE 클라이언트, 테스트) |
 | GTM | `index.html` GTM 스니펫 (`GTM-549LQWSC`), `.env.example` 업데이트 |
 | 디자인 시안 | `docs/design/stitch/stitch_jeomhana_mvp_v2/` (7 페이지 HTML + 스크린샷) |
 | 디자인 시스템 | `docs/design/stitch/design-system.md` (컬러, 타이포, 컴포넌트) |
-| 이미지 자산 | 타로 카드 22장 + 뒷면, 마스코트 3종, 파비콘 |
+| 이미지 자산 | 타로 카드 22장(`card_00~21.png`) + 뒷면(`card_back.png`), 마스코트 3종, 파비콘 |
 | 핸드오프 디자인 가이드 | `docs/handoff/page-design-guide.md` (페이지별 시안↔코드 매핑) |
 
 ---

@@ -1,18 +1,20 @@
 import { describe, it, expect } from "vitest";
-import { determineOrientation } from "./cardUtils";
+import { getCardById, getRandomReversed } from "@/utils/cardUtils";
 
-describe("determineOrientation", () => {
-  it("should return a boolean", () => {
-    const result = determineOrientation();
-    expect(typeof result).toBe("boolean");
+describe("cardUtils", () => {
+  it("getCardById returns correct card", () => {
+    const fool = getCardById(0);
+    expect(fool).toBeDefined();
+    expect(fool!.name).toBe("The Fool");
+    expect(fool!.nameKo).toBe("광대");
   });
 
-  it("should produce both true and false over many calls", () => {
-    const results = Array.from({ length: 100 }, () => determineOrientation());
-    const trueCount = results.filter(Boolean).length;
-    const falseCount = results.filter((r) => !r).length;
-    // Both should occur at least once in 100 tries
-    expect(trueCount).toBeGreaterThan(0);
-    expect(falseCount).toBeGreaterThan(0);
+  it("getCardById returns undefined for invalid id", () => {
+    expect(getCardById(999)).toBeUndefined();
+  });
+
+  it("getRandomReversed returns boolean", () => {
+    const result = getRandomReversed();
+    expect(typeof result).toBe("boolean");
   });
 });

@@ -1,101 +1,62 @@
 @import "tailwindcss";
 
 @theme {
-  /* Colors — Material Design 3 */
-  --color-primary: #6b38d4;
+  /* Primary */
+  --color-primary: #6B38D4;
   --color-on-primary: #ffffff;
-  --color-primary-container: #8455ef;
-  --color-on-primary-container: #fffbff;
-  --color-primary-fixed: #e9ddff;
-  --color-primary-fixed-dim: #d0bcff;
-  --color-on-primary-fixed: #23005c;
-  --color-on-primary-fixed-variant: #5516be;
-  --color-inverse-primary: #d0bcff;
+  --color-primary-container: #EDE5FA;
+  --color-on-primary-container: #4A1FA8;
 
-  --color-secondary: #b90538;
+  /* Secondary (CTA) */
+  --color-secondary: #B90538;
   --color-on-secondary: #ffffff;
-  --color-secondary-container: #dc2c4f;
-  --color-on-secondary-container: #fffbff;
-  --color-secondary-fixed: #ffdadb;
-  --color-secondary-fixed-dim: #ffb2b7;
-  --color-on-secondary-fixed: #40000d;
-  --color-on-secondary-fixed-variant: #92002a;
+  --color-secondary-container: #FDEAEF;
 
-  --color-tertiary: #855000;
-  --color-on-tertiary: #ffffff;
-  --color-tertiary-container: #a76500;
-  --color-on-tertiary-container: #fffbff;
-  --color-tertiary-fixed: #ffdcbb;
-  --color-tertiary-fixed-dim: #ffb869;
-  --color-on-tertiary-fixed: #2c1700;
-  --color-on-tertiary-fixed-variant: #673d00;
-
-  --color-error: #ba1a1a;
-  --color-on-error: #ffffff;
-  --color-error-container: #ffdad6;
-  --color-on-error-container: #93000a;
-
-  --color-surface: #fef7ff;
+  /* Surfaces */
+  --color-background: #FEF7FF;
+  --color-on-background: #1A1523;
+  --color-surface: #FEF7FF;
   --color-surface-dim: #ded7e4;
-  --color-surface-bright: #fef7ff;
-  --color-surface-container-lowest: #ffffff;
+  --color-surface-container-lowest: #FFFFFF;
   --color-surface-container-low: #f8f1fe;
-  --color-surface-container: #f3ebf8;
+  --color-surface-container: #F8F0FC;
   --color-surface-container-high: #ede5f3;
-  --color-surface-container-highest: #e7e0ed;
-  --color-surface-variant: #e7e0ed;
-  --color-surface-tint: #6d3bd7;
+  --color-on-surface: #1A1523;
+  --color-on-surface-variant: #6B6078;
 
-  --color-on-surface: #1d1a23;
-  --color-on-surface-variant: #494454;
-  --color-on-background: #1d1a23;
-  --color-background: #fef7ff;
-
+  /* Outline */
   --color-outline: #7b7486;
-  --color-outline-variant: #cbc3d7;
+  --color-outline-variant: #E8E0F0;
 
-  --color-inverse-surface: #322f39;
-  --color-inverse-on-surface: #f5eefb;
+  /* Error */
+  --color-error: #C53030;
 
-  /* Typography */
-  --font-family-pretendard: "Pretendard", sans-serif;
+  /* Semantic */
+  --color-success: #2D8A4E;
+  --color-warning: #D4920B;
 
-  --font-size-display-title: 20px;
-  --font-size-section-header: 18px;
-  --font-size-body-main: 16px;
-  --font-size-sub-text: 14px;
-  --font-size-caption: 12px;
+  /* Category tag colors */
+  --color-tag-daily-bg: #F3E8FF;
+  --color-tag-daily-text: #7C3AED;
+  --color-tag-love-bg: #FCE7F3;
+  --color-tag-love-text: #9D174D;
+  --color-tag-career-bg: #E0F2FE;
+  --color-tag-career-text: #075985;
+  --color-tag-wealth-bg: #FEF3C7;
+  --color-tag-wealth-text: #92400E;
+  --color-tag-study-bg: #D1FAE5;
+  --color-tag-study-text: #065F46;
+  --color-tag-general-bg: #F3F4F6;
+  --color-tag-general-text: #374151;
 
-  /* Spacing */
-  --spacing-base: 4px;
-  --spacing-xs: 8px;
-  --spacing-sm: 12px;
-  --spacing-md: 16px;
-  --spacing-lg: 24px;
-  --spacing-xl: 32px;
-  --spacing-container-padding: 20px;
-  --spacing-gutter: 12px;
-
-  /* Border Radius */
-  --radius-sm: 0.25rem;
-  --radius-DEFAULT: 0.5rem;
-  --radius-md: 0.75rem;
-  --radius-lg: 1rem;
-  --radius-xl: 1.5rem;
-  --radius-full: 9999px;
+  /* Font */
+  --font-sans: "Pretendard", system-ui, -apple-system, sans-serif;
 }
 
-@keyframes bounce-custom {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-24px); }
-}
-
-@keyframes shadow-pulse {
-  0%, 100% { transform: scaleX(1); opacity: 0.3; }
-  50% { transform: scaleX(0.7); opacity: 0.15; }
-}
-
-body {
-  font-family: "Pretendard", sans-serif;
-  -webkit-tap-highlight-color: transparent;
+html {
+  font-family: var(--font-sans);
+  background-color: var(--color-background);
+  color: var(--color-on-background);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }

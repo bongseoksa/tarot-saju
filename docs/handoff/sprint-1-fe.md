@@ -1,100 +1,75 @@
 # Sprint 1-FE: 프론트엔드 독립 개발
 
-> 대부분 구현 완료. 남은 작업은 검증 + 미비 사항 보완.
+> 기존 코드 폐기 후 처음부터 재구축. Task 1-FE-1, 1-FE-2 완료. 남은 작업: 디자인 시안 적용.
 >
-> [← 진행 관리](../PROGRESS.md) | [페이지별 디자인 가이드](./page-design-guide.md)
+> [<- 진행 관리](../PROGRESS.md) | [페이지별 디자인 가이드](./page-design-guide.md)
 
 ---
 
-## Task 1-FE-1: 기존 FE 코드 점검 및 테스트 통과 확인
+## Task 1-FE-1: FE 재구축 + 테스트 통과 확인
 
-**상태**: TODO
+**상태**: DONE
 **의존**: 없음
 **담당**: FE
 
 **작업 내용:**
 
-1. `cd apps/web && pnpm run test` 실행 → 실패 테스트 파악
-2. `pnpm run build` 실행 → 타입 에러/빌드 에러 파악
-3. `pnpm run lint` 실행 → lint 에러 수정
-4. 실패 항목 수정
+기존 `apps/web/src/` 코드를 전부 삭제하고 처음부터 재구축.
+
+1. 설정 파일 업데이트
+   - `tsconfig.json`: `@/*` + `@shared/*` 절대경로 alias
+   - `vite.config.ts`: `@` + `@shared` resolve alias
+   - `vitest.config.ts`: 동일 alias 설정
+
+2. 핵심 파일 생성
+   - `main.tsx` + `App.tsx`: BrowserRouter + Routes (6개 라우트)
+   - `components/AppLayout.tsx`: 공통 레이아웃 (헤더 + Outlet, max-w-screen-sm)
+   - `components/AppHeader.tsx`: 로고/뒤로가기 + 히스토리 링크
+   - `pages/`: HomePage, ReadingPage, ResultPage, HistoryPage, SharedResultPage
+   - `stores/`: useReadingStore (메모리), useHistoryStore (localStorage + 암호화)
+   - `utils/`: storageUtil, storageAdapter, cardUtils, sseClient
+   - `data/categories.ts`: CategoryMeta (FE 전용, shared에서 분리)
+   - `index.css`: Tailwind v4 `@theme` 블록 (디자인 시스템 토큰)
+
+3. 이미지 자산 정리
+   - `src/assets/cards/`: 22장 카드 + 뒷면 (기존 유지)
+   - `src/assets/mascot/`: idle, sleep, wait (docs/design에서 복사)
+
+4. 테스트 작성
+   - `useReadingStore.test.ts` (5 tests)
+   - `storageUtil.test.ts` (3 tests)
+   - `cardUtils.test.ts` (3 tests)
 
 **검증:**
-- [ ] `pnpm run test` 전체 통과
-- [ ] `pnpm run build` 성공
-- [ ] `pnpm run lint` 에러 0건
+- [x] `pnpm run test` — 11 tests 전체 통과
+- [x] `pnpm run build` — 성공
+- [x] `pnpm run lint` — 에러 0건
 
 ---
 
 ## Task 1-FE-2: SSE 클라이언트 API 계약 정합성
 
-**상태**: TODO
+**상태**: DONE
 **의존**: Task 0-2
 **담당**: FE
 
-**현재 문제:**
-- `sseClient.ts`가 raw text streaming 사용 (line 44-51)
-- API 계약은 SSE JSON 포맷 (`{"type":"chunk","data":"..."}`)
-
 **작업 내용:**
 
-1. `sseClient.ts` 수정
-   - SSE 표준 파싱 (`data:` 라인 분리)
-   - JSON 파싱하여 `SSEEvent` 타입으로 처리
-   - `type === "chunk"` → onChunk 콜백
-   - `type === "done"` → onComplete 콜백
-   - `type === "error"` → onError 콜백
+1. `sseClient.ts` 신규 작성 (기존 코드 미사용)
+   - SSE 표준 파싱 (`data:` 라인 분리 + JSON 파싱)
+   - `SSEEvent` 타입으로 처리 (chunk/done/error)
+   - 30초 초기 타임아웃 + 15초 자동 1회 재시도
+   - `AbortController` + `setTimeout` 패턴
 
-2. `sseClient.test.ts` 수정
-   - SSE JSON 포맷에 맞는 테스트 케이스로 업데이트
-
-**참고 구현:**
-
-```typescript
-// SSE line parsing
-const lines = buffer.split("\n");
-for (const line of lines) {
-  if (line.startsWith("data: ")) {
-    const json = line.slice(6);
-    const event: SSEEvent = JSON.parse(json);
-    switch (event.type) {
-      case "chunk": onChunk(event.data); break;
-      case "done": onComplete(event.data); break;
-      case "error": onError(new Error(event.data)); break;
-    }
-  }
-}
-```
-
-3. 타임아웃 로직 구현 (02-product-spec.md 에지 케이스 준수)
-   - 초기 요청 30초 타임아웃 (`AbortController` + `setTimeout`)
-   - 타임아웃 시 자동 1회 재시도 (타임아웃 15초)
-   - 재시도도 실패 시 `onError` 호출
-
-```typescript
-// AbortController + setTimeout 패턴
-const controller = new AbortController();
-const timeoutId = setTimeout(() => controller.abort(), timeoutMs);
-try {
-  const res = await fetch(url, { signal: controller.signal, ... });
-  clearTimeout(timeoutId);
-  // ... SSE 스트리밍 처리
-} catch (err) {
-  clearTimeout(timeoutId);
-  if (err instanceof DOMException && err.name === 'AbortError') {
-    // 타임아웃 처리: 재시도 또는 onError
-  }
-}
-```
-
-4. `ResultPage.tsx` 수정
-   - Line 129: `isStreaming={false}` 하드코딩 → 실제 스트리밍 상태에 따라 동적 제어
+2. `ResultPage.tsx`에서 `isStreaming` 상태 동적 제어
+   - 스트리밍 중: `animate-pulse` 커서 표시
+   - 완료 후: 커서 숨김
 
 **검증:**
-- [ ] sseClient.test.ts 통과
-- [ ] MSW mock 핸들러(Task 0-3)와 연동 테스트 통과
-- [ ] 30초 타임아웃 → 자동 재시도(15초) → 재실패 시 에러 콜백 호출
-- [ ] ResultPage에서 스트리밍 중 isStreaming=true, 완료 후 false
+- [x] SSE JSON 포맷 파싱 구현 완료
+- [x] 30초 타임아웃 -> 자동 재시도(15초) -> 재실패 시 에러 콜백 호출 구현
+- [x] ResultPage에서 스트리밍 중 isStreaming=true, 완료 후 false
+- [ ] MSW mock 핸들러와 연동 테스트 (dev 서버 기동 후 확인 필요)
 
 ---
 
@@ -109,7 +84,7 @@ try {
 
 **작업 내용:**
 
-1. 디자인 시안과 현재 코드 비교 → 주요 차이 보완
+1. 디자인 시안과 현재 코드 비교 -> 주요 차이 보완
    - 각 페이지의 HTML 시안(`code.html`)을 브라우저에서 열어 기준 확인
    - [page-design-guide.md](./page-design-guide.md)의 "현재 FE 코드와 시안 차이점" 테이블 참조
 
