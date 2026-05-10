@@ -36,7 +36,7 @@
 
 | 디렉토리 | 설명 |
 |---|---|
-| `docs/reference/` | 타로 기초 지식, Waite Pictorial Key 한글 번역 |
+| `docs/reference/` | 타로 기초 지식, Waite Pictorial Key 한글 번역, Cloudflare Tunnel 설정 가이드 |
 | `docs/benchmark/` | 경쟁 서비스 스크린샷 |
 | `docs/legal/` | 개인정보처리방침, 이용약관 |
 

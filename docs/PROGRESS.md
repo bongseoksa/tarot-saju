@@ -15,7 +15,7 @@
 | [Sprint 1-BE: 백엔드](./handoff/sprint-1-be.md) | 5/5 | 완료 |
 | [Sprint 1-AI: AI](./handoff/sprint-1-ai.md) | 5/5 | 완료 |
 | [Sprint 2: 통합](./handoff/sprint-2.md) | 2/4 | 진행중 |
-| [Sprint 3: 폴리싱+인프라](./handoff/sprint-3.md) | 0/9 | 대기 |
+| [Sprint 3: 폴리싱+인프라](./handoff/sprint-3.md) | 0/9 | 진행중 |
 | **합계** | **18/29** | |
 
 ---
@@ -76,7 +76,7 @@
 | 3-1 | 광고 연동 (AdSense) | TODO | 2-2 | FE |
 | 3-2 | 카드 선택 애니메이션 폴리싱 | TODO | 1-FE-1 | FE |
 | 3-3 | 반응형 레이아웃 최종 검증 | TODO | 2-2 | FE |
-| 3-4 | Vercel 배포 + Cloudflare Tunnel | TODO | 2-2 | Infra |
+| 3-4 | Vercel 배포 + Cloudflare Tunnel | IN_PROGRESS | 2-2 | Infra |
 | 3-5 | GA4 이벤트 트래킹 | TODO | 3-4 | Infra |
 | 3-6 | Sentry 에러 트래킹 | TODO | 2-2 | Infra+FE+BE |
 | 3-7 | test:ai:full 실행 | TODO | 2-1, 1-AI-4 | AI |
@@ -157,6 +157,7 @@ Sprint 0                Sprint 1                    Sprint 2        Sprint 3
 | OG 태그 Edge Function | `supabase/functions/og-image/index.ts` — 동적 OG meta + JS redirect |
 | prompt-builder 연결 | `_shared/mod.ts`에 packages/shared 로직 완전 구현 (파생 복사+싱크 방식). interpret Edge Function이 실제 buildPrompt 사용 |
 | FE 실제 API 연결 | sseClient.ts Authorization 헤더 추가, done 이벤트 InterpretResult JSON 파싱, 로컬 프록시(`scripts/local-proxy.mjs`) E2E 검증 완료 |
+| Cloudflare Tunnel 설정 | cloudflared 설치, Named Tunnel `jeomhana` 시스템 데몬 등록, Quick Tunnel 방식으로 Ollama 외부 노출 확인 (`OLLAMA_ORIGINS=* OLLAMA_HOST=0.0.0.0:11434`). 도메인 미보유로 Public Hostname 미설정, Quick Tunnel 사용 중 |
 
 ---
 
