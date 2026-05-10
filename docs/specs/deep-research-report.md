@@ -211,78 +211,253 @@ flowchart TD
 
 ## Figma Make 프롬프트 세트
 
-아래 프롬프트는 **결과 안정성**을 위해 영어로 썼고, 화면에 보이는 라벨은 한국어로 지시했다. 공통 프롬프트를 먼저 붙여넣고, 이어서 화면별 프롬프트를 사용하면 된다.
+아래 프롬프트는 **결과 안정성**을 위해 영어로 썼고, 화면에 보이는 라벨은 한국어로 지시했다. 공통 프롬프트를 먼저 붙여넣고, 이어서 화면별 프롬프트를 사용하면 된다. 브랜드명·컬러·폰트·KRDS 브레이크포인트·접근성 기준은 `docs/specs/02-taro-mvp.md`와 일치시켰다.
 
-### 공통 시스템 프롬프트
+### 1. 공통 시스템 프롬프트
 
 ```text
-Create a responsive web app design for a Korean tarot and fortune service.
+Create a responsive web app design for “점하나” (JeomHana), a Korean tarot and fortune service.
+Brand tagline: “오늘, 점 하나 찍어볼까?”
+Tone: friendly, lightly mystical, approachable — like chatting with a friend, not a fortune teller.
 
-Generate both:
+Generate three frames:
 - mobile frame: 390x844
+- tablet frame: 768x1024
 - desktop frame: 1440x1024
 
-Responsive rules:
+Responsive rules (KRDS standard grid):
 - mobile-first layout
-- 4-column grid on mobile with 16px margins
-- 8-column grid on tablet
-- 12-column grid on desktop with 24px margins and gutters
+- 360px+: 4-column grid, 16px gutters, 16px margins
+- 768px+: 8-column grid, 16px gutters, 24px margins
+- 1024px+: 12-column grid, 24px gutters, 24px margins — side panels allowed
+- 1280px+: 12-column grid, 24px gutters, centered max-width with auxiliary panels
 - never stretch the mobile layout on desktop
-- use adaptive regions such as left filter rail, center content area, and right sticky summary only when screen width is large enough
+- use adaptive regions such as left filter rail, center content area, and right sticky summary only at 1024px and above
 
 Visual direction:
 - modern Korean editorial UI
-- light mystical mood, not dark fantasy, not neon AI art
+- light base with subtle mystical accents, not dark fantasy, not neon AI art
+- primary accent: soft violet/lavender (around #6b38d4)
+- secondary accent: warm coral/rose for CTAs (around #b90538)
+- background: warm off-white (#fef7ff), cards: white
+- font: Pretendard (Korean system font, clean and readable)
 - clean surfaces, restrained illustration accents
 - clear information hierarchy, real text blocks, visible labels
-- high readability and strong contrast
+- high readability: text contrast 4.5:1+, controls contrast 3:1+
 - touch targets at least 44x44px
-- obvious active states, focus states, and selected states
-- ads must be visually distinct from content cards
+- obvious active states, focus states, and selected states — never rely on color alone
+- ads must be visually distinct from content cards with “광고” label
 
 Content direction:
 - labels and visible text must be in Korean
 - avoid generic AI-looking glowing panels
 - prefer structured cards, chips, tabs, and readable sections
 - use subtle character illustration only as a secondary accent
+- no gold borders, no Chinese characters, no talisman imagery
 ```
 
-### 허브형 홈 화면
+### 2. 점하나에 바로 적용할 조합
 
 ```text
-Design the home screen of a Korean tarot web app.
+Create a responsive screen set for the MVP of “점하나” (JeomHana).
+Tagline: “오늘, 점 하나 찍어볼까?”
 
-Include both mobile and desktop versions.
+Generate these screens in one coherent system:
+1. hub-style home with quick actions and category chips
+2. focused three-card selection with 4-column card grid
+3. ad-safe transition/loading with mascot animation
+4. report-style result with collapsible sections and streaming text
+5. history list with empty state
+6. shared result landing with mascot greeting and CTA
+
+Brand:
+- friendly Korean tone, like chatting with a friend
+- light base with subtle mystical accents
+- soft violet primary (#6b38d4), warm coral CTA (#b90538), off-white background (#fef7ff)
+- Pretendard font throughout
+- trustworthy and readable
+- not AI-generic, not overly magical, not game-like
+- no gold borders, no traditional fortune-telling cliches
+
+Responsive behavior:
+- mobile-first (390x844)
+- tablet (768x1024): 2-region split begins
+- desktop (1440x1024): centered content with adaptive side panels
+- KRDS grid system: 4col → 8col → 12col
+- preserve the same identity across sizes
+- use reusable components and consistent spacing
+- no bottom tab bar — linear flow with header back navigation
+```
+
+### 3. 허브형 홈 화면
+
+```text
+Design the home screen of “점하나”, a Korean tarot web app.
+
+Include mobile, tablet, and desktop versions.
 
 Mobile layout:
-- top header with logo "점하나" and history icon
-- two quick action cards: "오늘의 타로", "이번 주 타로"
-- horizontal category chips: 전체, 연애, 직장, 재물, 학업, 기타
-- structured theme card list below
+- top header with logo “점하나” and history icon (히스토리)
+- two quick action cards: “오늘의 타로”, “이번 주 타로”
+- horizontal category chips: 전체, 일상, 연애, 직장, 재물, 학업, 기타
+- structured theme card list below (11 themes total, show 6-8 initially)
 - each theme card includes title, short subtitle, and hashtag chips
 - one clearly separated ad slot after the second content block
-- clean vertical scroll
+- footer: 개인정보처리방침 | 이용약관
+- clean vertical scroll, no bottom tab bar
 
 Desktop layout:
-- centered max-width container
-- left filter rail for categories
-- center area with quick actions and theme card grid
-- right sticky panel with recent readings and one separated promo/ad block
+- centered max-width container (1280px)
+- left filter rail for categories (240px)
+- center area with quick actions and theme card grid (3-4 columns)
+- right sticky panel with recent readings (3 items) and one separated ad block (280px)
 - do not use oversized hero art
 
 Style:
-- warm neutral background
-- one restrained accent color
+- warm off-white background (#fef7ff)
+- soft violet accent for active states and CTAs
 - subtle mystical illustration near the header only
 - efficient, trustworthy, and not cluttered
+- first viewport must show a clear primary action, not a wall of choices
 ```
 
-### 카테고리 탐색 화면
+### 4. 카드 뽑기 화면
+
+```text
+Design a responsive three-card tarot selection screen for “점하나”.
+
+Include mobile, tablet, and desktop versions.
+
+Mobile:
+- sub-page header with back arrow and theme title (e.g. “오늘의 타로”)
+- instruction text: “세 장의 카드를 신중하게 골라주세요”
+- three empty slots labeled “과거”, “현재”, “미래”
+- center grid of 22 card backs in 4-column layout (4x5 rows + last 2 centered)
+- only the card grid area scrolls vertically
+- clear selected state: chosen cards show opacity reduction and grayscale in grid
+- selected cards appear in their corresponding slot above
+- bottom sticky action bar:
+  - before 3 cards: single disabled button “점 보기 (N/3)”
+  - after 3 cards: “다시 선택” secondary + “결과 보기” primary
+- selection must work by simple tap, not swipe or drag
+
+Desktop:
+- left panel (360px): theme title, instruction, three slots, CTA buttons
+- right panel: 22-card selection board with generous spacing
+- use whitespace to avoid card crowding
+
+Style:
+- focused, immersive experience
+- minimal decoration, subtle category-toned background
+- no flashy game UI
+- clear contrast between selected and unselected cards
+- each card must be a tappable button with accessible label
+```
+
+### 5. 광고 친화 로딩 화면
+
+```text
+Design a responsive loading/transition screen placed between card selection and result for “점하나”.
+
+Include mobile and desktop versions.
+
+Requirements:
+- show a calm branded loading state with mascot character (round violet avatar with simple face)
+- branded text: “당신을 위한 점, 하나 준비 중”
+- include one clearly separated sponsored/ad area
+- the ad area must never look like a tarot content card
+- show a gentle bounce animation or spinner with accessible status text (aria-live)
+- block all user interaction (touch, back navigation) during loading
+- keep the page simple and uncluttered
+
+Mobile:
+- centered mascot bounce animation
+- status text below
+- ad block separated by spacing and background tone
+
+Desktop:
+- centered loading module
+- optional side panel or lower panel for ad placement
+- preserve focus on the transition to result
+```
+
+### 6. 리포트형 결과 화면
+
+```text
+Design a responsive tarot result screen for “점하나”, focused on reading quality.
+
+Include mobile, tablet, and desktop versions.
+
+Mobile:
+- sub-page header with back arrow, theme title, and share icon
+- card summary strip for 3 selected cards (past/present/future labels, card images, names, upright/reversed indicator)
+- mascot bubble: avatar + “점하나가 당신의 카드를 읽고 있어요...” (shown during AI streaming)
+- one-line takeaway summary at the top
+- sections for “과거 해석”, “현재 해석”, “미래 해석”, “종합 조언” — collapsible accordion
+- AI interpretation text streams in with a typing cursor effect
+- share and save actions visible near the top and bottom
+- one separated ad slot only after the last section (never between paragraphs)
+- bottom sticky bar: “공유하기” secondary + “점 하나 더 찍어볼까?” primary CTA
+
+Desktop:
+- left table of contents (220px) with section anchors, sticky
+- center reading column (680-760px) with comfortable text width
+- right sticky summary panel (260-320px) with card thumbnails, share, save, retry
+- do not place ads inside paragraphs
+- do not make desktop a stretched mobile page
+
+Visual style:
+- editorial reading interface
+- highly readable Pretendard typography
+- calm, trustworthy, immersive but not dark
+- streaming text area should feel alive but not flashy
+```
+
+### 7. 히스토리와 공유 결과 화면
+
+```text
+Design a responsive history and shared-result screen for “점하나”, a Korean tarot web app.
+
+Include mobile, tablet, and desktop versions.
+
+History screen:
+- sub-page header with back arrow and title “히스토리”
+- summary statistics at top: readings this month, key keywords
+- list of past readings with category tag, date, theme title, and 3 card thumbnails
+- clear empty state with friendly mascot illustration:
+  “여기는 아직 비어있어요.” + “점 하나 찍으러 가볼까요?” + CTA button
+- each item is tappable with chevron icon
+- mobile uses one-column list
+- desktop uses list (left) plus result preview pane (right)
+- no search icon, no bottom tab bar
+
+Shared result screen:
+- centered logo header (no back button, no navigation)
+- mascot greeting bubble: “점하나가 전해준 타로 결과예요...”
+- card summary (3 cards in a row)
+- one-line takeaway in a highlighted card
+- readable result sections in timeline style (vertical line + dots)
+- advice card at the bottom
+- clear CTA: “나도 점 하나 찍어볼까?” → navigates to home
+- service caption: “AI 타로 서비스 점하나(JeomHana)”
+- no confusing navigation — this is a social traffic landing page
+
+Accessibility:
+- obvious item boundaries
+- enough tapping space (44x44px minimum)
+- visible current item state
+- accessible labels on all interactive elements
+```
+
+### 8. 카테고리 탐색 화면 (선택 — MVP는 홈 필터로 대체)
+
+> MVP에서는 별도 카테고리 화면 없이 홈의 카테고리 칩 필터(`/?category=love`)로 처리한다.
+> 테마가 20개 이상으로 늘어날 경우 별도 화면을 검토할 수 있다.
 
 ```text
 Design a responsive category browsing screen for a Korean tarot and fortune service.
 
-Include both mobile and desktop frames.
+Include mobile, tablet, and desktop frames.
 
 Mobile:
 - page title and currently selected category
@@ -296,117 +471,42 @@ Desktop:
 - left category/filter rail
 - center search + sort toolbar
 - 3-column theme card grid
-- right narrow panel for "최근 본 결과" and "추천 테마"
+- right narrow panel for “최근 본 결과” and “추천 테마”
 - cards should feel like readable content modules, not ads
 
 Accessibility:
-- visible selected state on category chips
+- visible selected state on category chips (color + underline or bold, not color alone)
 - readable card titles
 - enough spacing between cards
 - avoid tiny tags and low-contrast gradients
 ```
 
-### 카드 뽑기 화면
+### 9. 대화형 결과 변형 화면 (부분 적용 전용)
+
+> 점하나에서는 전체 결과를 채팅형으로 만들지 않는다.
+> 리포트형 결과의 **첫 2~3문단만** 순차 리빌하는 패턴으로 제한 차용한다.
+> 전체 화면을 채팅형으로 통일하면 스캔 속도가 떨어지고 다시 읽기 어려워진다.
 
 ```text
-Design a responsive three-card tarot selection screen.
+Design a responsive chat-lite result variation for a Korean tarot app “점하나”.
+This is NOT a full chat screen — it is a partial reveal pattern used only for the first 2-3 paragraphs of the report-style result.
 
-Include both mobile and desktop versions.
-
-Mobile:
-- top progress header with current step
-- three empty slots labeled "과거", "현재", "미래"
-- center grid of 22 tarot card backs
-- clear selected state when a card is chosen
-- bottom sticky action bar with "다시 선택" and "결과 보기"
-- selection must work by simple tap, not gesture only
-
-Desktop:
-- left panel with theme title, short instruction, and selected slots
-- right panel with 22-card selection board
-- bottom or side CTA area for reset and continue
-- use whitespace to avoid card crowding
-
-Style:
-- focused experience
-- minimal decoration
-- subtle motion-ready layout without showing flashy game UI
-- clear contrast between selected and unselected cards
-```
-
-### 광고 친화 로딩 화면
-
-```text
-Design a responsive loading screen placed between card selection and result.
-
-Include both mobile and desktop versions.
-
-Requirements:
-- show a short loading state with calm branding
-- include one clearly separated sponsored/ad area
-- the ad area must never look like a tarot content card
-- show a spinner or progress indicator with accessible status text
-- keep the page simple and uncluttered
-
-Mobile:
-- centered loading animation
-- status text below
-- ad block separated by spacing and background tone
-
-Desktop:
-- centered loading module
-- optional side panel or lower panel for ad placement
-- preserve focus on the transition to result
-```
-
-### 리포트형 결과 화면
-
-```text
-Design a responsive tarot result screen focused on reading quality.
-
-Include both mobile and desktop versions.
-
-Mobile:
-- card summary strip for 3 selected cards
-- one-line takeaway at the top
-- sections for "과거 해석", "현재 해석", "미래 해석", "종합 조언"
-- sections may be collapsible
-- share and save actions visible near the top and bottom
-- one separated ad slot only after a full section
-
-Desktop:
-- left table of contents with section anchors
-- center reading column with comfortable text width
-- right sticky summary panel with card thumbnails, share, save, retry
-- do not place ads inside paragraphs
-- do not make desktop a stretched mobile page
-
-Visual style:
-- editorial reading interface
-- highly readable typography
-- calm, trustworthy, immersive but not dark
-```
-
-### 대화형 결과 변형 화면
-
-```text
-Design a responsive chat-lite result screen for a Korean tarot app.
-
-Include both mobile and desktop versions.
+Include mobile and desktop versions.
 
 Mobile:
 - progress header
-- conversation-style explanation blocks
-- each block reveals one idea at a time
+- conversation-style explanation blocks (2-3 blocks only)
+- each block reveals one idea at a time with a typing animation
 - card image or card summary appears before the final advice
-- one main CTA per step
+- one main CTA per step: “다음 보기”
 - no inline ad between message steps
+- after the reveal sequence, transition to the full report-style result
 
 Desktop:
 - left column for conversation flow
 - right column for card summary and final takeaway
 - keep it readable and compact
-- this is not a full messenger clone; it is a guided reading interface
+- this is not a full messenger clone; it is a guided reading intro
 
 Tone:
 - warm, calm, lightly personal
@@ -414,12 +514,15 @@ Tone:
 - not overly robotic
 ```
 
-### 사주 리포트 대시보드 변형 화면
+### 10. 사주 리포트 대시보드 변형 화면 (Phase 2 — MVP 범위 아님)
+
+> 사주 기능은 Phase 2(유료 수익화 레이어)에서 개발 예정. MVP에서는 구현하지 않는다.
+> 디자인 시안만 미리 확보해두면 Phase 2 착수 시 도움이 된다.
 
 ```text
-Design a responsive saju report dashboard screen for a Korean fortune service.
+Design a responsive saju report dashboard screen for a Korean fortune service “점하나”.
 
-Include both mobile and desktop versions.
+Include mobile and desktop versions.
 
 Mobile:
 - summary score cards
@@ -439,61 +542,18 @@ Style:
 - modern editorial dashboard
 - not finance-like, not fantasy-like
 - calm icons, subtle traditional Korean visual reference
+- must feel like a natural extension of the tarot result screen
 ```
 
-### 히스토리와 공유 결과 화면
+이 프롬프트 세트는 “장식적인 AI 느낌”보다 **구조·가독성·행동 유도**를 먼저 잡기 위한 것이다. Figma Make에서 처음부터 완성형을 기대하지 말고, 위 번호 순서대로 진행하면 된다.
 
-```text
-Design a responsive history and shared-result screen for a Korean tarot web app.
+### 프롬프트 사용 순서 요약
 
-Include both mobile and desktop versions.
-
-History screen:
-- list of past readings with date, theme, and short summary
-- clear empty state with friendly illustration
-- each item is tappable
-- mobile uses one-column list
-- desktop uses list plus preview pane
-
-Shared result screen:
-- card summary
-- one-line takeaway
-- readable result sections
-- clear CTA: "나도 점 하나 찍어볼까?"
-- no confusing navigation
-- suitable for social traffic landing
-
-Accessibility:
-- obvious item boundaries
-- enough tapping space
-- visible current item state
 ```
-
-### 점하나에 바로 적용할 조합
-
-```text
-Create a responsive screen set for the MVP of "점하나".
-
-Generate these screens in one coherent system:
-1. hub-style home
-2. focused three-card selection
-3. ad-safe transition/loading
-4. report-style result
-5. history
-6. shared result landing
-
-Brand:
-- friendly Korean tone
-- light mysticism
-- calm night mood without heavy darkness
-- trustworthy and readable
-- not AI-generic, not overly magical, not game-like
-
-Responsive behavior:
-- mobile-first
-- desktop must use a centered content system with adaptive side panels
-- preserve the same identity across sizes
-- use reusable components and consistent spacing
+1. 공통 시스템 프롬프트 붙여넣기
+2. “점하나에 바로 적용할 조합” → 전체 톤 확인
+3. 허브형 홈 → 카드 뽑기 → 광고 로딩 → 리포트형 결과 → 히스토리/공유 순서로 개별 생성
+4. 컴포넌트(칩, 카드, 버튼, 헤더) 일관성 교차 확인
+5. 대화형 결과 변형은 리포트형 결과 확정 후 부분 패턴으로만 시도
+6. 사주 리포트 대시보드는 MVP 이후 별도 진행
 ```
-
-이 프롬프트 세트는 “장식적인 AI 느낌”보다 **구조·가독성·행동 유도**를 먼저 잡기 위한 것이다. Figma Make에서 처음부터 완성형을 기대하지 말고, 홈·카드 선택·결과를 각각 생성한 뒤 컴포넌트 일관성을 다시 맞추는 순서로 가는 편이 더 낫다.
